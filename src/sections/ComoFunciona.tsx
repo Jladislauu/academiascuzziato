@@ -33,8 +33,8 @@ export function ComoFunciona() {
 
       <ol className="grid gap-4 md:grid-cols-3 md:gap-6">
         {passos.map((passo, i) => (
-          <Reveal key={passo.titulo} atraso={i * 0.08} className="flex">
-            <li className="relative w-full overflow-hidden rounded-2xl border border-cinza-700 bg-cinza-900 p-6 md:p-8">
+          <Reveal as="li" key={passo.titulo} atraso={i * 0.08} className="flex">
+            <div className="relative w-full overflow-hidden rounded-2xl border border-cinza-700 bg-cinza-900 p-6 md:p-8">
               <span
                 aria-hidden="true"
                 className="font-display text-7xl leading-none font-black text-vermelho md:text-8xl"
@@ -46,7 +46,7 @@ export function ComoFunciona() {
                 {passo.titulo}
               </h3>
               <p className="mt-2 text-cinza-200">{passo.texto}</p>
-            </li>
+            </div>
           </Reveal>
         ))}
       </ol>

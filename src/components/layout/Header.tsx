@@ -68,10 +68,10 @@ export function Header() {
           {...linkExterno}
           onClick={() => trackAgendamentoIniciado('cabecalho')}
           className="ml-auto lg:ml-0"
-          aria-label="Agendar aula experimental grátis"
         >
+          {/* Nome acessível sempre "Agendar aula grátis"; no celular, "aula grátis" fica só para leitor de tela. */}
           <span>
-            Agendar<span className="hidden xl:inline"> aula grátis</span>
+            Agendar<span className="sr-only xl:not-sr-only"> aula grátis</span>
           </span>
         </ButtonLink>
 

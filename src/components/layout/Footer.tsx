@@ -1,4 +1,5 @@
 import { config } from '../../data/config';
+import { funcionamentoTexto } from '../../lib/format';
 import { instagramArroba, linkExterno, whatsappLink } from '../../lib/links';
 import { Container } from '../ui/Section';
 import { Logo } from '../ui/Logo';
@@ -32,7 +33,7 @@ export function Footer() {
               <br />
               {cep}
             </address>
-            <p className="mt-3">{config.funcionamento}</p>
+            <p className="mt-3">{funcionamentoTexto(config.funcionamento)}</p>
           </div>
 
           <div>

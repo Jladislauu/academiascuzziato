@@ -1,4 +1,4 @@
-import { m } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 import { config } from '../data/config';
 import { trackAgendamentoIniciado } from '../lib/analytics';
 import { agendaLink, linkExterno } from '../lib/links';
@@ -13,13 +13,16 @@ const destaques = [
   `Até ${config.vagasPorAula} vagas por aula experimental`,
 ];
 
-const entrada = (atraso: number) => ({
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: 'easeOut', delay: atraso },
-}) as const;
-
 export function Hero() {
+  // Com prefers-reduced-motion, só o fade (sem deslocamento).
+  const reduzir = useReducedMotion();
+  const entrada = (atraso: number) =>
+    ({
+      initial: { opacity: 0, y: reduzir ? 0 : 20 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, ease: 'easeOut', delay: atraso },
+    }) as const;
+
   return (
     <section id="topo" aria-labelledby="topo-titulo" className="relative isolate overflow-hidden">
       {/* Fundo: grade de quadra + faixa diagonal vermelha */}
@@ -47,7 +50,7 @@ export function Hero() {
         <m.h1
           {...entrada(0.08)}
           id="topo-titulo"
-          className="font-display text-[clamp(3.75rem,17vw,9.5rem)] leading-[0.85] font-black uppercase"
+          className="font-display text-[clamp(3.75rem,17vw,9.5rem)] leading-[0.85] font-black wrap-break-word uppercase"
         >
           Primeira semana <span className="text-vermelho">grátis</span>
         </m.h1>

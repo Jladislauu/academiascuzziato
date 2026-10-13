@@ -32,14 +32,13 @@ return [
         'remetente' => 'site@arenapinhais.com.br',
     ],
 
-    // Só aceita envios vindos destes endereços.
-    'origens_permitidas' => [
-        'https://arenapinhais.com.br',
-        'https://www.arenapinhais.com.br',
-    ],
+    // https://arenapinhais.com.br e https://www.arenapinhais.com.br já são aceitos
+    // pelo interesse.php. Aqui só entram endereços extras (ex.: um domínio de testes).
+    'origens_permitidas' => [],
 
-    // Segredo para o hash do IP (limite de envios). Uma sequência aleatória longa,
-    // por exemplo gerada com: php -r "echo bin2hex(random_bytes(32));"
+    // Segredo para o hash do IP (limite de envios). Uma sequência aleatória longa, gerada com
+    //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+    // ou, onde houver PHP: php -r "echo bin2hex(random_bytes(32));"
     'ip_segredo' => 'TROQUE-POR-UMA-SEQUENCIA-ALEATORIA-LONGA',
 
     // No máximo `envios` por IP a cada `janela_minutos`.

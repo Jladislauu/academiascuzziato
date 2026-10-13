@@ -24,7 +24,12 @@ export const config: Config = {
     cep: '83323-190',
   },
 
-  funcionamento: 'Segunda a sexta, 8h às 23h',
+  // Vira o texto "Segunda a sexta, 8h às 23h" no site e o horário no schema.org.
+  funcionamento: {
+    dias: ['seg', 'ter', 'qua', 'qui', 'sex'],
+    abre: '08:00',
+    fecha: '23:00',
+  },
 
   vagasPorAula: 5,
 

@@ -17,10 +17,8 @@ export function Modalidades() {
 
       <ul className="grid gap-4 sm:grid-cols-2">
         {modalidades.map((modalidade, i) => (
-          <Reveal key={modalidade.id} atraso={(i % 2) * 0.08} className="flex">
-            <li className="flex w-full">
-              <ModalidadeCard modalidade={modalidade} />
-            </li>
+          <Reveal as="li" key={modalidade.id} atraso={(i % 2) * 0.08} className="flex">
+            <ModalidadeCard modalidade={modalidade} />
           </Reveal>
         ))}
       </ul>

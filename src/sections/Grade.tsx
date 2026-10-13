@@ -199,7 +199,7 @@ function TurmaCard({ turma }: { turma: Turma }) {
                     <span
                       key={dia}
                       className={`flex-1 rounded-md py-1 text-center text-sm font-semibold ${
-                        tem ? 'bg-branco text-preto' : 'border border-cinza-700 text-cinza-500'
+                        tem ? 'bg-branco text-preto' : 'border border-cinza-700 text-cinza-400'
                       }`}
                     >
                       {diaCurto(dia)}

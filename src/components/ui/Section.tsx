@@ -33,7 +33,7 @@ export function SectionHeading({ id, sobretitulo, titulo, descricao }: SectionHe
       <p className="mb-3 text-sm font-semibold tracking-[0.18em] text-vermelho-claro uppercase">{sobretitulo}</p>
       <h2
         id={`${id}-titulo`}
-        className="font-display text-5xl leading-[0.95] font-black uppercase md:text-7xl"
+        className="font-display text-5xl leading-[0.95] font-black wrap-break-word uppercase md:text-7xl"
       >
         {titulo}
       </h2>

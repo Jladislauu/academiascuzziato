@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { config } from '../data/config';
 import { trackAgendamentoIniciado } from '../lib/analytics';
+import { funcionamentoTexto } from '../lib/format';
 import { agendaLink, comoChegarUrl, instagramArroba, linkExterno, mapaEmbedUrl, whatsappLink } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
@@ -31,7 +32,7 @@ export function Localizacao() {
                 {cep}
               </address>
             </Item>
-            <Item rotulo="Funcionamento">{config.funcionamento}</Item>
+            <Item rotulo="Funcionamento">{funcionamentoTexto(config.funcionamento)}</Item>
             <Item rotulo="WhatsApp">
               <a
                 href={whatsappLink()}
@@ -86,7 +87,7 @@ export function Localizacao() {
             title="Mapa com a localização da Arena Pinhais"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="aspect-[4/3] h-full min-h-72 w-full border-0"
+            className="aspect-4/3 h-full min-h-72 w-full border-0"
           />
         </Reveal>
       </div>

@@ -20,7 +20,7 @@ export function Planos() {
 
       <div className="grid gap-5 md:grid-cols-2 lg:max-w-4xl">
         {planos.map((plano, i) => (
-          <Reveal key={plano.id} atraso={i * 0.08} className="flex">
+          <Reveal key={plano.id} atraso={i * 0.08} className="flex min-w-0">
             <PlanoCard plano={plano} />
           </Reveal>
         ))}
@@ -62,8 +62,8 @@ function PlanoCard({ plano }: { plano: Plano }) {
       </h3>
       <p className="mt-1 text-cinza-400">{plano.descricao}</p>
 
-      <p className="mt-6 flex items-baseline gap-1">
-        <span className="font-display text-7xl leading-none font-black">{preco(plano.precoMensal)}</span>
+      <p className="mt-6 flex flex-wrap items-baseline gap-x-1">
+        <span className="font-display text-6xl leading-none font-black sm:text-7xl">{preco(plano.precoMensal)}</span>
         <span className="text-lg font-medium text-cinza-400">/mês</span>
       </p>
 

@@ -1,6 +1,8 @@
 export type Modalidade = 'jiu-jitsu' | 'judo' | 'muay-thai' | 'boxe';
 export type Publico = 'infantil' | 'juvenil-adulto';
 export type Dia = 'seg' | 'ter' | 'qua' | 'qui' | 'sex';
+/** Dias de funcionamento (a grade de turmas usa só Dia, de segunda a sexta). */
+export type DiaSemana = Dia | 'sab' | 'dom';
 
 export interface Turma {
   id: string;
@@ -57,7 +59,14 @@ export interface Config {
     uf: string;
     cep: string;
   };
-  funcionamento: string;
+  /** Horário da academia. Vira o texto do site e o horário do schema.org. */
+  funcionamento: {
+    dias: DiaSemana[];
+    /** "HH:MM" */
+    abre: string;
+    /** "HH:MM" */
+    fecha: string;
+  };
   vagasPorAula: number;
   avisoPrivacidade: string;
   /** Endpoint PHP do formulário "Turmas em formação". */
@@ -107,4 +116,19 @@ export interface FaqItem {
    * (com selo de rascunho); no site publicado, a pergunta leva para o WhatsApp.
    */
   confirmado: boolean;
+}
+
+export interface Seo {
+  /** <title>: o que aparece no Google. Até ~60 caracteres. */
+  titulo: string;
+  /** Descrição no Google. Até ~155 caracteres. */
+  descricao: string;
+  /** Cartão de compartilhamento (WhatsApp, Instagram, Facebook). */
+  compartilhamento: {
+    titulo: string;
+    descricao: string;
+    /** Caminho em public/, 1200x630. */
+    imagem: string;
+    imagemAlt: string;
+  };
 }

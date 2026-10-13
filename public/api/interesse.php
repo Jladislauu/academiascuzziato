@@ -23,6 +23,8 @@ const MODALIDADES = ['muay-thai' => 'Muay thai', 'boxe' => 'Boxe'];
 const PUBLICOS = ['adulto' => 'Adulto', 'infantil' => 'Infantil'];
 const DIAS = ['seg' => 'Segunda', 'ter' => 'Terça', 'qua' => 'Quarta', 'qui' => 'Quinta', 'sex' => 'Sexta'];
 const PERIODOS = ['manha' => 'Manhã', 'tarde' => 'Tarde', 'noite' => 'Noite'];
+// Endereços do site que sempre podem enviar (com e sem www). O config pode acrescentar outros.
+const ORIGENS_DO_SITE = ['https://arenapinhais.com.br', 'https://www.arenapinhais.com.br'];
 const IDADE_MIN = 1;
 const IDADE_MAX = 17;
 
@@ -53,7 +55,8 @@ date_default_timezone_set('America/Sao_Paulo');
 
 // Só aceita envios vindos do próprio site.
 $origem = $_SERVER['HTTP_ORIGIN'] ?? '';
-if ($origem !== '' && !in_array($origem, $config['origens_permitidas'], true)) {
+$origensPermitidas = array_merge(ORIGENS_DO_SITE, (array) ($config['origens_permitidas'] ?? []));
+if ($origem !== '' && !in_array($origem, $origensPermitidas, true)) {
     responder(403, ['ok' => false, 'erro' => 'Origem não permitida.']);
 }
 
