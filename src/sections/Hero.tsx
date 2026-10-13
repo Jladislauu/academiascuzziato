@@ -5,6 +5,7 @@ import { agendaLink, linkExterno } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Container } from '../components/ui/Section';
 import { IconCalendario, IconCheck } from '../components/ui/icons';
+import { Logo } from '../components/ui/Logo';
 
 const destaques = [
   'Do iniciante ao competidor',
@@ -30,9 +31,13 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-preto to-transparent" />
       </div>
 
-      <Container className="flex min-h-[100svh] flex-col justify-center pt-28 pb-16 md:pt-32">
+      <Container className="flex min-h-[100svh] flex-col justify-center pt-24 pb-16 md:pt-32">
+        <m.div {...entrada(0)} className="mb-8">
+          <Logo className="h-20 sm:h-24 lg:h-28" />
+        </m.div>
+
         <m.p
-          {...entrada(0)}
+          {...entrada(0.04)}
           className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-cinza-700 bg-preto/70 px-4 py-1.5 text-sm font-semibold tracking-[0.14em] text-cinza-200 uppercase"
         >
           <span className="size-2 rounded-full bg-vermelho" aria-hidden="true" />

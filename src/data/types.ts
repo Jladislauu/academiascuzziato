@@ -59,6 +59,7 @@ export interface Config {
   };
   funcionamento: string;
   vagasPorAula: number;
+  avisoPrivacidade: string;
   /** Link do gateway por plano. null = botão abre o WhatsApp com mensagem pronta. */
   matriculaLinks: Record<PlanoId, string | null>;
 }
@@ -75,4 +76,9 @@ export interface ModalidadeInfo {
 export interface FaqItem {
   pergunta: string;
   resposta: string;
+  /**
+   * false = rascunho que depende de regra da academia. Aparece só no `npm run dev`
+   * (com selo de rascunho); no site publicado, a pergunta leva para o WhatsApp.
+   */
+  confirmado: boolean;
 }

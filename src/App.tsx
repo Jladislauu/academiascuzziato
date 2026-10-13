@@ -1,8 +1,13 @@
 import { LazyMotion, MotionConfig, domAnimation } from 'motion/react';
+import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { WhatsAppFloat } from './components/layout/WhatsAppFloat';
+import { ComoFunciona } from './sections/ComoFunciona';
+import { Faq } from './sections/Faq';
 import { Grade } from './sections/Grade';
 import { Hero } from './sections/Hero';
+import { Localizacao } from './sections/Localizacao';
+import { Modalidades } from './sections/Modalidades';
 import { Planos } from './sections/Planos';
 
 export default function App() {
@@ -16,11 +21,18 @@ export default function App() {
           Pular para o conteúdo
         </a>
         <Header />
-        <main id="conteudo" className="pb-24">
+        <main id="conteudo">
           <Hero />
+          <ComoFunciona />
+          <Modalidades />
           <Grade />
+          {/* Fase 3: Turmas em formação, Professores */}
           <Planos />
+          {/* Fase 3: Estrutura */}
+          <Faq />
+          <Localizacao />
         </main>
+        <Footer />
         <WhatsAppFloat />
       </MotionConfig>
     </LazyMotion>

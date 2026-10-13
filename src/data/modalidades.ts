@@ -21,7 +21,7 @@ export const modalidades: ModalidadeInfo[] = [
   {
     id: 'muay-thai',
     nome: 'Muay thai',
-    descricao: 'Turma em formação.',
+    descricao: 'Estamos montando as turmas. Quer treinar? Avise a gente.',
     publicos: ['Infantil', 'Adulto'],
     niveis: [],
     emFormacao: true,
@@ -29,7 +29,7 @@ export const modalidades: ModalidadeInfo[] = [
   {
     id: 'boxe',
     nome: 'Boxe',
-    descricao: 'Turma em formação.',
+    descricao: 'Estamos montando as turmas. Quer treinar? Avise a gente.',
     publicos: ['Infantil', 'Adulto'],
     niveis: [],
     emFormacao: true,

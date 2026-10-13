@@ -10,6 +10,9 @@ export function Logo({ className = '', versao = 'escuro' }: LogoProps) {
     <img
       src={`/brand/arena-pinhais-${versao}-transparente.svg`}
       alt="Arena Pinhais"
+      // Proporção do SVG (recortado rente às letras); a altura vem do className.
+      width={900}
+      height={480}
       className={`w-auto ${className}`}
       decoding="async"
     />

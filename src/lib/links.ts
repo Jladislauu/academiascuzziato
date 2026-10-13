@@ -30,4 +30,26 @@ export function matriculaLink(plano: Plano): string {
   return config.matriculaLinks[plano.id] ?? whatsappLink(mensagens.matricula(plano.nome));
 }
 
-export const linkExterno = { target: '_blank', rel: 'noopener noreferrer' } as const;
+/** "R. Vicente D'Andréa, 617 - Estância Pinhais, Pinhais - PR, 83323-190" */
+export function enderecoCompleto(): string {
+  const { rua, bairro, cidade, uf, cep } = config.endereco;
+  return `${rua} - ${bairro}, ${cidade} - ${uf}, ${cep}`;
+}
+
+/** Mapa para iframe, buscado pelo endereço (não precisa de chave de API). */
+export function mapaEmbedUrl(): string {
+  return `https://www.google.com/maps?q=${encodeURIComponent(enderecoCompleto())}&output=embed`;
+}
+
+/** Abre a rota no Google Maps (no celular, abre o app). */
+export function comoChegarUrl(): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(enderecoCompleto())}`;
+}
+
+/** "https://instagram.com/arenapinhais" → "@arenapinhais" */
+export function instagramArroba(): string {
+  const usuario = config.instagram.replace(/\/+$/, '').split('/').pop();
+  return usuario ? `@${usuario}` : '';
+}
+
+export const linkExterno ={ target: '_blank', rel: 'noopener noreferrer' } as const;
