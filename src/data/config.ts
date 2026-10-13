@@ -1,0 +1,45 @@
+import type { Config } from './types';
+
+export const config: Config = {
+  siteUrl: 'https://arenapinhais.com.br',
+
+  // Provisório: Easy!Appointments. Vai ser trocado pela Thryve Agenda.
+  agendaUrl: 'https://agenda.arenapinhais.com.br',
+
+  // TODO: número do WhatsApp da academia, só dígitos (ex.: '5541999999999').
+  // Enquanto estiver vazio, os botões abrem o WhatsApp sem destinatário.
+  whatsapp: '',
+
+  // TODO: URL do perfil no Instagram (ex.: 'https://instagram.com/arenapinhais').
+  instagram: '',
+
+  // TODO: e-mail de contato da academia.
+  email: '',
+
+  endereco: {
+    rua: "R. Vicente D'Andréa, 617",
+    bairro: 'Estância Pinhais',
+    cidade: 'Pinhais',
+    uf: 'PR',
+    cep: '83323-190',
+  },
+
+  funcionamento: 'Segunda a sexta, 8h às 23h',
+
+  vagasPorAula: 5,
+
+  matriculaLinks: {
+    // TODO: links do gateway de pagamento (ainda não existem).
+    'uma-modalidade': null,
+    livre: null,
+  },
+};
+
+/** Mensagens prontas do WhatsApp. */
+export const mensagens = {
+  geral: 'Olá! Vim pelo site da Arena Pinhais e quero tirar uma dúvida.',
+  horariosTurma: (turma: string) => `Olá! Quero saber os horários de ${turma}`,
+  matricula: (plano: string) => `Olá! Quero me matricular no plano ${plano} da Arena Pinhais.`,
+  conviteAmigo: (agendaUrl: string) =>
+    `Bora treinar comigo na Arena Pinhais? A primeira semana é grátis. Agenda a sua aula experimental aqui: ${agendaUrl}`,
+};

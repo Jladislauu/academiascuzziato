@@ -1,0 +1,13 @@
+node_modules
+dist
+*.local
+.env
+.env.*
+
+# Credenciais do PHP (ficam no servidor, fora da pasta pública)
+config.local.php
+
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

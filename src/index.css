@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens da marca. Os componentes usam só estas cores (bg-preto, text-vermelho...);
+ * a paleta padrão do Tailwind foi desligada para não escapar hex solto.
+ */
+@theme {
+  --color-*: initial;
+
+  --color-preto: #0e0f12;
+  --color-branco: #ffffff;
+  --color-vermelho: #e10600;
+  /* hover dos botões vermelhos (branco sobre ele: 6,9:1) */
+  --color-vermelho-escuro: #b80500;
+  /* vermelho para texto pequeno sobre o preto (5,8:1; o vermelho puro só passa em texto grande) */
+  --color-vermelho-claro: #ff4d47;
+
+  /* cinzas derivados do preto */
+  --color-cinza-900: #16181d; /* cards */
+  --color-cinza-800: #1f2228; /* cards em destaque, hover */
+  --color-cinza-700: #2c3038; /* bordas */
+  --color-cinza-500: #5c6270; /* bordas fortes, ícones apagados */
+  --color-cinza-400: #a3a8b4; /* texto secundário (8,1:1 sobre o preto) */
+  --color-cinza-200: #d9dbe0; /* texto de apoio claro */
+
+  --color-whatsapp: #25d366;
+
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-sans: 'Barlow', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-preto);
+    color: var(--color-branco);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-branco);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-vermelho);
+    color: var(--color-branco);
+  }
+}
