@@ -1,16 +1,26 @@
+import { useEffect } from 'react';
 import { LazyMotion, MotionConfig, domAnimation } from 'motion/react';
 import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { WhatsAppFloat } from './components/layout/WhatsAppFloat';
 import { ComoFunciona } from './sections/ComoFunciona';
+import { EmFormacao } from './sections/EmFormacao';
+import { Estrutura } from './sections/Estrutura';
 import { Faq } from './sections/Faq';
 import { Grade } from './sections/Grade';
 import { Hero } from './sections/Hero';
 import { Localizacao } from './sections/Localizacao';
 import { Modalidades } from './sections/Modalidades';
 import { Planos } from './sections/Planos';
+import { Professores } from './sections/Professores';
 
 export default function App() {
+  // Links com âncora vindos de fora (ex.: ...#em-formacao): a seção só existe
+  // depois que o React monta, então o navegador não rola sozinho.
+  useEffect(() => {
+    if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+  }, []);
+
   return (
     <LazyMotion features={domAnimation} strict>
       <MotionConfig reducedMotion="user">
@@ -26,9 +36,10 @@ export default function App() {
           <ComoFunciona />
           <Modalidades />
           <Grade />
-          {/* Fase 3: Turmas em formação, Professores */}
+          <EmFormacao />
+          <Professores />
           <Planos />
-          {/* Fase 3: Estrutura */}
+          <Estrutura />
           <Faq />
           <Localizacao />
         </main>

@@ -1,7 +1,6 @@
-import { mensagens } from '../data/config';
 import { modalidades } from '../data/modalidades';
 import type { ModalidadeInfo } from '../data/types';
-import { linkExterno, whatsappLink } from '../lib/links';
+import { escolherModalidadeInteresse } from '../lib/interesse';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
 import { IconSeta } from '../components/ui/icons';
@@ -57,8 +56,14 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
       <div className="mt-auto pt-6">
         {emFormacao ? (
           <a
-            href={whatsappLink(mensagens.interesseModalidade(modalidade.nome.toLowerCase()))}
-            {...linkExterno}
+            href={`?modalidade=${modalidade.id}#em-formacao`}
+            onClick={(e) => {
+              // Sem recarregar a página: marca a modalidade no formulário e rola até ele.
+              e.preventDefault();
+              escolherModalidadeInteresse(modalidade.id);
+              history.replaceState(null, '', `?modalidade=${modalidade.id}#em-formacao`);
+              document.getElementById('em-formacao')?.scrollIntoView();
+            }}
             className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-branco uppercase hover:text-vermelho-claro"
           >
             Quero ser avisado <IconSeta className="size-5" />

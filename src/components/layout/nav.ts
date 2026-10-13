@@ -3,6 +3,7 @@ export const NAV = [
   { href: '#como-funciona', label: 'Como funciona' },
   { href: '#modalidades', label: 'Modalidades' },
   { href: '#horarios', label: 'Horários' },
+  { href: '#professores', label: 'Professores' },
   { href: '#planos', label: 'Planos' },
   { href: '#faq', label: 'Dúvidas' },
   { href: '#contato', label: 'Contato' },

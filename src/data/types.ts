@@ -60,9 +60,35 @@ export interface Config {
   funcionamento: string;
   vagasPorAula: number;
   avisoPrivacidade: string;
+  /** Endpoint PHP do formulário "Turmas em formação". */
+  interesseEndpoint: string;
   /** Link do gateway por plano. null = botão abre o WhatsApp com mensagem pronta. */
   matriculaLinks: Record<PlanoId, string | null>;
 }
+
+export interface Foto {
+  src: string;
+  alt: string;
+  largura: number;
+  altura: number;
+}
+
+export interface Professor {
+  id: string;
+  /** Igual ao `professor` em turmas.ts: as turmas do card saem de lá. */
+  nome: string;
+  faixa: string | null;
+  bio: string | null;
+  foto: Foto | null;
+}
+
+export interface FotoEstrutura {
+  foto: Foto | null;
+  legenda: string | null;
+}
+
+export type PublicoInteresse = 'adulto' | 'infantil';
+export type Periodo = 'manha' | 'tarde' | 'noite';
 
 export interface ModalidadeInfo {
   id: Modalidade;

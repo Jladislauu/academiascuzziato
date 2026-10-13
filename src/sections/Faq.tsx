@@ -12,7 +12,7 @@ const MOSTRAR_RASCUNHOS = import.meta.env.DEV;
 
 export function Faq() {
   return (
-    <Section id="faq" className="bg-cinza-900/40">
+    <Section id="faq">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
           <SectionHeading

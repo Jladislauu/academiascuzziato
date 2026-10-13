@@ -11,7 +11,7 @@ export function Localizacao() {
   const { rua, bairro, cidade, uf, cep } = config.endereco;
 
   return (
-    <Section id="contato">
+    <Section id="contato" className="bg-cinza-900/40">
       <SectionHeading
         id="contato"
         sobretitulo="Localização e contato"
