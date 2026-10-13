@@ -1,7 +1,8 @@
 import type { Config } from './types';
 
 export const config: Config = {
-  siteUrl: 'https://arenapinhais.com.br',
+  // Produção. Na homologação (branch dev), o workflow troca por VITE_SITE_URL.
+  siteUrl: import.meta.env?.VITE_SITE_URL || 'https://arenapinhais.com.br',
 
   // Provisório: Easy!Appointments. Vai ser trocado pela Thryve Agenda.
   agendaUrl: 'https://agenda.arenapinhais.com.br',

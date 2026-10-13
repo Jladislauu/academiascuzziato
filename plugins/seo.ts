@@ -1,4 +1,6 @@
-import type { Plugin } from 'vite';
+import fs from 'node:fs';
+import path from 'node:path';
+import type { Plugin, ResolvedConfig } from 'vite';
 import { config } from '../src/data/config';
 import { planos } from '../src/data/planos';
 import { seo } from '../src/data/seo';
@@ -10,7 +12,15 @@ import type { DiaSemana } from '../src/data/types';
  *   - <title>, description, canonical, Open Graph e Twitter no lugar de <!-- seo --> do index.html
  *   - dados estruturados schema.org (SportsActivityLocation)
  *   - robots.txt e sitemap.xml no dist/
+ *
+ * Homologação (branch dev, ver .github/workflows/deploy.yml): o workflow define
+ * VITE_SITE_URL e VITE_HOMOLOGACAO=true. Aí o site usa a URL de homologação e não
+ * pode ser indexado: meta robots noindex, robots.txt com Disallow: / (sem sitemap)
+ * e cabeçalho X-Robots-Tag no .htaccess. Sem essas variáveis (produção), nada muda.
  */
+
+const HOMOLOGACAO = process.env.VITE_HOMOLOGACAO === 'true';
+const SITE_URL = process.env.VITE_SITE_URL || config.siteUrl;
 
 const DIA_SCHEMA: Record<DiaSemana, string> = {
   seg: 'Monday',
@@ -22,7 +32,7 @@ const DIA_SCHEMA: Record<DiaSemana, string> = {
   dom: 'Sunday',
 };
 
-const url = (caminho = '/') => new URL(caminho, config.siteUrl).toString();
+const url = (caminho = '/') => new URL(caminho, SITE_URL).toString();
 
 const attr = (valor: string) =>
   valor.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -69,6 +79,7 @@ function tagsHead(): string {
   const jsonLd = JSON.stringify(dadosEstruturados(), null, 2).replace(/</g, '\\u003c');
 
   return [
+    ...(HOMOLOGACAO ? ['<meta name="robots" content="noindex, nofollow" />'] : []),
     `<title>${attr(seo.titulo)}</title>`,
     `<meta name="description" content="${attr(seo.descricao)}" />`,
     `<link rel="canonical" href="${url()}" />`,
@@ -92,7 +103,12 @@ function tagsHead(): string {
     .join('\n');
 }
 
-const robots = () => `User-agent: *
+const robots = () =>
+  HOMOLOGACAO
+    ? `User-agent: *
+Disallow: /
+`
+    : `User-agent: *
 Allow: /
 Disallow: /api/
 
@@ -108,9 +124,21 @@ const sitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
 </urlset>
 `;
 
+const NOINDEX_HTACCESS = `
+# Homologação: não indexar (acrescentado no build com VITE_HOMOLOGACAO=true)
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+`;
+
 export function seoPlugin(): Plugin {
+  let viteConfig: ResolvedConfig;
+
   return {
     name: 'arena-seo',
+    configResolved(resolvido) {
+      viteConfig = resolvido;
+    },
     transformIndexHtml(html, ctx) {
       if (!html.includes('<!-- seo -->')) throw new Error('index.html sem o marcador <!-- seo -->');
       let head = tagsHead();
@@ -127,7 +155,13 @@ export function seoPlugin(): Plugin {
     },
     generateBundle() {
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots() });
-      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
+      if (!HOMOLOGACAO) this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
+    },
+    closeBundle() {
+      if (!HOMOLOGACAO || viteConfig.build.ssr) return;
+      const htaccess = path.resolve(viteConfig.root, viteConfig.build.outDir, '.htaccess');
+      if (!fs.existsSync(htaccess)) throw new Error('seo: dist/.htaccess não encontrado (deveria vir de public/)');
+      fs.appendFileSync(htaccess, NOINDEX_HTACCESS);
     },
   };
 }
