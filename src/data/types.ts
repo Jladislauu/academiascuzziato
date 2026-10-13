@@ -120,6 +120,8 @@ export interface ModalidadeInfo {
   publicos: string[];
   niveis: string[];
   emFormacao: boolean;
+  /** Foto do card (3:2). */
+  foto: Foto | null;
 }
 
 export interface FaqItem {
