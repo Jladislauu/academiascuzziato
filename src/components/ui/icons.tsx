@@ -38,6 +38,13 @@ export const IconSeta = (p: IconProps) => (
   </svg>
 );
 
+export const IconMedalha = (p: IconProps) => (
+  <svg {...linha} {...p}>
+    <circle cx="12" cy="15" r="6" />
+    <path d="M8.5 10.2 6 3h4l2 4.5L14 3h4l-2.5 7.2" />
+  </svg>
+);
+
 export const IconMenu = (p: IconProps) => (
   <svg {...linha} {...p}>
     <path d="M4 7h16M4 12h16M4 17h16" />

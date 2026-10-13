@@ -82,12 +82,26 @@ export interface Foto {
   altura: number;
 }
 
+export interface Destaque {
+  texto: string;
+  /**
+   * false = rascunho ainda não confirmado. Aparece só no `npm run dev` (com selo
+   * de rascunho) e não vai para o site publicado. Mesmo esquema do FAQ.
+   */
+  confirmado: boolean;
+}
+
 export interface Professor {
   id: string;
   /** Igual ao `professor` em turmas.ts: as turmas do card saem de lá. */
   nome: string;
   faixa: string | null;
+  /** Frase curta abaixo do nome (o papel do professor na Arena). */
+  chamada: string | null;
+  /** 2 a 3 frases, falando com o visitante. */
   bio: string | null;
+  /** No máximo 4, contando os rascunhos. */
+  destaques: Destaque[];
   foto: Foto | null;
 }
 

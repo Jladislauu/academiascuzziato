@@ -2,13 +2,11 @@ import { mensagens } from '../data/config';
 import { faq, respostaPendente } from '../data/faq';
 import type { FaqItem } from '../data/types';
 import { linkExterno, whatsappLink } from '../lib/links';
+import { MOSTRAR_RASCUNHOS, SELO_RASCUNHO } from '../lib/rascunho';
 import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
 import { IconWhatsApp } from '../components/ui/icons';
-
-// Rascunhos (confirmado: false) só aparecem no `npm run dev`. No build, nunca.
-const MOSTRAR_RASCUNHOS = import.meta.env.DEV;
 
 export function Faq() {
   return (
@@ -69,7 +67,7 @@ function Pergunta({ item }: { item: FaqItem }) {
         {pendente && MOSTRAR_RASCUNHOS && (
           <div className="rounded-lg border-2 border-dashed border-vermelho-claro p-4">
             <p className="mb-2 text-xs font-bold tracking-[0.12em] text-vermelho-claro uppercase">
-              Rascunho — confirmar com o Rhaue (não aparece no site publicado)
+              {SELO_RASCUNHO}
             </p>
             <p>{item.resposta}</p>
           </div>
