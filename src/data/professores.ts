@@ -37,7 +37,7 @@ export const professores: Professor[] = [
     ],
     foto: {
       src: '/fotos/professores/rhaue.webp',
-      alt: 'Rhaue Scuzziato sorrindo com a medalha do Floripa Fall International Open IBJJF',
+      alt: 'Rhaue Scuzziato sorrindo, em frente ao painel de um campeonato de jiu-jitsu',
       largura: 800,
       altura: 600,
     },
@@ -56,7 +56,7 @@ export const professores: Professor[] = [
     ],
     foto: {
       src: '/fotos/professores/camilo.webp',
-      alt: 'Camilo Scuzziato com a medalha do Campeonato Brasileiro de Jiu-Jitsu 2026, fazendo o número três com a mão',
+      alt: 'Camilo Scuzziato segurando uma medalha de ouro e fazendo o número três com a mão',
       largura: 800,
       altura: 600,
     },
