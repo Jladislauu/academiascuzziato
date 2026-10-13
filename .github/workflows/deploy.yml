@@ -4,7 +4,8 @@
 #   push na dev  → build de homologação → branch "deploy-dev" (dev.arenapinhais.com.br)
 #
 # As branches de publicação têm só o conteúdo de dist/ (inclusive .htaccess e api/),
-# num único commit sem histórico do código. A Hostinger puxa dessas branches.
+# sem histórico do código. Cada deploy é um commit novo em cima do deploy anterior
+# (sem push --force), para a Hostinger conseguir atualizar a pasta com git pull.
 
 name: Deploy
 
@@ -68,6 +69,15 @@ jobs:
           git init -q -b "$DESTINO"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          # Continua a partir do último deploy (na primeira vez a branch ainda não existe).
+          if git fetch -q --depth=1 origin "$DESTINO" 2>/dev/null; then
+            git reset -q --soft FETCH_HEAD
+          fi
           git add -A
+          if git rev-parse -q --verify HEAD >/dev/null && git diff --cached --quiet HEAD; then
+            echo "dist/ igual ao último deploy; nada a publicar."
+            exit 0
+          fi
           git commit -q -m "Deploy de ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
-          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$DESTINO"
+          git push -q origin "HEAD:refs/heads/$DESTINO"

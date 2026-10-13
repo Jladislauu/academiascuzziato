@@ -1,4 +1,4 @@
-import { m, useReducedMotion } from 'motion/react';
+import type { CSSProperties } from 'react';
 import { config } from '../data/config';
 import { trackAgendamentoIniciado } from '../lib/analytics';
 import { agendaLink, linkExterno } from '../lib/links';
@@ -13,16 +13,13 @@ const destaques = [
   `Até ${config.vagasPorAula} vagas por aula experimental`,
 ];
 
-export function Hero() {
-  // Com prefers-reduced-motion, só o fade (sem deslocamento).
-  const reduzir = useReducedMotion();
-  const entrada = (atraso: number) =>
-    ({
-      initial: { opacity: 0, y: reduzir ? 0 : 20 },
-      animate: { opacity: 1, y: 0 },
-      transition: { duration: 0.6, ease: 'easeOut', delay: atraso },
-    }) as const;
+/*
+ * Entrada do topo em CSS puro (classe .entrada no index.css): o conteúdo já vem
+ * no HTML pré-renderizado e aparece mesmo sem JavaScript.
+ */
+const atraso = (segundos: number) => ({ '--atraso': `${segundos}s` }) as CSSProperties;
 
+export function Hero() {
   return (
     <section id="topo" aria-labelledby="topo-titulo" className="relative isolate overflow-hidden">
       {/* Fundo: grade de quadra + faixa diagonal vermelha */}
@@ -35,32 +32,32 @@ export function Hero() {
       </div>
 
       <Container className="flex min-h-[100svh] flex-col justify-center pt-24 pb-16 md:pt-32">
-        <m.div {...entrada(0)} className="mb-8">
+        <div className="entrada mb-8" style={atraso(0)}>
           <Logo className="h-20 sm:h-24 lg:h-28" />
-        </m.div>
+        </div>
 
-        <m.p
-          {...entrada(0.04)}
-          className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-cinza-700 bg-preto/70 px-4 py-1.5 text-sm font-semibold tracking-[0.14em] text-cinza-200 uppercase"
+        <p
+          style={atraso(0.04)}
+          className="entrada mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-cinza-700 bg-preto/70 px-4 py-1.5 text-sm font-semibold tracking-[0.14em] text-cinza-200 uppercase"
         >
           <span className="size-2 rounded-full bg-vermelho" aria-hidden="true" />
           Jiu-jitsu e judô em Pinhais-PR
-        </m.p>
+        </p>
 
-        <m.h1
-          {...entrada(0.08)}
+        <h1
+          style={atraso(0.08)}
           id="topo-titulo"
-          className="font-display text-[clamp(3.75rem,17vw,9.5rem)] leading-[0.85] font-black wrap-break-word uppercase"
+          className="entrada font-display text-[clamp(3.75rem,17vw,9.5rem)] leading-[0.85] font-black wrap-break-word uppercase"
         >
           Primeira semana <span className="text-vermelho">grátis</span>
-        </m.h1>
+        </h1>
 
-        <m.p {...entrada(0.16)} className="mt-6 max-w-xl text-lg text-cinza-200 md:text-xl">
+        <p style={atraso(0.16)} className="entrada mt-6 max-w-xl text-lg text-cinza-200 md:text-xl">
           Treine uma semana inteira antes de se matricular. Para quem quer competir, para quem só quer
           treinar e para quem nunca pisou num tatame.
-        </m.p>
+        </p>
 
-        <m.div {...entrada(0.24)} className="mt-9 flex flex-col gap-3 sm:flex-row">
+        <div style={atraso(0.24)} className="entrada mt-9 flex flex-col gap-3 sm:flex-row">
           <ButtonLink
             href={agendaLink()}
             {...linkExterno}
@@ -73,16 +70,16 @@ export function Hero() {
           <ButtonLink href="#horarios" variante="secundario" tamanho="lg" className="bg-preto/60">
             Ver horários
           </ButtonLink>
-        </m.div>
+        </div>
 
-        <m.ul {...entrada(0.32)} className="mt-10 grid gap-3 text-cinza-200 sm:flex sm:flex-wrap sm:gap-x-8">
+        <ul style={atraso(0.32)} className="entrada mt-10 grid gap-3 text-cinza-200 sm:flex sm:flex-wrap sm:gap-x-8">
           {destaques.map((item) => (
             <li key={item} className="flex items-center gap-2 font-medium">
               <IconCheck className="size-5 shrink-0 text-vermelho-claro" />
               {item}
             </li>
           ))}
-        </m.ul>
+        </ul>
       </Container>
     </section>
   );

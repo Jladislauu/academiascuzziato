@@ -13,8 +13,9 @@ import type { Professor } from './types';
  * não confirmado, use confirmado: false com o texto dentro de
  * `import.meta.env.DEV ? '...' : ''` (mesmo esquema do FAQ: só aparece no `npm run dev`).
  *
- * Foto: WebP em public/fotos/professores/, retrato 4:5. Exemplo:
- *   foto: { src: '/fotos/professores/rhaue.webp', alt: 'Professor Rhaue Scuzziato', largura: 800, altura: 1000 },
+ * Foto: WebP 800x600 (4:3) em public/fotos/professores/, recortada das fotos
+ * originais. O recorte deixa de fora o emblema e o nome de equipe bordados no
+ * kimono (marca independente): use o mesmo cuidado ao trocar as fotos.
  */
 
 /** Frase de abertura da seção Professores. */
@@ -34,7 +35,12 @@ export const professores: Professor[] = [
       { texto: 'Prata no No-Gi absoluto — Curitiba Internacional 2026', confirmado: true },
       { texto: 'Prata no kimono — Curitiba Internacional 2026', confirmado: true },
     ],
-    foto: null, // TODO: foto
+    foto: {
+      src: '/fotos/professores/rhaue.webp',
+      alt: 'Rhaue Scuzziato sorrindo, em frente ao painel de um campeonato de jiu-jitsu',
+      largura: 800,
+      altura: 600,
+    },
   },
   {
     id: 'camilo',
@@ -48,6 +54,11 @@ export const professores: Professor[] = [
       { texto: 'Campeão brasileiro faixa roxa (2025)', confirmado: true },
       { texto: 'Campeão brasileiro faixa marrom (2026)', confirmado: true },
     ],
-    foto: null, // TODO: foto
+    foto: {
+      src: '/fotos/professores/camilo.webp',
+      alt: 'Camilo Scuzziato segurando uma medalha de ouro e fazendo o número três com a mão',
+      largura: 800,
+      altura: 600,
+    },
   },
 ];

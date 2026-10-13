@@ -79,12 +79,19 @@ export function EmFormacao() {
 }
 
 function FormularioInteresse() {
-  const [dados, setDados] = useState<DadosInteresse>(() => ({ ...VAZIO, modalidade: modalidadeDaUrl() }));
+  const [dados, setDados] = useState<DadosInteresse>(VAZIO);
   const [erros, setErros] = useState<ErrosInteresse>({});
   const [erroGeral, setErroGeral] = useState('');
   const [status, setStatus] = useState<Status>('preenchendo');
   const formRef = useRef<HTMLFormElement>(null);
   const sucessoRef = useRef<HTMLHeadingElement>(null);
+
+  // Link com ?modalidade=boxe já marca a modalidade. Fica num efeito (e não no
+  // useState) porque o HTML é pré-renderizado no build, sem URL do visitante.
+  useEffect(() => {
+    const modalidade = modalidadeDaUrl();
+    if (modalidade) setDados((d) => ({ ...d, modalidade }));
+  }, []);
 
   // "Quero ser avisado" na seção Modalidades marca a modalidade aqui.
   useEffect(
