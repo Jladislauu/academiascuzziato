@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { config } from '../../data/config';
 import { funcionamentoTexto } from '../../lib/format';
 import { instagramArroba, linkExterno, whatsappLink } from '../../lib/links';
@@ -10,6 +11,9 @@ const link = 'hover:text-branco underline-offset-4 hover:underline';
 
 export function Footer() {
   const { rua, bairro, cidade, uf, cep } = config.endereco;
+  // O HTML sai com o ano do build; no navegador, vira o ano atual.
+  const [ano, setAno] = useState(__ANO_BUILD__);
+  useEffect(() => setAno(new Date().getFullYear()), []);
 
   return (
     <footer className="border-t border-cinza-700 bg-cinza-900 pt-14 pb-28 text-cinza-200">
@@ -83,7 +87,7 @@ export function Footer() {
         </section>
 
         <div className="mt-8 flex flex-col gap-2 text-sm text-cinza-400 sm:flex-row sm:justify-between">
-          <p>© {new Date().getFullYear()} Arena Pinhais</p>
+          <p>© {ano} Arena Pinhais</p>
           <p>Site por Thryve</p>
         </div>
       </Container>

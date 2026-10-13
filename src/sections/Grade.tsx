@@ -24,6 +24,9 @@ type Filtro<T> = T | 'todas';
 export function Grade() {
   const [modalidade, setModalidade] = useState<Filtro<Modalidade>>('todas');
   const [publico, setPublico] = useState<Filtro<Publico>>('todas');
+  // Só anima os cards que entram depois de um filtro. Na primeira renderização
+  // (a que vira HTML no build) os cards saem sem opacity 0.
+  const [filtrou, setFiltrou] = useState(false);
 
   // Só oferece no filtro as modalidades que têm turma na grade.
   const opcoesModalidade = modalidades
@@ -54,13 +57,19 @@ export function Grade() {
           rotulo="Modalidade"
           opcoes={[{ valor: 'todas', label: 'Todas' }, ...opcoesModalidade]}
           valor={modalidade}
-          onChange={setModalidade}
+          onChange={(v) => {
+            setFiltrou(true);
+            setModalidade(v);
+          }}
         />
         <GrupoFiltro
           rotulo="Público"
           opcoes={[{ valor: 'todas', label: 'Todos' }, ...PUBLICOS]}
           valor={publico}
-          onChange={setPublico}
+          onChange={(v) => {
+            setFiltrou(true);
+            setPublico(v);
+          }}
         />
       </Reveal>
 
@@ -73,7 +82,7 @@ export function Grade() {
           {visiveis.map((turma) => (
             <m.li
               key={turma.id}
-              initial={{ opacity: 0, y: 8 }}
+              initial={filtrou ? { opacity: 0, y: 8 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25 }}
               className="flex"

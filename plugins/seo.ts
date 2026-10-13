@@ -154,6 +154,7 @@ export function seoPlugin(): Plugin {
       return html.replace('    <!-- seo -->', head);
     },
     generateBundle() {
+      if (viteConfig.build.ssr) return; // build de pré-renderização não gera robots/sitemap
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots() });
       if (!HOMOLOGACAO) this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() });
     },

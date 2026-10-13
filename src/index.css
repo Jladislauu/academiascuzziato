@@ -57,3 +57,53 @@
     color: var(--color-branco);
   }
 }
+
+/*
+ * Animações. O conteúdo vem no HTML pré-renderizado e nunca depende do
+ * JavaScript para aparecer:
+ *   .entrada          topo: fade + subida em CSS puro ao carregar
+ *   .reveal-pendente  adicionada pelo Reveal (JS) só em blocos abaixo da dobra
+ *   .reveal-ativo     quando o bloco entra na tela
+ * Com prefers-reduced-motion, só o fade, sem deslocamento.
+ */
+@layer components {
+  .entrada {
+    animation: entrada 0.6s ease-out backwards;
+    animation-delay: var(--atraso, 0s);
+  }
+
+  .reveal-pendente {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .reveal-ativo {
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.5s ease-out;
+    transition-delay: var(--atraso, 0s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .entrada {
+      animation-name: entrada-fade;
+    }
+
+    .reveal-pendente {
+      transform: none;
+    }
+  }
+}
+
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes entrada-fade {
+  from {
+    opacity: 0;
+  }
+}
