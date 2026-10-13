@@ -5,12 +5,13 @@ import { MOSTRAR_RASCUNHOS, SELO_RASCUNHO } from '../lib/rascunho';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
 import { IconMedalha } from '../components/ui/icons';
+import { FaixaDiagonal } from '../components/ui/efeitos';
 
 const MAX_DESTAQUES = 4;
 
 export function Professores() {
   return (
-    <Section id="professores" className="bg-cinza-900/40">
+    <Section id="professores" corte>
       <SectionHeading
         id="professores"
         sobretitulo="Professores"
@@ -43,63 +44,77 @@ function ProfessorCard({ professor }: { professor: Professor }) {
   }
 
   return (
-    <article className="flex w-full flex-col overflow-hidden rounded-2xl border border-cinza-700 bg-cinza-900">
-      {professor.foto ? (
-        <img
-          src={professor.foto.src}
-          alt={professor.foto.alt}
-          width={professor.foto.largura}
-          height={professor.foto.altura}
-          loading="lazy"
-          decoding="async"
-          className="aspect-4/3 w-full object-cover"
-        />
-      ) : (
-        // Placeholder até chegar a foto.
-        <div
-          aria-hidden="true"
-          className="relative flex aspect-4/3 items-center justify-center overflow-hidden bg-cinza-800"
-        >
-          <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,transparent_0_18px,var(--color-cinza-700)_18px_19px)] opacity-60" />
-          <span className="relative font-display text-8xl font-black text-cinza-700">{iniciais}</span>
+    <article className="flex w-full flex-col overflow-hidden rounded-2xl border border-tom-borda bg-tom-card">
+      {/* Foto 4:5: faixa vermelha atrás da pessoa (foto sem fundo), gradiente do preto na base e nome por cima */}
+      <div className="relative aspect-4/5 overflow-hidden bg-preto">
+        <div aria-hidden="true" className="absolute inset-0">
+          <FaixaDiagonal className="right-[4%] bg-vermelho" />
+          <FaixaDiagonal fina className="right-[calc(4%+11rem)] bg-vermelho/60 sm:right-[calc(4%+15rem)]" />
         </div>
-      )}
 
-      <div className="flex flex-1 flex-col p-6 md:p-7">
-        <h3 className="font-display text-4xl leading-none font-black uppercase">{professor.nome}</h3>
-        {professor.chamada && (
-          <p className="mt-2 font-display text-xl font-extrabold text-vermelho-claro uppercase">{professor.chamada}</p>
+        {professor.foto ? (
+          <img
+            src={professor.foto.src}
+            alt={professor.foto.alt}
+            width={professor.foto.largura}
+            height={professor.foto.altura}
+            loading="lazy"
+            decoding="async"
+            className="relative size-full object-cover"
+          />
+        ) : (
+          // Placeholder até chegar a foto.
+          <span
+            aria-hidden="true"
+            className="texto-vazado relative flex size-full items-center justify-center font-display text-9xl font-black"
+          >
+            {iniciais}
+          </span>
         )}
 
-        <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Graduação e turmas">
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t from-tom-card from-15% via-tom-card/75 to-transparent"
+        />
+
+        <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
+          <h3 className="font-display text-4xl leading-none font-black uppercase md:text-5xl">{professor.nome}</h3>
+          {professor.chamada && (
+            <p className="mt-2 font-display text-xl font-extrabold text-tom-destaque uppercase">{professor.chamada}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col px-6 pb-6 md:px-7 md:pb-7">
+        <ul className="flex flex-wrap gap-1.5" aria-label="Graduação e turmas">
           {professor.faixa && (
-            <li className="rounded-md border border-cinza-500 bg-preto px-2.5 py-1 text-sm font-semibold text-branco">
+            <li className="rounded-md border border-tom-borda-forte bg-tom-fundo px-2.5 py-1 text-sm font-semibold">
               {professor.faixa}
             </li>
           )}
           {suasTurmas.map((t) => (
-            <li key={t.id} className="rounded-md bg-cinza-800 px-2.5 py-1 text-sm font-medium text-cinza-200">
+            <li key={t.id} className="rounded-md bg-tom-chip px-2.5 py-1 text-sm font-medium text-tom-chip-texto">
               {t.nome}
               {t.nivel && ` · ${t.nivel}`}
             </li>
           ))}
         </ul>
 
-        <p className="mt-4 text-cinza-200">{professor.bio ?? 'Apresentação em breve.'}</p>
+        <p className="mt-4 text-tom-apoio">{professor.bio ?? 'Apresentação em breve.'}</p>
 
         {destaques.length > 0 && (
-          <ul className="mt-5 space-y-2.5 border-t border-cinza-700 pt-5" aria-label={`Destaques de ${professor.nome}`}>
+          <ul className="mt-5 space-y-2.5 border-t border-tom-borda pt-5" aria-label={`Destaques de ${professor.nome}`}>
             {destaques.map((d) =>
               d.confirmado ? (
                 <li key={d.texto} className="flex gap-3 font-semibold">
-                  <IconMedalha className="mt-0.5 size-5 shrink-0 text-vermelho-claro" />
+                  <IconMedalha className="mt-0.5 size-5 shrink-0 text-tom-destaque" />
                   {d.texto}
                 </li>
               ) : (
-                <li key={d.texto} className="rounded-lg border-2 border-dashed border-vermelho-claro p-3">
-                  <p className="mb-1 text-xs font-bold tracking-[0.12em] text-vermelho-claro uppercase">{SELO_RASCUNHO}</p>
+                <li key={d.texto} className="rounded-lg border-2 border-dashed border-tom-destaque p-3">
+                  <p className="mb-1 text-xs font-bold tracking-[0.12em] text-tom-destaque uppercase">{SELO_RASCUNHO}</p>
                   <p className="flex gap-3 font-semibold">
-                    <IconMedalha className="mt-0.5 size-5 shrink-0 text-vermelho-claro" />
+                    <IconMedalha className="mt-0.5 size-5 shrink-0 text-tom-destaque" />
                     {d.texto}
                   </p>
                 </li>

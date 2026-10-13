@@ -13,9 +13,11 @@ import type { Professor } from './types';
  * não confirmado, use confirmado: false com o texto dentro de
  * `import.meta.env.DEV ? '...' : ''` (mesmo esquema do FAQ: só aparece no `npm run dev`).
  *
- * Foto: WebP 800x600 (4:3) em public/fotos/professores/, recortada das fotos
- * originais. O recorte deixa de fora o emblema e o nome de equipe bordados no
- * kimono (marca independente): use o mesmo cuidado ao trocar as fotos.
+ * Foto: WebP 720x900 (4:5) com fundo transparente, em preto e branco, em
+ * public/fotos/professores/. Feitas a partir dos originais em image/ (fora do Git):
+ * pessoa recortada do fundo (modelo local de segmentação), emblema e nome de
+ * equipe bordados no kimono retocados com o tom do próprio tecido, e alto contraste.
+ * O card põe a faixa vermelha atrás da pessoa e o gradiente na base.
  */
 
 /** Frase de abertura da seção Professores. */
@@ -37,9 +39,9 @@ export const professores: Professor[] = [
     ],
     foto: {
       src: '/fotos/professores/rhaue.webp',
-      alt: 'Rhaue Scuzziato sorrindo, em frente ao painel de um campeonato de jiu-jitsu',
-      largura: 800,
-      altura: 600,
+      alt: 'Rhaue Scuzziato sorrindo, de kimono preto, segurando com os dedos enfaixados a medalha que leva no pescoço',
+      largura: 720,
+      altura: 900,
     },
   },
   {
@@ -56,9 +58,9 @@ export const professores: Professor[] = [
     ],
     foto: {
       src: '/fotos/professores/camilo.webp',
-      alt: 'Camilo Scuzziato segurando uma medalha de ouro e fazendo o número três com a mão',
-      largura: 800,
-      altura: 600,
+      alt: 'Camilo Scuzziato sorrindo, de kimono branco, mostrando a medalha do Brasileiro de Jiu-Jitsu 2026 e fazendo o número três com a outra mão',
+      largura: 720,
+      altura: 900,
     },
   },
 ];
