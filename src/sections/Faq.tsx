@@ -10,7 +10,7 @@ import { IconWhatsApp } from '../components/ui/icons';
 
 export function Faq() {
   return (
-    <Section id="faq">
+    <Section id="faq" tom="gelo">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
           <SectionHeading
@@ -20,7 +20,7 @@ export function Faq() {
             descricao="As respostas para o que mais perguntam antes do primeiro treino."
           />
           <Reveal className="hidden lg:block">
-            <p className="mb-4 text-cinza-200">Não achou sua pergunta?</p>
+            <p className="mb-4 text-tom-apoio">Não achou sua pergunta?</p>
             <ButtonLink href={whatsappLink()} {...linkExterno} variante="secundario" icone={<IconWhatsApp className="size-5" />}>
               Pergunte no WhatsApp
             </ButtonLink>
@@ -28,7 +28,7 @@ export function Faq() {
         </div>
 
         <Reveal>
-          <ul className="divide-y divide-cinza-700 border-y border-cinza-700">
+          <ul className="divide-y divide-tom-borda border-y border-tom-borda">
             {faq.map((item) => (
               <li key={item.pergunta}>
                 <Pergunta item={item} />
@@ -37,7 +37,7 @@ export function Faq() {
           </ul>
 
           <div className="mt-8 lg:hidden">
-            <p className="mb-4 text-cinza-200">Não achou sua pergunta?</p>
+            <p className="mb-4 text-tom-apoio">Não achou sua pergunta?</p>
             <ButtonLink href={whatsappLink()} {...linkExterno} variante="secundario" icone={<IconWhatsApp className="size-5" />}>
               Pergunte no WhatsApp
             </ButtonLink>
@@ -57,16 +57,16 @@ function Pergunta({ item }: { item: FaqItem }) {
         {item.pergunta}
         <span
           aria-hidden="true"
-          className="relative size-5 shrink-0 before:absolute before:top-1/2 before:left-0 before:h-0.5 before:w-5 before:-translate-y-1/2 before:bg-vermelho-claro after:absolute after:top-0 after:left-1/2 after:h-5 after:w-0.5 after:-translate-x-1/2 after:bg-vermelho-claro after:transition-transform group-open:after:scale-y-0"
+          className="relative size-5 shrink-0 before:absolute before:top-1/2 before:left-0 before:h-0.5 before:w-5 before:-translate-y-1/2 before:bg-tom-destaque after:absolute after:top-0 after:left-1/2 after:h-5 after:w-0.5 after:-translate-x-1/2 after:bg-tom-destaque after:transition-transform group-open:after:scale-y-0"
         />
       </summary>
 
-      <div className="pb-5 text-cinza-200">
+      <div className="pb-5 text-tom-apoio">
         {!pendente && <p>{item.resposta}</p>}
 
         {pendente && MOSTRAR_RASCUNHOS && (
-          <div className="rounded-lg border-2 border-dashed border-vermelho-claro p-4">
-            <p className="mb-2 text-xs font-bold tracking-[0.12em] text-vermelho-claro uppercase">
+          <div className="rounded-lg border-2 border-dashed border-tom-destaque p-4">
+            <p className="mb-2 text-xs font-bold tracking-[0.12em] text-tom-destaque uppercase">
               {SELO_RASCUNHO}
             </p>
             <p>{item.resposta}</p>
@@ -79,7 +79,7 @@ function Pergunta({ item }: { item: FaqItem }) {
             <a
               href={whatsappLink(mensagens.duvidaFaq(item.pergunta))}
               {...linkExterno}
-              className="mt-3 inline-flex items-center gap-2 font-semibold text-branco underline underline-offset-4 hover:text-vermelho-claro"
+              className="mt-3 inline-flex items-center gap-2 font-semibold text-tom-texto underline underline-offset-4 hover:text-tom-destaque"
             >
               <IconWhatsApp className="size-5" /> Perguntar no WhatsApp
             </a>

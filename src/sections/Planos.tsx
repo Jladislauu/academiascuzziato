@@ -10,7 +10,7 @@ import { IconCheck, IconSeta } from '../components/ui/icons';
 
 export function Planos() {
   return (
-    <Section id="planos">
+    <Section id="planos" tom="claro">
       <SectionHeading
         id="planos"
         sobretitulo="Planos"
@@ -27,12 +27,12 @@ export function Planos() {
       </div>
 
       <Reveal className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-        <p className="text-lg text-cinza-200">Ainda em dúvida? Treine primeiro, decida depois.</p>
+        <p className="text-lg text-tom-apoio">Ainda em dúvida? Treine primeiro, decida depois.</p>
         <a
           href={agendaLink()}
           {...linkExterno}
           onClick={() => trackAgendamentoIniciado('planos')}
-          className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-vermelho-claro uppercase hover:text-branco"
+          className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-tom-destaque uppercase hover:text-tom-texto"
         >
           Agendar aula experimental <IconSeta className="size-5" />
         </a>
@@ -48,7 +48,8 @@ function PlanoCard({ plano }: { plano: Plano }) {
     <article
       aria-labelledby={`plano-${plano.id}`}
       className={`relative flex w-full flex-col rounded-2xl border-2 p-6 md:p-8 ${
-        destaque ? 'border-vermelho bg-cinza-800' : 'border-cinza-700 bg-cinza-900'
+        // Plano Livre em destaque: card escuro sobre a seção clara
+        destaque ? 'tom-escuro border-vermelho bg-tom-fundo text-tom-texto shadow-2xl shadow-preto/25' : 'border-tom-borda bg-tom-card'
       }`}
     >
       {destaque && (
@@ -60,19 +61,19 @@ function PlanoCard({ plano }: { plano: Plano }) {
       <h3 id={`plano-${plano.id}`} className="font-display text-3xl font-extrabold uppercase">
         {plano.nome}
       </h3>
-      <p className="mt-1 text-cinza-400">{plano.descricao}</p>
+      <p className="mt-1 text-tom-suave">{plano.descricao}</p>
 
       <p className="mt-6 flex flex-wrap items-baseline gap-x-1">
         <span className="font-display text-6xl leading-none font-black sm:text-7xl">{preco(plano.precoMensal)}</span>
-        <span className="text-lg font-medium text-cinza-400">/mês</span>
+        <span className="text-lg font-medium text-tom-suave">/mês</span>
       </p>
 
-      {plano.chamada && <p className="mt-3 text-lg font-semibold text-vermelho-claro">{plano.chamada}</p>}
+      {plano.chamada && <p className="mt-3 text-lg font-semibold text-tom-destaque">{plano.chamada}</p>}
 
-      <ul className="mt-6 space-y-3 border-t border-cinza-700 pt-6">
+      <ul className="mt-6 space-y-3 border-t border-tom-borda pt-6">
         {plano.inclui.map((item) => (
-          <li key={item} className="flex gap-3 text-cinza-200">
-            <IconCheck className="mt-0.5 size-5 shrink-0 text-vermelho-claro" />
+          <li key={item} className="flex gap-3 text-tom-apoio">
+            <IconCheck className="mt-0.5 size-5 shrink-0 text-tom-destaque" />
             {item}
           </li>
         ))}

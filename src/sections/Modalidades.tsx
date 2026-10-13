@@ -4,10 +4,11 @@ import { escolherModalidadeInteresse } from '../lib/interesse';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
 import { IconSeta } from '../components/ui/icons';
+import { LinhasQuadra } from '../components/ui/efeitos';
 
 export function Modalidades() {
   return (
-    <Section id="modalidades">
+    <Section id="modalidades" decoracao={<LinhasQuadra className="opacity-70" />}>
       <SectionHeading
         id="modalidades"
         sobretitulo="Modalidades"
@@ -32,11 +33,11 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
   return (
     <article
       className={`flex w-full flex-col overflow-hidden rounded-2xl ${
-        emFormacao ? 'border-2 border-dashed border-cinza-700' : 'border border-cinza-700 bg-cinza-900'
+        emFormacao ? 'border-2 border-dashed border-tom-borda' : 'border border-tom-borda bg-tom-card'
       }`}
     >
       {modalidade.foto && (
-        <div className="relative aspect-3/2 overflow-hidden bg-cinza-800">
+        <div className="relative aspect-3/2 overflow-hidden bg-tom-chip">
           <img
             src={modalidade.foto.src}
             alt={modalidade.foto.alt}
@@ -50,7 +51,7 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
           <div
             aria-hidden="true"
             className={`absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t to-transparent ${
-              emFormacao ? 'from-preto' : 'from-cinza-900'
+              emFormacao ? 'from-tom-fundo' : 'from-tom-card'
             }`}
           />
         </div>
@@ -60,15 +61,15 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <h3 className="font-display text-5xl leading-none font-black uppercase md:text-6xl">{modalidade.nome}</h3>
           {emFormacao && (
-            <span className="rounded-md border border-cinza-500 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-cinza-200 uppercase">
+            <span className="rounded-md border border-tom-borda-forte px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-tom-apoio uppercase">
               Em formação
             </span>
           )}
         </div>
 
-        <p className="mt-3 text-cinza-200">{modalidade.descricao}</p>
+        <p className="mt-3 text-tom-apoio">{modalidade.descricao}</p>
 
-        <dl className="mt-6 grid gap-4 border-t border-cinza-700 pt-5 sm:grid-cols-2">
+        <dl className="mt-6 grid gap-4 border-t border-tom-borda pt-5 sm:grid-cols-2">
           <Info rotulo="Público" itens={modalidade.publicos} />
           {modalidade.niveis.length > 0 && <Info rotulo="Níveis" itens={modalidade.niveis} />}
         </dl>
@@ -84,14 +85,14 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
                 history.replaceState(null, '', `?modalidade=${modalidade.id}#em-formacao`);
                 document.getElementById('em-formacao')?.scrollIntoView();
               }}
-              className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-branco uppercase hover:text-vermelho-claro"
+              className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-tom-texto uppercase hover:text-tom-destaque"
             >
               Quero ser avisado <IconSeta className="size-5" />
             </a>
           ) : (
             <a
               href="#horarios"
-              className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-vermelho-claro uppercase hover:text-branco"
+              className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-tom-destaque uppercase hover:text-tom-texto"
             >
               Ver horários <IconSeta className="size-5" />
             </a>
@@ -105,10 +106,10 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
 function Info({ rotulo, itens }: { rotulo: string; itens: string[] }) {
   return (
     <div>
-      <dt className="text-xs font-semibold tracking-[0.14em] text-cinza-400 uppercase">{rotulo}</dt>
+      <dt className="text-xs font-semibold tracking-[0.14em] text-tom-suave uppercase">{rotulo}</dt>
       <dd className="mt-2 flex flex-wrap gap-1.5">
         {itens.map((item) => (
-          <span key={item} className="rounded-md bg-cinza-800 px-2.5 py-1 text-sm font-medium text-cinza-200">
+          <span key={item} className="rounded-md bg-tom-chip px-2.5 py-1 text-sm font-medium text-tom-apoio">
             {item}
           </span>
         ))}

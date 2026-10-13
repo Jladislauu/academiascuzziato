@@ -44,7 +44,7 @@ export function Grade() {
   );
 
   return (
-    <Section id="horarios" className="bg-cinza-900/40">
+    <Section id="horarios" tom="grafite">
       <SectionHeading
         id="horarios"
         sobretitulo="Grade de horários"
@@ -92,18 +92,18 @@ export function Grade() {
           ))}
         </ul>
       ) : (
-        <p className="rounded-xl border border-dashed border-cinza-700 p-8 text-center text-cinza-400">
+        <p className="rounded-xl border border-dashed border-tom-borda p-8 text-center text-tom-suave">
           Ainda não temos turma com esse filtro.{' '}
-          <a href={whatsappLink()} {...linkExterno} className="font-semibold text-branco underline underline-offset-4">
+          <a href={whatsappLink()} {...linkExterno} className="font-semibold text-tom-texto underline underline-offset-4">
             Fale com a gente
           </a>{' '}
           e conte o que você procura.
         </p>
       )}
 
-      <Reveal className="mt-8 rounded-xl border border-cinza-700 p-5 text-cinza-200 md:flex md:items-center md:gap-4">
+      <Reveal className="mt-8 rounded-xl border border-tom-borda p-5 text-tom-apoio md:flex md:items-center md:gap-4">
         <p>
-          <strong className="font-semibold text-branco">
+          <strong className="font-semibold text-tom-texto">
             Até {config.vagasPorAula} vagas por aula experimental.
           </strong>{' '}
           Vai trazer amigos? Ótimo: cada um agenda a própria vaga.
@@ -123,7 +123,7 @@ interface GrupoFiltroProps<T extends string> {
 function GrupoFiltro<T extends string>({ rotulo, opcoes, valor, onChange }: GrupoFiltroProps<T>) {
   return (
     <div role="group" aria-label={`Filtrar por ${rotulo.toLowerCase()}`}>
-      <p className="mb-2 text-xs font-semibold tracking-[0.14em] text-cinza-400 uppercase" aria-hidden="true">
+      <p className="mb-2 text-xs font-semibold tracking-[0.14em] text-tom-suave uppercase" aria-hidden="true">
         {rotulo}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -137,8 +137,8 @@ function GrupoFiltro<T extends string>({ rotulo, opcoes, valor, onChange }: Grup
               onClick={() => onChange(opcao.valor)}
               className={`min-h-11 rounded-full border-2 px-4 font-semibold transition-colors ${
                 ativo
-                  ? 'border-branco bg-branco text-preto'
-                  : 'border-cinza-700 text-cinza-200 hover:border-cinza-500 hover:text-branco'
+                  ? 'border-tom-texto bg-tom-texto text-tom-fundo'
+                  : 'border-tom-borda text-tom-apoio hover:border-tom-borda-forte hover:text-tom-texto'
               }`}
             >
               {opcao.label}
@@ -155,13 +155,13 @@ function TurmaCard({ turma }: { turma: Turma }) {
 
   return (
     <article
-      className={`flex w-full flex-col rounded-2xl border bg-cinza-900 p-5 ${
-        turma.selo ? 'border-vermelho' : 'border-cinza-700'
+      className={`tom-claro flex w-full flex-col rounded-2xl border bg-tom-fundo p-5 text-tom-texto shadow-lg shadow-preto/30 ${
+        turma.selo ? 'border-vermelho' : 'border-tom-borda'
       }`}
     >
       <div className="flex items-center justify-between gap-3 text-sm font-semibold tracking-[0.12em] uppercase">
-        <span className="text-vermelho-claro">{nomeModalidade(turma.modalidade)}</span>
-        <span className="text-cinza-400">{publicoTexto}</span>
+        <span className="text-tom-destaque">{nomeModalidade(turma.modalidade)}</span>
+        <span className="text-tom-suave">{publicoTexto}</span>
       </div>
 
       <h3 className="mt-2 font-display text-3xl leading-none font-extrabold uppercase">{turma.nome}</h3>
@@ -172,12 +172,12 @@ function TurmaCard({ turma }: { turma: Turma }) {
             <span className="rounded-md bg-vermelho px-2.5 py-1 text-sm font-semibold text-branco">{turma.selo}</span>
           )}
           {turma.nivelAviso ? (
-            <span className="rounded-md border border-vermelho-claro px-2.5 py-1 text-sm font-semibold text-vermelho-claro">
+            <span className="rounded-md border border-tom-destaque px-2.5 py-1 text-sm font-semibold text-tom-destaque">
               {turma.nivelAviso}
             </span>
           ) : (
             turma.nivel && (
-              <span className="rounded-md border border-cinza-500 px-2.5 py-1 text-sm font-medium text-cinza-200">
+              <span className="rounded-md border border-tom-borda-forte px-2.5 py-1 text-sm font-medium text-tom-apoio">
                 {turma.nivel}
               </span>
             )
@@ -185,12 +185,12 @@ function TurmaCard({ turma }: { turma: Turma }) {
         </div>
       )}
 
-      <div className="mt-5 border-t border-cinza-700 pt-5">
+      <div className="mt-5 border-t border-tom-borda pt-5">
         {turma.provisorio ? (
-          <p className="flex items-start gap-3 text-cinza-200">
-            <IconRelogio className="mt-0.5 size-5 shrink-0 text-cinza-400" />
+          <p className="flex items-start gap-3 text-tom-apoio">
+            <IconRelogio className="mt-0.5 size-5 shrink-0 text-tom-suave" />
             <span>
-              <strong className="block font-semibold text-branco">Horário a confirmar</strong>
+              <strong className="block font-semibold text-tom-texto">Horário a confirmar</strong>
               Fale com a gente
             </span>
           </p>
@@ -208,7 +208,7 @@ function TurmaCard({ turma }: { turma: Turma }) {
                     <span
                       key={dia}
                       className={`flex-1 rounded-md py-1 text-center text-sm font-semibold ${
-                        tem ? 'bg-branco text-preto' : 'border border-cinza-700 text-cinza-400'
+                        tem ? 'bg-tom-texto text-tom-fundo' : 'border border-tom-borda text-tom-suave'
                       }`}
                     >
                       {diaCurto(dia)}
@@ -221,10 +221,10 @@ function TurmaCard({ turma }: { turma: Turma }) {
         )}
       </div>
 
-      <p className="mt-4 text-sm text-cinza-400">
+      <p className="mt-4 text-sm text-tom-suave">
         {turma.professor ? (
           <>
-            Professor <span className="font-semibold text-cinza-200">{turma.professor}</span>
+            Professor <span className="font-semibold text-tom-apoio">{turma.professor}</span>
           </>
         ) : (
           'Professor a definir'

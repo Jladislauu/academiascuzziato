@@ -11,6 +11,7 @@ import { Grade } from './sections/Grade';
 import { Hero } from './sections/Hero';
 import { Localizacao } from './sections/Localizacao';
 import { Modalidades } from './sections/Modalidades';
+import { ChamadaFinal } from './sections/ChamadaFinal';
 import { Planos } from './sections/Planos';
 import { Professores } from './sections/Professores';
 
@@ -42,6 +43,7 @@ export default function App() {
           <Estrutura />
           <Faq />
           <Localizacao />
+          <ChamadaFinal />
         </main>
         <Footer />
         <WhatsAppFloat />

@@ -6,8 +6,8 @@ import { Container } from '../ui/Section';
 import { Logo } from '../ui/Logo';
 import { NAV } from './nav';
 
-const tituloColuna = 'mb-3 text-xs font-semibold tracking-[0.14em] text-cinza-400 uppercase';
-const link = 'hover:text-branco underline-offset-4 hover:underline';
+const tituloColuna = 'mb-3 text-xs font-semibold tracking-[0.14em] text-tom-suave uppercase';
+const link = 'hover:text-tom-texto underline-offset-4 hover:underline';
 
 export function Footer() {
   const { rua, bairro, cidade, uf, cep } = config.endereco;
@@ -16,14 +16,14 @@ export function Footer() {
   useEffect(() => setAno(new Date().getFullYear()), []);
 
   return (
-    <footer className="border-t border-cinza-700 bg-cinza-900 pt-14 pb-28 text-cinza-200">
+    <footer className="tom-escuro border-t border-tom-borda bg-preto-profundo pt-14 pb-28 text-tom-apoio">
       <Container>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
           <div>
             <a href="#topo" className="inline-block">
               <Logo className="h-14" />
             </a>
-            <p className="mt-4 max-w-xs text-cinza-400">
+            <p className="mt-4 max-w-xs text-tom-suave">
               Centro esportivo em Pinhais. Primeira semana de treino grátis.
             </p>
           </div>
@@ -79,14 +79,14 @@ export function Footer() {
           </nav>
         </div>
 
-        <section id="privacidade" aria-labelledby="privacidade-titulo" className="mt-12 border-t border-cinza-700 pt-8">
+        <section id="privacidade" aria-labelledby="privacidade-titulo" className="mt-12 border-t border-tom-borda pt-8">
           <h2 id="privacidade-titulo" className={tituloColuna}>
             Privacidade
           </h2>
-          <p className="max-w-3xl text-sm text-cinza-400">{config.avisoPrivacidade}</p>
+          <p className="max-w-3xl text-sm text-tom-suave">{config.avisoPrivacidade}</p>
         </section>
 
-        <div className="mt-8 flex flex-col gap-2 text-sm text-cinza-400 sm:flex-row sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 text-sm text-tom-suave sm:flex-row sm:justify-between">
           <p>© {ano} Arena Pinhais</p>
           <p>Site por Thryve</p>
         </div>

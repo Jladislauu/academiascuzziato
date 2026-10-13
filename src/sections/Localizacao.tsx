@@ -7,12 +7,17 @@ import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
 import { IconCalendario, IconSeta, IconWhatsApp } from '../components/ui/icons';
+import { TextoGigante } from '../components/ui/efeitos';
 
 export function Localizacao() {
   const { rua, bairro, cidade, uf, cep } = config.endereco;
 
   return (
-    <Section id="contato" className="bg-cinza-900/40">
+    <Section
+      id="contato"
+      granulado
+      decoracao={<TextoGigante texto="Arena" className="bottom-[-0.2em] left-1/2 -translate-x-1/2 text-[38vw] lg:text-[30rem]" />}
+    >
       <SectionHeading
         id="contato"
         sobretitulo="Localização e contato"
@@ -37,7 +42,7 @@ export function Localizacao() {
               <a
                 href={whatsappLink()}
                 {...linkExterno}
-                className="inline-flex items-center gap-2 font-semibold underline underline-offset-4 hover:text-vermelho-claro"
+                className="inline-flex items-center gap-2 font-semibold underline underline-offset-4 hover:text-tom-destaque"
               >
                 <IconWhatsApp className="size-5" />
                 Chamar no WhatsApp
@@ -48,7 +53,7 @@ export function Localizacao() {
                 <a
                   href={config.instagram}
                   {...linkExterno}
-                  className="font-semibold underline underline-offset-4 hover:text-vermelho-claro"
+                  className="font-semibold underline underline-offset-4 hover:text-tom-destaque"
                 >
                   {instagramArroba()}
                 </a>
@@ -58,7 +63,7 @@ export function Localizacao() {
               <Item rotulo="E-mail">
                 <a
                   href={`mailto:${config.email}`}
-                  className="font-semibold underline underline-offset-4 hover:text-vermelho-claro"
+                  className="font-semibold underline underline-offset-4 hover:text-tom-destaque"
                 >
                   {config.email}
                 </a>
@@ -66,7 +71,7 @@ export function Localizacao() {
             )}
           </dl>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:flex-col">
             <ButtonLink
               href={agendaLink()}
               {...linkExterno}
@@ -81,7 +86,7 @@ export function Localizacao() {
           </div>
         </Reveal>
 
-        <Reveal className="overflow-hidden rounded-2xl border border-cinza-700 bg-cinza-900">
+        <Reveal className="overflow-hidden rounded-2xl border border-tom-borda bg-tom-card">
           <iframe
             src={mapaEmbedUrl()}
             title="Mapa com a localização da Arena Pinhais"
@@ -98,8 +103,8 @@ export function Localizacao() {
 function Item({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   return (
     <div>
-      <dt className="text-xs font-semibold tracking-[0.14em] text-cinza-400 uppercase">{rotulo}</dt>
-      <dd className="mt-1.5 text-lg text-cinza-200">{children}</dd>
+      <dt className="text-xs font-semibold tracking-[0.14em] text-tom-suave uppercase">{rotulo}</dt>
+      <dd className="mt-1.5 text-lg text-tom-apoio">{children}</dd>
     </div>
   );
 }

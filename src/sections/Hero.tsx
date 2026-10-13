@@ -6,6 +6,7 @@ import { ButtonLink } from '../components/ui/Button';
 import { Container } from '../components/ui/Section';
 import { IconCalendario, IconCheck } from '../components/ui/icons';
 import { Logo } from '../components/ui/Logo';
+import { FaixaDiagonal } from '../components/ui/efeitos';
 
 const destaques = [
   'Do iniciante ao competidor',
@@ -26,12 +27,13 @@ export function Hero() {
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-cinza-900)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-cinza-900)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(ellipse_at_70%_30%,black_20%,transparent_75%)]" />
         {/* No celular a faixa fica atrás do texto, então é bem mais fraca (contraste do parágrafo). */}
-        <div className="absolute -top-[20%] -right-20 h-[140%] w-36 rotate-[20deg] bg-vermelho/25 sm:w-52 lg:right-[6%] lg:bg-vermelho/90" />
-        <div className="absolute -top-[20%] right-24 h-[140%] w-2 rotate-[20deg] bg-vermelho/20 sm:right-40 lg:right-[calc(6%+15rem)] lg:w-3 lg:bg-vermelho/50" />
+        <FaixaDiagonal className="-right-20 bg-vermelho/25 lg:right-[6%] lg:bg-vermelho/90" />
+        <FaixaDiagonal fina className="right-24 bg-vermelho/20 sm:right-40 lg:right-[calc(6%+15rem)] lg:bg-vermelho/50" />
+        <div className="granulado absolute inset-0" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-preto to-transparent" />
       </div>
 
-      <Container className="flex min-h-[100svh] flex-col justify-center pt-24 pb-16 md:pt-32">
+      <Container className="flex min-h-svh flex-col justify-center pt-24 pb-16 md:pt-32">
         <div className="entrada mb-8" style={atraso(0)}>
           <Logo className="h-20 sm:h-24 lg:h-28" />
         </div>
