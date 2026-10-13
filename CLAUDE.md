@@ -92,7 +92,7 @@ Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto
 3. **Modalidades** — card por modalidade (jiu-jitsu, judô e, como "em formação", muay thai e boxe), com público e níveis.
 4. **Grade de horários** — filtro por modalidade e por público (infantil / juvenil-adulto). Cada turma com `aulaExperimental` tem botão "Agendar" que abre a agenda (link direto da turma, se houver IDs; senão `agendaUrl`).
 5. **Turmas em formação** — formulário de interesse (ver abaixo).
-6. **Professores** — Rhaue e Camilo (fotos e textos ainda não recebidos → placeholders).
+6. **Professores** — Rhaue e Camilo, com foto, bio e destaques (`src/data/professores.ts`).
 7. **Planos** — os dois planos, botão "Quero me matricular" (por enquanto leva ao WhatsApp com mensagem pronta; depois vai para o link do gateway em `matriculaLinks`).
 8. **Estrutura** — galeria de fotos (placeholders até recebermos as fotos).
 9. **Perguntas frequentes** — precisa de kimono na aula experimental? qual a idade mínima? nunca treinei, posso ir? posso trazer amigos? o que levar? como funciona a semana grátis?
