@@ -36,7 +36,7 @@ export function Header() {
   const fundo = rolou || aberto ? 'border-cinza-700 bg-preto/95 backdrop-blur' : 'border-transparent';
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${fundo}`}>
+    <header className={`tom-escuro fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${fundo}`}>
       <Container className="flex h-16 items-center gap-4">
         <a
           href="#topo"

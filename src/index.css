@@ -8,6 +8,8 @@
   --color-*: initial;
 
   --color-preto: #0e0f12;
+  /* rodapé, um tom abaixo do preto */
+  --color-preto-profundo: #07080a;
   --color-branco: #ffffff;
   --color-vermelho: #e10600;
   /* hover dos botões vermelhos (branco sobre ele: 6,9:1) */
@@ -22,6 +24,8 @@
   --color-cinza-500: #5c6270; /* bordas fortes, ícones apagados */
   --color-cinza-400: #a3a8b4; /* texto secundário (8,1:1 sobre o preto) */
   --color-cinza-200: #d9dbe0; /* texto de apoio claro */
+  --color-cinza-100: #e9ebee; /* chips e hover sobre fundo claro */
+  --color-cinza-50: #f5f6f7; /* fundo "gelo" e cards sobre o branco */
 
   --color-whatsapp: #25d366;
 
@@ -29,7 +33,114 @@
   --font-sans: 'Barlow', system-ui, sans-serif;
 }
 
+/*
+ * Tons de seção. Cada .tom-* define os mesmos tokens semânticos, e os
+ * componentes usam só eles (bg-tom-fundo, text-tom-destaque, border-tom-borda...).
+ * Assim botões, chips, bordas e textos se adaptam ao tom da seção em volta, e
+ * um card pode trocar de tom dentro da seção (ex.: card claro sobre fundo grafite).
+ *
+ * Contraste AA conferido (texto normal ≥ 4,5:1; bordas de campo ≥ 3:1):
+ *   escuro   suave #a3a8b4 8,1 · destaque #ff4d47 5,8 · botão branco/vermelho 5,0
+ *   grafite  suave 7,5 · destaque 5,4
+ *   claro    suave #5c6270 6,2 · destaque #e10600 5,0 (4,6 sobre o gelo #f5f6f7)
+ *   vermelho texto branco 5,0 · botão vermelho sobre branco 5,0
+ */
+@theme inline {
+  --color-tom-fundo: var(--tom-fundo);
+  --color-tom-texto: var(--tom-texto);
+  --color-tom-apoio: var(--tom-apoio);
+  --color-tom-suave: var(--tom-suave);
+  --color-tom-borda: var(--tom-borda);
+  --color-tom-borda-forte: var(--tom-borda-forte);
+  --color-tom-card: var(--tom-card);
+  --color-tom-card-forte: var(--tom-card-forte);
+  --color-tom-chip: var(--tom-chip);
+  --color-tom-chip-texto: var(--tom-chip-texto);
+  --color-tom-destaque: var(--tom-destaque);
+  --color-tom-botao: var(--tom-botao);
+  --color-tom-botao-texto: var(--tom-botao-texto);
+  --color-tom-botao-hover: var(--tom-botao-hover);
+  --color-tom-linha: var(--tom-linha);
+}
+
 @layer base {
+  :root,
+  .tom-escuro,
+  .tom-grafite {
+    --tom-fundo: var(--color-preto);
+    --tom-texto: var(--color-branco);
+    --tom-apoio: var(--color-cinza-200);
+    --tom-suave: var(--color-cinza-400);
+    --tom-borda: var(--color-cinza-700);
+    --tom-borda-forte: var(--color-cinza-500);
+    --tom-card: var(--color-cinza-900);
+    --tom-card-forte: var(--color-cinza-800);
+    --tom-chip: var(--color-cinza-800);
+    --tom-chip-texto: var(--color-cinza-200);
+    --tom-destaque: var(--color-vermelho-claro);
+    --tom-foco: var(--color-branco);
+    --tom-botao: var(--color-vermelho);
+    --tom-botao-texto: var(--color-branco);
+    --tom-botao-hover: var(--color-vermelho-escuro);
+    --tom-linha: var(--color-cinza-800);
+  }
+
+  /* cinza muito escuro (grade de horários) */
+  .tom-grafite {
+    --tom-fundo: var(--color-cinza-900);
+    --tom-card: var(--color-cinza-800);
+    --tom-card-forte: var(--color-cinza-700);
+    --tom-chip: var(--color-cinza-700);
+    --tom-linha: var(--color-cinza-700);
+  }
+
+  .tom-claro,
+  .tom-gelo {
+    --tom-fundo: var(--color-branco);
+    --tom-texto: var(--color-preto);
+    --tom-apoio: var(--color-cinza-700);
+    --tom-suave: var(--color-cinza-500);
+    --tom-borda: var(--color-cinza-200);
+    --tom-borda-forte: var(--color-cinza-500);
+    --tom-card: var(--color-cinza-50);
+    --tom-card-forte: var(--color-cinza-100);
+    --tom-chip: var(--color-cinza-100);
+    --tom-chip-texto: var(--color-cinza-700);
+    /* em fundo claro o destaque é o vermelho da marca, não o vermelho-claro */
+    --tom-destaque: var(--color-vermelho);
+    --tom-foco: var(--color-preto);
+    --tom-botao: var(--color-vermelho);
+    --tom-botao-texto: var(--color-branco);
+    --tom-botao-hover: var(--color-vermelho-escuro);
+    --tom-linha: var(--color-cinza-200);
+  }
+
+  /* cinza bem claro (dúvidas): cards brancos */
+  .tom-gelo {
+    --tom-fundo: var(--color-cinza-50);
+    --tom-card: var(--color-branco);
+  }
+
+  /* vermelho de fundo: só na faixa de turmas em formação e na chamada final. Todo texto é branco. */
+  .tom-vermelho {
+    --tom-fundo: var(--color-vermelho);
+    --tom-texto: var(--color-branco);
+    --tom-apoio: var(--color-branco);
+    --tom-suave: var(--color-branco);
+    --tom-borda: color-mix(in oklab, var(--color-branco) 40%, transparent);
+    --tom-borda-forte: var(--color-branco);
+    --tom-card: var(--color-vermelho-escuro);
+    --tom-card-forte: var(--color-vermelho-escuro);
+    --tom-chip: var(--color-vermelho-escuro);
+    --tom-chip-texto: var(--color-branco);
+    --tom-destaque: var(--color-branco);
+    --tom-foco: var(--color-branco);
+    --tom-botao: var(--color-branco);
+    --tom-botao-texto: var(--color-vermelho);
+    --tom-botao-hover: var(--color-cinza-100);
+    --tom-linha: color-mix(in oklab, var(--color-branco) 22%, transparent);
+  }
+
   html {
     background-color: var(--color-preto);
     color: var(--color-branco);
@@ -47,8 +158,9 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* foco visível na cor do tom: branco no escuro e no vermelho, preto no claro */
   :focus-visible {
-    outline: 3px solid var(--color-branco);
+    outline: 3px solid var(--tom-foco);
     outline-offset: 3px;
   }
 
@@ -84,6 +196,11 @@
     transition-delay: var(--atraso, 0s);
   }
 
+  /* troca de passo do formulário */
+  .passo-entrada {
+    animation: passo 0.28s ease-out;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .entrada {
       animation-name: entrada-fade;
@@ -92,6 +209,46 @@
     .reveal-pendente {
       transform: none;
     }
+
+    .passo-entrada {
+      animation: none;
+    }
+  }
+
+  /*
+   * Motivos visuais permitidos (sempre decorativos, com aria-hidden):
+   * faixa diagonal vermelha, linhas de quadra, tipografia gigante vazada e granulado.
+   */
+
+  /* tipografia gigante vazada: só o contorno, na cor de linha do tom */
+  .texto-vazado {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--tom-linha);
+  }
+
+  /* granulado bem leve (ruído SVG), sobre o fundo e atrás do conteúdo */
+  .granulado {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+  }
+
+  /*
+   * Corte diagonal entre seções: a borda de cima sobe da esquerda para a direita,
+   * na mesma direção da faixa do topo. A seção sobe sobre a anterior pela altura
+   * do corte, e o triângulo de baixo mostra a seção anterior.
+   */
+  .corte-topo {
+    --corte: clamp(1.5rem, 5vw, 4.5rem);
+    clip-path: polygon(0 var(--corte), 100% 0, 100% 100%, 0 100%);
+    margin-top: calc(var(--corte) * -1);
+  }
+}
+
+@keyframes passo {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
   }
 }
 
