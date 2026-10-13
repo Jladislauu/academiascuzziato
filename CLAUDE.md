@@ -14,7 +14,7 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 
 - Vite + React + TypeScript + Tailwind CSS + Framer Motion
 - Site estático (`npm run build` gera `dist/`), hospedado na Hostinger em `arenapinhais.com.br`
-- Repositório no GitHub
+- Repositório privado no GitHub, com publicação automática na Hostinger (ver "Fluxo de trabalho")
 - Página única com seções e navegação por âncoras. Sem roteador por enquanto.
 - Mobile-first: a maior parte do público vem do Instagram e do WhatsApp, no celular.
 
@@ -134,6 +134,21 @@ Botão que abre `https://wa.me/?text=` com mensagem pronta: convite para a seman
 - Performance: imagens em WebP com tamanho definido, lazy loading abaixo da dobra, animações discretas (respeitar `prefers-reduced-motion`).
 - Testar em 360 px de largura.
 - Antes de concluir qualquer tarefa: `npm run build` sem erros.
+
+## Fluxo de trabalho
+
+Repositório privado no GitHub, com publicação automática (`.github/workflows/deploy.yml`):
+
+| Branch | Para quê | Publica em |
+|---|---|---|
+| `main` | produção | branch `deploy` → https://arenapinhais.com.br |
+| `dev` | homologação (não indexável) | branch `deploy-dev` → https://dev.arenapinhais.com.br |
+| `deploy`, `deploy-dev` | só o `dist/` compilado, gerado pelo workflow | nunca editar à mão |
+
+- Todo trabalho é feito na `dev` (ou em branch a partir dela), com commits pequenos.
+- Ao terminar uma tarefa: push na `dev` e abrir PR de `dev` para `main` com resumo do que mudou e checklist do que foi testado.
+- Nunca fazer push nem merge na `main` sem aprovação explícita do João.
+- Depois do merge, confirmar no GitHub Actions que o deploy da produção terminou.
 
 ## Fora do escopo agora
 
