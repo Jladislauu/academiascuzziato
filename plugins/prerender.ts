@@ -19,7 +19,7 @@ export function prerenderPlugin(): Plugin {
   let config: ResolvedConfig;
 
   return {
-    name: 'arena-prerender',
+    name: 'academia-prerender',
     apply: 'build',
     configResolved(resolvido) {
       config = resolvido;
@@ -29,7 +29,7 @@ export function prerenderPlugin(): Plugin {
       if (config.build.ssr) return;
 
       const pastaSite = path.resolve(config.root, config.build.outDir);
-      const pastaServidor = path.resolve(config.root, 'node_modules/.cache/arena-prerender');
+      const pastaServidor = path.resolve(config.root, 'node_modules/.cache/academia-prerender');
 
       await build({
         root: config.root,

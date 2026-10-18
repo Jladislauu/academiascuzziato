@@ -1,7 +1,7 @@
 # Build e publicação automática.
 #
-#   push na main → build de produção  → branch "deploy"      (arenapinhais.com.br)
-#   push na dev  → build de homologação → branch "deploy-dev" (dev.arenapinhais.com.br)
+#   push na main → build de produção  → branch "deploy"      (www.academiascuzziato.com.br)
+#   push na dev  → build de homologação → branch "deploy-dev" (dev.academiascuzziato.com.br)
 #
 # As branches de publicação têm só o conteúdo de dist/ (inclusive .htaccess e api/),
 # sem histórico do código. Cada deploy é um commit novo em cima do deploy anterior
@@ -39,7 +39,7 @@ jobs:
           else
             echo "DESTINO=deploy-dev" >> "$GITHUB_ENV"
             # Homologação: URL própria e nada indexável (ver plugins/seo.ts)
-            echo "VITE_SITE_URL=https://dev.arenapinhais.com.br" >> "$GITHUB_ENV"
+            echo "VITE_SITE_URL=https://dev.academiascuzziato.com.br" >> "$GITHUB_ENV"
             echo "VITE_HOMOLOGACAO=true" >> "$GITHUB_ENV"
           fi
 
@@ -49,7 +49,7 @@ jobs:
 
       - name: Conferir dist/
         run: |
-          for f in index.html .htaccess api/interesse.php robots.txt og-image.png brand/arena-pinhais-escuro-transparente.svg; do
+          for f in index.html .htaccess api/interesse.php robots.txt og-image.png brand/academia-scuzziato-escuro-transparente.svg site.webmanifest; do
             test -f "dist/$f" || { echo "::error::Faltou dist/$f"; exit 1; }
           done
           if [ "$DESTINO" = "deploy-dev" ]; then

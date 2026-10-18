@@ -7,8 +7,8 @@
  *   1. Copie este arquivo como config.local.php e preencha os valores.
  *   2. Coloque o config.local.php UM NÍVEL ACIMA de public_html, fora da pasta pública:
  *
- *        .../domains/arenapinhais.com.br/config.local.php          ← aqui
- *        .../domains/arenapinhais.com.br/public_html/api/interesse.php
+ *        .../domains/academiascuzziato.com.br/config.local.php         ← aqui
+ *        .../domains/academiascuzziato.com.br/public_html/api/interesse.php
  *
  *      O interesse.php lê de __DIR__ . '/../../config.local.php'.
  *   3. Crie a tabela rodando server/interesses.sql no phpMyAdmin.
@@ -20,19 +20,19 @@ return [
     // hPanel → Bancos de dados → MySQL
     'db' => [
         'host' => 'localhost',
-        'nome' => 'u000000000_arena',
-        'usuario' => 'u000000000_arena',
+        'nome' => 'u000000000_scuzziato',
+        'usuario' => 'u000000000_scuzziato',
         'senha' => 'TROQUE-PELA-SENHA-DO-BANCO',
     ],
 
     'email' => [
         // Quem recebe o aviso de novo interesse. Vazio = não envia e-mail (só grava no banco).
-        'destino' => '',
+        'destino' => 'academiascuzziato@gmail.com',
         // Remetente: use um e-mail do próprio domínio, senão o aviso cai no spam.
-        'remetente' => 'site@arenapinhais.com.br',
+        'remetente' => 'site@academiascuzziato.com.br',
     ],
 
-    // https://arenapinhais.com.br e https://www.arenapinhais.com.br já são aceitos
+    // https://www.academiascuzziato.com.br e https://academiascuzziato.com.br já são aceitos
     // pelo interesse.php. Aqui só entram endereços extras (ex.: um domínio de testes).
     'origens_permitidas' => [],
 

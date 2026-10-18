@@ -9,7 +9,7 @@ export function Estrutura() {
       <SectionHeading
         id="estrutura"
         sobretitulo="Estrutura"
-        titulo="Conheça a Arena"
+        titulo="Conheça a academia"
         descricao="Um espaço feito para treinar, na Estância Pinhais."
       />
 

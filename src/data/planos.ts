@@ -14,7 +14,7 @@ export const planos: Plano[] = [
     id: 'livre',
     nome: 'Livre',
     precoMensal: 160,
-    descricao: 'Treine todas as modalidades da Arena.',
+    descricao: 'Treine todas as modalidades da academia.',
     inclui: [
       'Todas as modalidades',
       'Jiu-jitsu e judô no mesmo plano',

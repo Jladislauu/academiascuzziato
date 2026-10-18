@@ -16,7 +16,7 @@ export function Localizacao() {
     <Section
       id="contato"
       granulado
-      decoracao={<TextoGigante texto="Arena" className="bottom-[-0.2em] left-1/2 -translate-x-1/2 text-[38vw] lg:text-[30rem]" />}
+      decoracao={<TextoGigante texto="Scuzziato" className="bottom-[-0.2em] left-1/2 -translate-x-1/2 text-[21vw] lg:text-[18rem]" />}
     >
       <SectionHeading
         id="contato"
@@ -89,7 +89,7 @@ export function Localizacao() {
         <Reveal className="overflow-hidden rounded-2xl border border-tom-borda bg-tom-card">
           <iframe
             src={mapaEmbedUrl()}
-            title="Mapa com a localização da Arena Pinhais"
+            title="Mapa com a localização da Academia Scuzziato"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             className="aspect-4/3 h-full min-h-72 w-full border-0"

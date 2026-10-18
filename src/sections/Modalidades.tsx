@@ -59,7 +59,12 @@ function ModalidadeCard({ modalidade }: { modalidade: ModalidadeInfo }) {
 
       <div className="flex flex-1 flex-col p-6 md:p-8">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <h3 className="font-display text-5xl leading-none font-black uppercase md:text-6xl">{modalidade.nome}</h3>
+          <hgroup>
+            <h3 className="font-display text-5xl leading-none font-black uppercase md:text-6xl">{modalidade.nome}</h3>
+            <p className="mt-2 font-display text-lg font-extrabold tracking-[0.08em] text-tom-destaque uppercase">
+              {modalidade.equipe}
+            </p>
+          </hgroup>
           {emFormacao && (
             <span className="rounded-md border border-tom-borda-forte px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-tom-apoio uppercase">
               Em formação

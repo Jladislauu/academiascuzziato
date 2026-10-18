@@ -8,11 +8,11 @@ interface LogoProps {
 export function Logo({ className = '', versao = 'escuro' }: LogoProps) {
   return (
     <img
-      src={`/brand/arena-pinhais-${versao}-transparente.svg`}
-      alt="Arena Pinhais"
+      src={`/brand/academia-scuzziato-${versao}-transparente.svg`}
+      alt="Academia Scuzziato"
       // Proporção do SVG (recortado rente às letras); a altura vem do className.
       width={900}
-      height={480}
+      height={254}
       className={`w-auto ${className}`}
       decoding="async"
     />

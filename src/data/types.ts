@@ -96,7 +96,7 @@ export interface Professor {
   /** Igual ao `professor` em turmas.ts: as turmas do card saem de lá. */
   nome: string;
   faixa: string | null;
-  /** Frase curta abaixo do nome (o papel do professor na Arena). */
+  /** Frase curta abaixo do nome (o papel do professor na academia). */
   chamada: string | null;
   /** 2 a 3 frases, falando com o visitante. */
   bio: string | null;
@@ -116,6 +116,8 @@ export type Periodo = 'manha' | 'tarde' | 'noite';
 export interface ModalidadeInfo {
   id: Modalidade;
   nome: string;
+  /** Nome da equipe (ex.: "Scuzziato Team Jiu-Jitsu"), subtítulo do card. */
+  equipe: string;
   descricao: string;
   publicos: string[];
   niveis: string[];

@@ -87,7 +87,7 @@ export function Footer() {
         </section>
 
         <div className="mt-8 flex flex-col gap-2 text-sm text-tom-suave sm:flex-row sm:justify-between">
-          <p>© {ano} Arena Pinhais</p>
+          <p>© {ano} Academia Scuzziato</p>
           <p>Site por Thryve</p>
         </div>
       </Container>

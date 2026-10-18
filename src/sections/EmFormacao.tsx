@@ -77,7 +77,7 @@ const VAZIO: DadosInteresse = {
 type Status = 'preenchendo' | 'enviando' | 'sucesso';
 
 export function EmFormacao() {
-  const nomes = modalidadesEmFormacao.map((m) => m.nome.toLowerCase()).join(' e ');
+  const nomes = modalidadesEmFormacao.map((m) => m.nome).join(' e ');
 
   return (
     <Section
@@ -425,7 +425,7 @@ function FormularioInteresse() {
                   className="mt-1 size-5 shrink-0 accent-vermelho"
                 />
                 <span>
-                  Concordo que a Arena Pinhais use esses dados para me avisar sobre a abertura da turma.{' '}
+                  Concordo que a Academia Scuzziato use esses dados para me avisar sobre a abertura da turma.{' '}
                   <a href="#privacidade" className="font-semibold text-tom-texto underline underline-offset-4">
                     Aviso de privacidade
                   </a>

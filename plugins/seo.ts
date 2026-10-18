@@ -45,14 +45,14 @@ function dadosEstruturados() {
     '@context': 'https://schema.org',
     '@type': 'SportsActivityLocation',
     '@id': url('/#academia'),
-    name: 'Arena Pinhais',
+    name: 'Academia Scuzziato',
     description: seo.descricao,
     url: url(),
-    logo: url('/brand/arena-pinhais-avatar.png'),
+    logo: url('/brand/academia-scuzziato-avatar.png'),
     image: url(seo.compartilhamento.imagem),
     address: {
       '@type': 'PostalAddress',
-      streetAddress: endereco.rua,
+      streetAddress: `${endereco.rua} - ${endereco.bairro}`,
       addressLocality: endereco.cidade,
       addressRegion: endereco.uf,
       postalCode: endereco.cep,
@@ -86,7 +86,7 @@ function tagsHead(): string {
     '',
     `<meta property="og:type" content="website" />`,
     `<meta property="og:locale" content="pt_BR" />`,
-    `<meta property="og:site_name" content="Arena Pinhais" />`,
+    `<meta property="og:site_name" content="Academia Scuzziato" />`,
     `<meta property="og:url" content="${url()}" />`,
     `<meta property="og:title" content="${attr(og.titulo)}" />`,
     `<meta property="og:description" content="${attr(og.descricao)}" />`,
@@ -96,6 +96,10 @@ function tagsHead(): string {
     `<meta property="og:image:height" content="630" />`,
     `<meta property="og:image:alt" content="${attr(og.imagemAlt)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${attr(og.titulo)}" />`,
+    `<meta name="twitter:description" content="${attr(og.descricao)}" />`,
+    `<meta name="twitter:image" content="${url(og.imagem)}" />`,
+    `<meta name="twitter:image:alt" content="${attr(og.imagemAlt)}" />`,
     '',
     `<script type="application/ld+json">\n${jsonLd}\n</script>`,
   ]
@@ -135,7 +139,7 @@ export function seoPlugin(): Plugin {
   let viteConfig: ResolvedConfig;
 
   return {
-    name: 'arena-seo',
+    name: 'academia-seo',
     configResolved(resolvido) {
       viteConfig = resolvido;
     },

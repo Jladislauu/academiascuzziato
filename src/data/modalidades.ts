@@ -2,6 +2,7 @@ import type { ModalidadeInfo } from './types';
 
 /*
  * Cards da seção Modalidades. Os nomes também são usados nos filtros da grade.
+ * `equipe` é o nome da equipe da modalidade ("Scuzziato Team" + modalidade), subtítulo do card.
  *
  * Fotos: WebP 960x640 (3:2) em public/fotos/modalidades/. Fotos de banco gratuito,
  * licença que permite uso comercial sem crédito obrigatório (créditos abaixo
@@ -10,12 +11,13 @@ import type { ModalidadeInfo } from './types';
  *   judo       Juan Idier Alba Enriquez (Pexels)     https://www.pexels.com/photo/4392782/
  *   muay-thai  Boris Izmaylov (Unsplash)             https://unsplash.com/photos/pMhvvnCGv5E
  *   boxe       Ron Lach (Pexels)                     https://www.pexels.com/photo/8736743/
- * Quando houver fotos da própria Arena, é só trocar o arquivo e o alt.
+ * Quando houver fotos da própria academia, é só trocar o arquivo e o alt.
  */
 export const modalidades: ModalidadeInfo[] = [
   {
     id: 'jiu-jitsu',
-    nome: 'Jiu-jitsu',
+    nome: 'Jiu-Jitsu',
+    equipe: 'Scuzziato Team Jiu-Jitsu',
     descricao: 'Com kimono (GI) e sem kimono (No-Gi).',
     publicos: ['Infantil', 'Juvenil/Adulto'],
     niveis: ['Iniciante', 'Intermediário', 'Avançado'],
@@ -30,6 +32,7 @@ export const modalidades: ModalidadeInfo[] = [
   {
     id: 'judo',
     nome: 'Judô',
+    equipe: 'Scuzziato Team Judô',
     descricao: 'Turmas para adultos e crianças.',
     publicos: ['Infantil', 'Adulto'],
     niveis: [], // TODO: níveis do judô
@@ -43,7 +46,8 @@ export const modalidades: ModalidadeInfo[] = [
   },
   {
     id: 'muay-thai',
-    nome: 'Muay thai',
+    nome: 'Muay Thai',
+    equipe: 'Scuzziato Team Muay Thai',
     descricao: 'Estamos montando as turmas. Quer treinar? Avise a gente.',
     publicos: ['Infantil', 'Adulto'],
     niveis: [],
@@ -58,6 +62,7 @@ export const modalidades: ModalidadeInfo[] = [
   {
     id: 'boxe',
     nome: 'Boxe',
+    equipe: 'Scuzziato Team Boxe',
     descricao: 'Estamos montando as turmas. Quer treinar? Avise a gente.',
     publicos: ['Infantil', 'Adulto'],
     niveis: [],

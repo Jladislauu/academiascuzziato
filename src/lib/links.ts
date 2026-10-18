@@ -46,7 +46,7 @@ export function comoChegarUrl(): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(enderecoCompleto())}`;
 }
 
-/** "https://instagram.com/arenapinhais" → "@arenapinhais" */
+/** "https://www.instagram.com/academiascuzziato" → "@academiascuzziato" */
 export function instagramArroba(): string {
   const usuario = config.instagram.replace(/\/+$/, '').split('/').pop();
   return usuario ? `@${usuario}` : '';

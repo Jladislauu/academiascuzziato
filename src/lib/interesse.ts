@@ -106,7 +106,7 @@ export function modalidadeDaUrl(): Modalidade | '' {
  * "Quero ser avisado" (seção Modalidades) → formulário já com a modalidade marcada.
  * As seções não compartilham estado, então a conversa é por um evento do window.
  */
-const EVENTO_MODALIDADE = 'arena:interesse-modalidade';
+const EVENTO_MODALIDADE = 'scuzziato:interesse-modalidade';
 
 export function escolherModalidadeInteresse(modalidade: Modalidade): void {
   window.dispatchEvent(new CustomEvent<Modalidade>(EVENTO_MODALIDADE, { detail: modalidade }));

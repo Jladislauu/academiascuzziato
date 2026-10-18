@@ -1,5 +1,6 @@
 {
-  "name": "arena-pinhais-site",
+  "name": "academia-scuzziato-site",
+  "description": "Site da Academia Scuzziato, academia de jiu-jitsu, judô, muay thai e boxe em Pinhais-PR",
   "private": true,
   "version": "0.1.0",
   "type": "module",

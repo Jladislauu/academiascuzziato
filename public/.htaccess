@@ -1,12 +1,13 @@
-# Arena Pinhais (Hostinger / LiteSpeed). Vai junto com o conteúdo de dist/.
+# Academia Scuzziato (Hostinger / LiteSpeed). Vai junto com o conteúdo de dist/.
 # HTTPS: ativar "Forçar HTTPS" no hPanel (não forçar aqui, para não dar loop com a CDN).
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # www.arenapinhais.com.br → arenapinhais.com.br (mesmo endereço do canonical)
-  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+  # academiascuzziato.com.br → www.academiascuzziato.com.br (mesmo endereço do canonical).
+  # Só o domínio sem www: o subdomínio de homologação (dev.) não é afetado.
+  RewriteCond %{HTTP_HOST} ^academiascuzziato\.com\.br$ [NC]
+  RewriteRule ^ https://www.academiascuzziato.com.br%{REQUEST_URI} [R=301,L]
 </IfModule>
 
 # Arquivos ocultos (.git, .env etc.) e logs de erro do PHP nunca ficam acessíveis

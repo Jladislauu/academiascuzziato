@@ -5,7 +5,7 @@ import type { Professor } from './types';
  * (pelo nome), então não precisa repetir aqui.
  *
  * Fontes: reportagens do Jiu-Jitsu Brasil (mar–mai/2026) e da Banda B.
- * Não citar outras equipes, mestres ou professores de fora da Arena (marca
+ * Não citar outras equipes, mestres ou professores de fora da academia (marca
  * independente; decisão pendente). Nada de vida pessoal além do que está aqui.
  * Não citar a idade atual do Camilo, só "começou aos 56 anos".
  *

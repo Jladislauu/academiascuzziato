@@ -29,7 +29,7 @@ export function ComoFunciona() {
         id="como-funciona"
         sobretitulo="Semana grátis"
         titulo="Como funciona"
-        descricao="Você conhece a Arena, os professores e a turma antes de decidir qualquer coisa."
+        descricao="Você conhece a academia, os professores e a turma antes de decidir qualquer coisa."
       />
 
       <ol className="grid gap-10 md:grid-cols-3 md:gap-8">

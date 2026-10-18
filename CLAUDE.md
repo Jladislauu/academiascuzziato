@@ -1,6 +1,6 @@
-# Arena Pinhais — site
+# Academia Scuzziato — site
 
-Site da **Arena Pinhais**, centro esportivo em Pinhais-PR que começa pelas artes marciais (jiu-jitsu e judô hoje; muay thai e boxe em formação) e vai se expandir para outros esportes. Foco em formar atletas e campeões, mas aberto a quem só quer praticar, inclusive iniciantes e crianças.
+Site da **Academia Scuzziato**, centro esportivo em Pinhais-PR que começa pelas artes marciais (jiu-jitsu e judô hoje; muay thai e boxe em formação) e vai se expandir para outros esportes. Foco em formar atletas e campeões, mas aberto a quem só quer praticar, inclusive iniciantes e crianças.
 
 Projeto da Thryve (João Lucas). Documentação completa no Notion: página "Arena Pinhais — Site".
 
@@ -13,7 +13,7 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 ## Stack
 
 - Vite + React + TypeScript + Tailwind CSS + Framer Motion
-- Site estático (`npm run build` gera `dist/`), hospedado na Hostinger em `arenapinhais.com.br`
+- Site estático (`npm run build` gera `dist/`), hospedado na Hostinger em `www.academiascuzziato.com.br`
 - Repositório privado no GitHub, com publicação automática na Hostinger (ver "Fluxo de trabalho")
 - Página única com seções e navegação por âncoras. Sem roteador por enquanto.
 - Mobile-first: a maior parte do público vem do Instagram e do WhatsApp, no celular.
@@ -23,24 +23,28 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 - **Cores** (definir como tokens no Tailwind, nunca hex solto nos componentes):
   - `preto` #0E0F12 (fundo principal; o site é escuro)
   - `branco` #FFFFFF
-  - `vermelho` #E10600 (destaque, botões principais, "PINHAIS")
+  - `vermelho` #E10600 (destaque, botões principais, "ACADEMIA" no logo)
   - cinzas derivados do preto para cards e bordas
 - **Tipografia:**
   - Títulos: Barlow Condensed 800/900, caixa alta (`@fontsource/barlow-condensed`)
   - Texto: Barlow 400/500/600 (`@fontsource/barlow`)
-- **Logo:** só tipográfico, "ARENA" em branco sobre "PINHAIS" em vermelho. Arquivos em `public/brand/`:
-  - `arena-pinhais-escuro-transparente.svg` (uso padrão sobre fundo escuro)
-  - `arena-pinhais-claro-transparente.svg` (sobre fundo claro)
-  - `arena-pinhais-favicon.png` e `arena-pinhais-avatar.png`
+- **Logo (provisório):** só tipográfico, "ACADEMIA" em vermelho, menor, acima de "SCUZZIATO" em branco, grande. Arquivos em `public/brand/` (componente `src/components/ui/Logo.tsx`):
+  - `academia-scuzziato-escuro-transparente.svg` (uso padrão sobre fundo escuro)
+  - `academia-scuzziato-claro-transparente.svg` (sobre fundo claro)
+  - `academia-scuzziato-favicon.svg`/`.png` (monograma "AS"), `academia-scuzziato-apple-touch-icon.png` e `academia-scuzziato-avatar.png`
   - Nunca recriar o logo com texto HTML; sempre usar os SVGs.
 - **Tom visual:** moderno e esportivo, como clubes e ligas esportivas. Não como academia de luta tradicional. Competitivo sem ser agressivo.
-- **Proibido:** qualquer referência à marca ou ao emblema "Arena Jiu-Jitsu", e a cor laranja #F26521. A Arena Pinhais é independente.
+- **Proibido:** qualquer referência à marca ou ao emblema "Arena Jiu-Jitsu", e a cor laranja #F26521. A Academia Scuzziato é independente.
 
 ## Dados da academia
 
+- Equipes por modalidade: "Scuzziato Team" + modalidade (Scuzziato Team Jiu-Jitsu, Scuzziato Team Judô, Scuzziato Team Muay Thai, Scuzziato Team Boxe)
 - Endereço: R. Vicente D'Andréa, 617 — Estância Pinhais, Pinhais-PR, 83323-190
 - Funcionamento: segunda a sexta, 8h às 23h
-- WhatsApp, Instagram, e-mail: **ainda não recebidos** → placeholders em `src/data/config.ts`
+- Site: https://www.academiascuzziato.com.br
+- Instagram: @academiascuzziato (https://www.instagram.com/academiascuzziato)
+- E-mail: academiascuzziato@gmail.com
+- WhatsApp: **ainda não recebido** → placeholder em `src/data/config.ts`
 - Professores: Rhaue Scuzziato e Camilo Scuzziato
 
 ## Regra mais importante: conteúdo fica em arquivos de dados
@@ -48,8 +52,8 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 Todo conteúdo que muda (turmas, horários, planos, links, contatos) vive em `src/data/`, nunca escrito dentro dos componentes. O João atualiza a grade e os links editando só esses arquivos.
 
 - `src/data/config.ts` — URLs e contatos:
-  - `agendaUrl` (Easy!Appointments, provisório: `https://agenda.arenapinhais.com.br`)
-  - `whatsapp`, `instagram`, `email` (placeholders marcados com `// TODO`)
+  - `agendaUrl` (Easy!Appointments, provisório: `https://agenda.academiascuzziato.com.br`, a confirmar)
+  - `whatsapp` (placeholder marcado com `// TODO`), `instagram`, `email`
   - `matriculaLinks` por plano (links do gateway de pagamento, ainda não existem)
 - `src/data/turmas.ts` — grade
 - `src/data/planos.ts` — planos e preços
@@ -112,7 +116,7 @@ Objetivo: descobrir quando e em que horário abrir muay thai e boxe.
 
 ## "Convide um amigo"
 
-Botão que abre `https://wa.me/?text=` com mensagem pronta: convite para a semana grátis na Arena Pinhais + link de agendamento.
+Botão que abre `https://wa.me/?text=` com mensagem pronta: convite para a semana grátis na Academia Scuzziato + link de agendamento.
 
 ## SEO local
 
@@ -141,8 +145,8 @@ Repositório privado no GitHub, com publicação automática (`.github/workflows
 
 | Branch | Para quê | Publica em |
 |---|---|---|
-| `main` | produção | branch `deploy` → https://arenapinhais.com.br |
-| `dev` | homologação (não indexável) | branch `deploy-dev` → https://dev.arenapinhais.com.br |
+| `main` | produção | branch `deploy` → https://www.academiascuzziato.com.br |
+| `dev` | homologação (não indexável) | branch `deploy-dev` → https://dev.academiascuzziato.com.br |
 | `deploy`, `deploy-dev` | só o `dist/` compilado, gerado pelo workflow | nunca editar à mão |
 
 - Todo trabalho é feito na `dev` (ou em branch a partir dela), com commits pequenos.
