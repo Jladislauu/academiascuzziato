@@ -1,7 +1,8 @@
 <?php
 
 /*
- * Modelo do config.local.php usado por public/api/interesse.php.
+ * Modelo do config.local.php usado por public/api/interesse.php (turmas em formação),
+ * public/api/agendamento.php (aula experimental) e public/painel/ (agendamentos da academia).
  *
  * No servidor (Hostinger):
  *   1. Copie este arquivo como config.local.php e preencha os valores.
@@ -11,7 +12,7 @@
  *        .../domains/academiascuzziato.com.br/public_html/api/interesse.php
  *
  *      O interesse.php lê de __DIR__ . '/../../config.local.php'.
- *   3. Crie a tabela rodando server/interesses.sql no phpMyAdmin.
+ *   3. Crie as tabelas rodando server/interesses.sql e server/agendamentos.sql no phpMyAdmin.
  *
  * Nunca coloque o config.local.php no Git (já está no .gitignore).
  */
@@ -41,9 +42,16 @@ return [
     // ou, onde houver PHP: php -r "echo bin2hex(random_bytes(32));"
     'ip_segredo' => 'TROQUE-POR-UMA-SEQUENCIA-ALEATORIA-LONGA',
 
-    // No máximo `envios` por IP a cada `janela_minutos`.
+    // No máximo `envios` por IP a cada `janela_minutos` (vale para cada formulário).
     'limite' => [
         'envios' => 5,
         'janela_minutos' => 60,
+    ],
+
+    // Painel de agendamentos (www.academiascuzziato.com.br/painel/).
+    'painel' => [
+        // Senha de quem acessa o painel, com pelo menos 12 caracteres. Com menos, o painel não abre.
+        // Para gerar uma: node -e "console.log(require('crypto').randomBytes(12).toString('base64url'))"
+        'senha' => 'TROQUE-POR-UMA-SENHA-LONGA',
     ],
 ];

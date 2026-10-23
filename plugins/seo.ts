@@ -115,6 +115,7 @@ Disallow: /
     : `User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /painel/
 
 Sitemap: ${url('/sitemap.xml')}
 `;
