@@ -8,7 +8,7 @@
   "background_color": "#0E0F12",
   "theme_color": "#0E0F12",
   "icons": [
-    { "src": "/brand/academia-scuzziato-favicon.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/brand/academia-scuzziato-favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "/brand/academia-scuzziato-favicon.png?v=2", "sizes": "512x512", "type": "image/png" },
+    { "src": "/brand/academia-scuzziato-favicon.svg?v=2", "sizes": "any", "type": "image/svg+xml" }
   ]
 }
