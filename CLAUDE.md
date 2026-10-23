@@ -30,12 +30,12 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 - **Tipografia:**
   - Títulos: Barlow Condensed 800/900, caixa alta (`@fontsource/barlow-condensed`)
   - Texto: Barlow 400/500/600 (`@fontsource/barlow`)
-- **Logo oficial (recebido em 22/10/2026):** ícone do "S" dentro de hexágono (branco, com contorno cinza) ao lado de "ACADEMIA / SCUZZIATO / — JIU-JITSU —", em branco. Arquivos (componente `src/components/ui/Logo.tsx`):
+- **Logo oficial (recebido em 22/10/2026):** ícone do "S" dentro de hexágono (branco, com contorno cinza) ao lado de "ACADEMIA / SCUZZIATO", em branco. **Sem o subtítulo "JIU-JITSU"** da arte original: a academia tem várias modalidades (versão gerada com `marca/sem-subtitulo.py`). Arquivos (componente `src/components/ui/Logo.tsx`):
   - `src/assets/marca/academia-scuzziato-escuro-transparente.svg` (uso padrão sobre fundo escuro)
   - `src/assets/marca/academia-scuzziato-claro-transparente.svg` (sobre fundo claro: preto e cinza #5C6270)
   - Ficam em `src/assets` para o build gerar um nome com hash: trocou o logo, o nome muda e nenhum cache segura o antigo.
   - Em `public/brand/`: `academia-scuzziato-favicon.svg`/`.png` (só o ícone, sobre quadrado preto arredondado para aparecer em aba clara e escura), `academia-scuzziato-apple-touch-icon.png` e `academia-scuzziato-avatar.png`
-  - `public/og-image.png`: logo + "Primeira semana grátis" (1200×630)
+  - `public/og-image.png`: logo + "Primeira semana grátis" (1200×630). Ao trocar, aumente o `?v=` em `src/data/seo.ts`.
   - Os arquivos de `public/brand/` têm nome fixo: ao trocá-los, aumente o `?v=` nos links do `index.html` e do `site.webmanifest`.
   - Os SVGs foram vetorizados das imagens em `marca/` com `marca/vetorizar.py`. Chegando arquivo em melhor resolução ou vetor original, é só trocar.
   - Nunca recriar o logo com texto HTML; sempre usar os SVGs.

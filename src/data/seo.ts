@@ -11,7 +11,7 @@ export const seo: Seo = {
   compartilhamento: {
     titulo: 'Academia Scuzziato | Primeira semana de treino grátis',
     descricao: 'Jiu-jitsu, judô e muay thai em Pinhais-PR, para adultos e crianças. Agende sua aula experimental.',
-    imagem: '/og-image.png',
+    imagem: '/og-image.png?v=2',
     imagemAlt: 'Logo da Academia Scuzziato com a chamada "Primeira semana grátis"',
   },
 };
