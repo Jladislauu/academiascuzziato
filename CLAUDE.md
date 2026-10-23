@@ -24,15 +24,18 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 - **Cores** (definir como tokens no Tailwind, nunca hex solto nos componentes):
   - `preto` #0E0F12 (fundo principal; o site é escuro)
   - `branco` #FFFFFF
-  - `vermelho` #E10600 (destaque, botões principais, "ACADEMIA" no logo)
+  - `vermelho` #E10600 (destaque, botões principais)
+  - cinza da marca #ABABAB (contorno do hexágono no logo)
   - cinzas derivados do preto para cards e bordas
 - **Tipografia:**
   - Títulos: Barlow Condensed 800/900, caixa alta (`@fontsource/barlow-condensed`)
   - Texto: Barlow 400/500/600 (`@fontsource/barlow`)
-- **Logo (provisório):** só tipográfico, "ACADEMIA" em vermelho, menor, acima de "SCUZZIATO" em branco, grande. Arquivos em `public/brand/` (componente `src/components/ui/Logo.tsx`):
+- **Logo oficial (recebido em 22/10/2026):** ícone do "S" dentro de hexágono (branco, com contorno cinza) ao lado de "ACADEMIA / SCUZZIATO / — JIU-JITSU —", em branco. Arquivos em `public/brand/` (componente `src/components/ui/Logo.tsx`):
   - `academia-scuzziato-escuro-transparente.svg` (uso padrão sobre fundo escuro)
-  - `academia-scuzziato-claro-transparente.svg` (sobre fundo claro)
-  - `academia-scuzziato-favicon.svg`/`.png` (monograma "AS"), `academia-scuzziato-apple-touch-icon.png` e `academia-scuzziato-avatar.png`
+  - `academia-scuzziato-claro-transparente.svg` (sobre fundo claro: preto e cinza #5C6270)
+  - `academia-scuzziato-favicon.svg`/`.png` (só o ícone, sobre quadrado preto arredondado para aparecer em aba clara e escura), `academia-scuzziato-apple-touch-icon.png` e `academia-scuzziato-avatar.png`
+  - `public/og-image.png`: logo + "Primeira semana grátis" (1200×630)
+  - Os SVGs foram vetorizados das imagens em `marca/` com `marca/vetorizar.py`. Chegando arquivo em melhor resolução ou vetor original, é só trocar.
   - Nunca recriar o logo com texto HTML; sempre usar os SVGs.
 - **Tom visual:** moderno e esportivo, como clubes e ligas esportivas. Não como academia de luta tradicional. Competitivo sem ser agressivo.
 - **Proibido:** qualquer referência à marca ou ao emblema "Arena Jiu-Jitsu", e a cor laranja #F26521. A Academia Scuzziato é independente.

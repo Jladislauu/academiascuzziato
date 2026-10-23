@@ -10,9 +10,9 @@ export function Logo({ className = '', versao = 'escuro' }: LogoProps) {
     <img
       src={`/brand/academia-scuzziato-${versao}-transparente.svg`}
       alt="Academia Scuzziato"
-      // Proporção do SVG (recortado rente às letras); a altura vem do className.
-      width={900}
-      height={254}
+      // Proporção do SVG (ícone + nome, recortado rente); a altura vem do className.
+      width={1095}
+      height={326}
       className={`w-auto ${className}`}
       decoding="async"
     />
