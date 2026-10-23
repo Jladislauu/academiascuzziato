@@ -256,7 +256,6 @@ function AcaoTurma({ turma }: { turma: Turma }) {
   return (
     <ButtonLink
       href={agendaLink(turma)}
-      {...linkExterno}
       icone={<IconCalendario className="size-5" />}
       className="w-full"
       aria-label={`Agendar aula experimental: ${turma.nome}`}

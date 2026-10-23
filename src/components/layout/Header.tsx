@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { agendaLink, linkExterno } from '../../lib/links';
+import { agendaLink } from '../../lib/links';
 import { trackAgendamentoIniciado } from '../../lib/analytics';
 import { ButtonLink } from '../ui/Button';
 import { Container } from '../ui/Section';
@@ -65,7 +65,6 @@ export function Header() {
 
         <ButtonLink
           href={agendaLink()}
-          {...linkExterno}
           onClick={() => trackAgendamentoIniciado('cabecalho')}
           className="ml-auto lg:ml-0"
         >

@@ -22,12 +22,17 @@ function enviarEvento(nome: string, params: Record<string, string>): void {
 }
 
 /**
- * Conversão "agendamento iniciado": clique em qualquer botão que abre a agenda.
+ * Conversão "agendamento iniciado": clique em qualquer botão que abre o agendamento.
  *
  * @param origem de onde veio o clique (ex.: 'topo', 'grade:jiu-jitsu-gi')
  */
 export function trackAgendamentoIniciado(origem: string): void {
   enviarEvento('agendamento_iniciado', { origem });
+}
+
+/** Aula experimental agendada (o agendamento foi gravado). */
+export function trackAgendamentoConcluido(turma: string): void {
+  enviarEvento('agendamento_concluido', { turma });
 }
 
 /** Envio do formulário "Turmas em formação". */

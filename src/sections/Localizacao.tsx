@@ -74,7 +74,6 @@ export function Localizacao() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:flex-col">
             <ButtonLink
               href={agendaLink()}
-              {...linkExterno}
               icone={<IconCalendario className="size-5" />}
               onClick={() => trackAgendamentoIniciado('contato')}
             >

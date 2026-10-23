@@ -4,9 +4,9 @@ export const config: Config = {
   // Produção. Na homologação (branch dev), o workflow troca por VITE_SITE_URL.
   siteUrl: import.meta.env?.VITE_SITE_URL || 'https://www.academiascuzziato.com.br',
 
-  // Provisório: Easy!Appointments. Vai ser trocado pela Thryve Agenda.
-  // TODO: confirmar o endereço da agenda no domínio novo.
-  agendaUrl: 'https://agenda.academiascuzziato.com.br',
+  // Agendamento da aula experimental, no próprio site (regras em agenda.ts).
+  // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
+  agendamentoEndpoint: '/api/agendamento.php',
 
   // TODO: número do WhatsApp da academia, só dígitos (ex.: '5541999999999').
   // Enquanto estiver vazio, os botões abrem o WhatsApp sem destinatário.
@@ -55,6 +55,8 @@ export const mensagens = {
   aviseAmigoTurma: (modalidade: string, link: string) =>
     `Entrei na lista da turma de ${modalidade} da Academia Scuzziato, em Pinhais. Bora treinar junto? Deixa seu interesse aqui: ${link}`,
   duvidaFaq: (pergunta: string) => `Olá! Tenho uma dúvida: ${pergunta}`,
-  conviteAmigo: (agendaUrl: string) =>
-    `Bora treinar comigo na Academia Scuzziato? A primeira semana é grátis. Agenda a sua aula experimental aqui: ${agendaUrl}`,
+  conviteAmigo: (link: string) =>
+    `Bora treinar comigo na Academia Scuzziato? A primeira semana é grátis. Agenda a sua aula experimental aqui: ${link}`,
+  conviteAmigoTurma: (turma: string, quando: string, link: string) =>
+    `Agendei uma aula experimental de ${turma} na Academia Scuzziato, em Pinhais, ${quando}. A primeira semana é grátis. Bora junto? Agenda a sua vaga aqui: ${link}`,
 };

@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { config } from '../data/config';
 import { trackAgendamentoIniciado } from '../lib/analytics';
-import { agendaLink, linkExterno } from '../lib/links';
+import { agendaLink } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Container } from '../components/ui/Section';
 import { IconCalendario, IconCheck } from '../components/ui/icons';
@@ -62,7 +62,6 @@ export function Hero() {
         <div style={atraso(0.24)} className="entrada mt-9 flex flex-col gap-3 sm:flex-row">
           <ButtonLink
             href={agendaLink()}
-            {...linkExterno}
             tamanho="lg"
             icone={<IconCalendario className="size-6" />}
             onClick={() => trackAgendamentoIniciado('topo')}

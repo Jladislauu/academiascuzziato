@@ -30,7 +30,6 @@ export function Planos() {
         <p className="text-lg text-tom-apoio">Ainda em dúvida? Treine primeiro, decida depois.</p>
         <a
           href={agendaLink()}
-          {...linkExterno}
           onClick={() => trackAgendamentoIniciado('planos')}
           className="inline-flex items-center gap-2 font-display text-xl font-extrabold text-tom-destaque uppercase hover:text-tom-texto"
         >

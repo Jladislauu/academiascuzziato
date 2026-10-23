@@ -153,6 +153,11 @@
     }
   }
 
+  /* Janela de agendamento aberta: a página atrás não rola. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
   body {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;

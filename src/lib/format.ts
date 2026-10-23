@@ -13,6 +13,7 @@ const DIAS: Record<DiaSemana, { curto: string; longo: string }> = {
 };
 
 export const diaCurto = (dia: Dia) => DIAS[dia].curto;
+export const diaLongo = (dia: DiaSemana) => DIAS[dia].longo;
 
 /** ['ter', 'qua', 'qui'] → "terça, quarta e quinta" */
 export function diasPorExtenso(dias: DiaSemana[]): string {

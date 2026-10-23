@@ -27,9 +27,6 @@ export interface Turma {
   aulaExperimental: boolean;
   /** true = dias e horário NÃO aparecem no site; mostra "Horário a confirmar". */
   provisorio: boolean;
-  /** IDs do Easy!Appointments para abrir a agenda já na turma. */
-  agendaProviderId?: number;
-  agendaServiceId?: number;
 }
 
 export type PlanoId = 'uma-modalidade' | 'livre';
@@ -47,7 +44,8 @@ export interface Plano {
 
 export interface Config {
   siteUrl: string;
-  agendaUrl: string;
+  /** Endpoint PHP do agendamento da aula experimental (próximas aulas e reserva). */
+  agendamentoEndpoint: string;
   /** Só dígitos, com 55 + DDD. Vazio = ainda não recebido. */
   whatsapp: string;
   instagram: string;

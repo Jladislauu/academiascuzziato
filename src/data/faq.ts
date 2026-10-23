@@ -14,7 +14,7 @@ export const faq: FaqItem[] = [
   {
     pergunta: 'Como funciona a semana grátis?',
     resposta:
-      'Você agenda a aula experimental na turma que quiser, treina com a gente durante a primeira semana sem pagar nada e só depois decide se quer se matricular. Sem compromisso.',
+      'Você agenda a primeira aula na turma que quiser e, durante a semana, vem nas outras aulas sem precisar agendar de novo. Treina sem pagar nada e só depois decide se quer se matricular. Sem compromisso.',
     confirmado: true,
   },
   {
@@ -57,7 +57,7 @@ export const faq: FaqItem[] = [
     // TODO: confirmar com o Rhaue (semana grátis vale para mais de uma modalidade?)
     pergunta: 'Posso fazer a semana grátis em mais de uma modalidade?',
     resposta: import.meta.env.DEV
-      ? 'Pode. Durante a primeira semana você pode experimentar jiu-jitsu e judô para descobrir de qual gosta mais. É só agendar cada aula.'
+      ? 'Pode. Durante a primeira semana você pode experimentar jiu-jitsu e judô para descobrir de qual gosta mais. Agende a primeira aula e combine as outras com a gente.'
       : '',
     confirmado: false,
   },
