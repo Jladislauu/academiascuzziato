@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * Formulário "Turmas em formação" (Arena Pinhais).
+ * Formulário "Turmas em formação" (Academia Scuzziato).
  *
  * Recebe JSON do site, valida, grava na tabela `interesses` (MySQL) e avisa a
  * academia por e-mail. Requer PHP 8.0+ com PDO MySQL e mbstring.
@@ -19,12 +19,12 @@ header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
 
 // Modalidades aceitas: as marcadas como emFormacao em src/data/modalidades.ts.
-const MODALIDADES = ['muay-thai' => 'Muay thai', 'boxe' => 'Boxe'];
+const MODALIDADES = ['muay-thai' => 'Muay Thai', 'boxe' => 'Boxe'];
 const PUBLICOS = ['adulto' => 'Adulto', 'infantil' => 'Infantil'];
 const DIAS = ['seg' => 'Segunda', 'ter' => 'Terça', 'qua' => 'Quarta', 'qui' => 'Quinta', 'sex' => 'Sexta'];
 const PERIODOS = ['manha' => 'Manhã', 'tarde' => 'Tarde', 'noite' => 'Noite'];
 // Endereços do site que sempre podem enviar (com e sem www). O config pode acrescentar outros.
-const ORIGENS_DO_SITE = ['https://arenapinhais.com.br', 'https://www.arenapinhais.com.br'];
+const ORIGENS_DO_SITE = ['https://www.academiascuzziato.com.br', 'https://academiascuzziato.com.br'];
 const IDADE_MIN = 1;
 const IDADE_MAX = 17;
 
@@ -208,7 +208,7 @@ if ($destino !== '') {
     ], fn ($linha) => $linha !== null));
 
     $cabecalhos = implode("\r\n", [
-        'From: Site Arena Pinhais <' . $config['email']['remetente'] . '>',
+        'From: Site Academia Scuzziato <' . $config['email']['remetente'] . '>',
         'Content-Type: text/plain; charset=UTF-8',
         'Content-Transfer-Encoding: 8bit',
     ]);

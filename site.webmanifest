@@ -1,0 +1,14 @@
+{
+  "name": "Academia Scuzziato",
+  "short_name": "Scuzziato",
+  "description": "Jiu-jitsu, judô e muay thai em Pinhais-PR. Primeira semana de treino grátis.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0F12",
+  "theme_color": "#0E0F12",
+  "icons": [
+    { "src": "/brand/academia-scuzziato-favicon.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/brand/academia-scuzziato-favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

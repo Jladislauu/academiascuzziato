@@ -1,0 +1,38 @@
+{
+  "aviso": "Gerado no build a partir de src/data. Não edite aqui.",
+  "vagasPorAula": 5,
+  "diasAFrente": 14,
+  "antecedenciaMinutos": 60,
+  "diasSemanaGratis": 7,
+  "diasSemAula": [],
+  "turmas": [
+    {
+      "id": "jiu-jitsu-gi",
+      "nome": "Jiu-jitsu com kimono (GI)",
+      "modalidade": "Jiu-Jitsu",
+      "infantil": false,
+      "professor": "Camilo Scuzziato",
+      "dias": [
+        "ter",
+        "qua",
+        "qui"
+      ],
+      "inicio": "21:00",
+      "fim": "22:00"
+    },
+    {
+      "id": "jiu-jitsu-nogi",
+      "nome": "Jiu-jitsu sem kimono (No-Gi)",
+      "modalidade": "Jiu-Jitsu",
+      "infantil": false,
+      "professor": "Rhaue Scuzziato",
+      "dias": [
+        "seg",
+        "qua",
+        "qui"
+      ],
+      "inicio": "11:00",
+      "fim": "12:00"
+    }
+  ]
+}
