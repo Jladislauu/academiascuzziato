@@ -1,0 +1,2 @@
+# Código PHP incluído pelos endpoints. Nunca acessível pelo navegador.
+Require all denied
