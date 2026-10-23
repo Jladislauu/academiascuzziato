@@ -49,7 +49,7 @@ jobs:
 
       - name: Conferir dist/
         run: |
-          for f in index.html .htaccess api/interesse.php api/agendamento.php api/inc/comum.php api/inc/.htaccess api/turmas.json painel/index.php robots.txt og-image.png brand/academia-scuzziato-escuro-transparente.svg site.webmanifest; do
+          for f in index.html .htaccess api/interesse.php api/agendamento.php api/inc/comum.php api/inc/.htaccess api/turmas.json painel/index.php robots.txt og-image.png brand/academia-scuzziato-favicon.svg site.webmanifest; do
             test -f "dist/$f" || { echo "::error::Faltou dist/$f"; exit 1; }
           done
           if [ "$DESTINO" = "deploy-dev" ]; then
