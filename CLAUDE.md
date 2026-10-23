@@ -50,7 +50,7 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 - Site: https://www.academiascuzziato.com.br
 - Instagram: @academiascuzziato (https://www.instagram.com/academiascuzziato)
 - E-mail: academiascuzziato@gmail.com
-- WhatsApp: **ainda não recebido** → placeholder em `src/data/config.ts`
+- WhatsApp: (41) 93300-2563 (`whatsapp` em `src/data/config.ts`)
 - Professores: Rhaue Scuzziato e Camilo Scuzziato
 
 ## Regra mais importante: conteúdo fica em arquivos de dados
@@ -59,7 +59,7 @@ Todo conteúdo que muda (turmas, horários, planos, links, contatos) vive em `sr
 
 - `src/data/config.ts` — URLs e contatos:
   - `agendamentoEndpoint` (`/api/agendamento.php`)
-  - `whatsapp` (placeholder marcado com `// TODO`), `instagram`, `email`
+  - `whatsapp`, `instagram`, `email`
   - `matriculaLinks` por plano (links do gateway de pagamento, ainda não existem)
 - `src/data/turmas.ts` — grade (também define o que aparece no agendamento)
 - `src/data/agenda.ts` — regras do agendamento: dias para a frente, antecedência, duração da semana grátis, dias sem aula

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { config } from '../data/config';
 import { trackAgendamentoIniciado } from '../lib/analytics';
 import { funcionamentoTexto } from '../lib/format';
-import { agendaLink, comoChegarUrl, instagramArroba, linkExterno, mapaEmbedUrl, whatsappLink } from '../lib/links';
+import { agendaLink, comoChegarUrl, instagramArroba, linkExterno, mapaEmbedUrl, whatsappLink, whatsappTexto } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
@@ -45,7 +45,7 @@ export function Localizacao() {
                 className="inline-flex items-center gap-2 font-semibold underline underline-offset-4 hover:text-tom-destaque"
               >
                 <IconWhatsApp className="size-5" />
-                Chamar no WhatsApp
+                {whatsappTexto()}
               </a>
             </Item>
             {config.instagram && (
