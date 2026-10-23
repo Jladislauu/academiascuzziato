@@ -1,19 +1,12 @@
 import { config, mensagens } from '../data/config';
 import type { Plano, Turma } from '../data/types';
+import { agendaHref, agendaUrlCompleta } from './agenda';
 
 /**
- * Link da agenda. Se a turma tiver os IDs do Easy!Appointments, abre a agenda
- * já com professor e serviço selecionados; senão, abre a agenda geral.
+ * Link dos botões "Agendar": abre a janela de agendamento (src/components/agendamento),
+ * já na turma se ela for informada. Fica na mesma aba (não usar linkExterno).
  */
-export function agendaLink(turma?: Turma): string {
-  if (turma?.agendaProviderId == null || turma.agendaServiceId == null) {
-    return config.agendaUrl;
-  }
-  const url = new URL(config.agendaUrl);
-  url.searchParams.set('provider', String(turma.agendaProviderId));
-  url.searchParams.set('service', String(turma.agendaServiceId));
-  return url.toString();
-}
+export const agendaLink = (turma?: Turma): string => agendaHref(turma?.id);
 
 /** Link do WhatsApp com mensagem pronta. Sem número configurado, abre o WhatsApp para escolher o contato. */
 export function whatsappLink(mensagem: string = mensagens.geral): string {
@@ -22,7 +15,7 @@ export function whatsappLink(mensagem: string = mensagens.geral): string {
 
 /** Convite para um amigo: abre o WhatsApp sem destinatário, com o link de agendamento. */
 export function conviteAmigoLink(): string {
-  return `https://wa.me/?text=${encodeURIComponent(mensagens.conviteAmigo(config.agendaUrl))}`;
+  return `https://wa.me/?text=${encodeURIComponent(mensagens.conviteAmigo(agendaUrlCompleta()))}`;
 }
 
 /** Link de matrícula: gateway, se houver; senão, WhatsApp com mensagem pronta. */

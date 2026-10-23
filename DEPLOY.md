@@ -2,12 +2,16 @@
 
 Passo a passo para colocar o site no ar em `www.academiascuzziato.com.br` e o checklist de testes depois de publicar.
 
-O site é estático (a pasta `dist/` gerada pelo build). A única parte que roda no servidor é o formulário "Turmas em formação": `api/interesse.php`, que grava no MySQL e manda e-mail.
+O site é estático (a pasta `dist/` gerada pelo build). O que roda no servidor, em PHP + MySQL:
+
+- `api/agendamento.php`: agendamento da aula experimental (próximas aulas, vagas e reserva);
+- `painel/`: painel da academia com os agendamentos (protegido por senha);
+- `api/interesse.php`: formulário "Turmas em formação".
 
 **Resumo:**
 
 1. Gerar o `dist/` no computador.
-2. Na Hostinger: PHP 8.2+, banco MySQL com a tabela `interesses` e e-mail remetente.
+2. Na Hostinger: PHP 8.2+, banco MySQL com as tabelas (`interesses.sql` e `agendamentos.sql`) e e-mail remetente.
 3. `config.local.php` **fora** de `public_html`.
 4. Enviar o **conteúdo** de `dist/` para `public_html`.
 5. SSL + forçar HTTPS.
@@ -33,12 +37,17 @@ dist/
 ├─ og-image.png
 ├─ robots.txt
 ├─ sitemap.xml
-├─ api/interesse.php
+├─ api/
+│  ├─ agendamento.php
+│  ├─ interesse.php
+│  ├─ turmas.json     ← gerado no build a partir de src/data (o PHP lê; bloqueado para o navegador)
+│  └─ inc/            ← código comum do PHP (bloqueado para o navegador)
+├─ painel/index.php   ← painel de agendamentos
 ├─ assets/            ← JS, CSS e fontes (nomes com hash)
 └─ brand/             ← logo e favicon
 ```
 
-Antes de publicar, confira em `src/data/config.ts` o que ainda está com `// TODO` (WhatsApp, agenda, links de matrícula). Com o WhatsApp vazio, os botões abrem o WhatsApp sem destinatário.
+Antes de publicar, confira em `src/data/config.ts` o que ainda está com `// TODO` (WhatsApp, links de matrícula). Com o WhatsApp vazio, os botões abrem o WhatsApp sem destinatário.
 
 ## 2. Versão do PHP
 
@@ -50,14 +59,14 @@ hPanel → **Sites** → `academiascuzziato.com.br` → **Avançado → Configur
 ## 3. Banco de dados
 
 1. hPanel → **Bancos de dados → Gerenciamento** (MySQL). Crie um banco e um usuário com senha forte. A Hostinger coloca um prefixo nos nomes (ex.: `u123456789_scuzziato`); anote o **nome do banco**, o **usuário** e a **senha** exatamente como aparecem.
-2. Clique em **phpMyAdmin** ao lado do banco → aba **Importar** → envie `server/interesses.sql` → **Executar**.
-3. Confira se a tabela `interesses` apareceu na lista.
+2. Clique em **phpMyAdmin** ao lado do banco → aba **Importar** → envie `server/interesses.sql` → **Executar**. Repita com `server/agendamentos.sql`.
+3. Confira se as tabelas `interesses`, `agendamentos` e `painel_tentativas` apareceram na lista.
 
 O `interesses.sql` também traz, comentadas no fim, consultas prontas para ver quantas pessoas querem cada turma e qual dia e período concentram mais interesse.
 
 ## 4. E-mail de aviso
 
-O `interesse.php` avisa a academia por e-mail a cada novo interesse.
+O `agendamento.php` e o `interesse.php` avisam a academia por e-mail a cada aula experimental agendada e a cada novo interesse.
 
 - **Remetente:** use um endereço do próprio domínio, como `site@academiascuzziato.com.br`, senão o aviso cai no spam. Crie a caixa em hPanel → **E-mails** (se o domínio ainda não tiver e-mail ativo, ative primeiro).
 - **Destino:** o e-mail da academia que vai receber os avisos (`academiascuzziato@gmail.com`).
@@ -83,7 +92,11 @@ As credenciais ficam num arquivo **fora de `public_html`**, para nunca poderem s
      ```bash
      node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
      ```
-   - `origens_permitidas`: deixe `[]`. O site com e sem `www` já é aceito.
+   - `origens_permitidas`: deixe `[]`. O site com e sem `www` já é aceito. Para testar formulário e agendamento na homologação, acrescente `https://dev.academiascuzziato.com.br`;
+   - `painel.senha`: a senha do painel de agendamentos, com pelo menos 12 caracteres. Para gerar uma:
+     ```bash
+     node -e "console.log(require('crypto').randomBytes(12).toString('base64url'))"
+     ```
 2. hPanel → **Arquivos → Gerenciador de arquivos**. Suba um nível a partir de `public_html` (para `domains/academiascuzziato.com.br/`) e envie o `config.local.php` ali.
 3. Clique com o botão direito no arquivo → **Permissões** → `600`.
 
@@ -118,11 +131,23 @@ Faça no celular (a maior parte do público vem dele) e no computador.
 
 **Botões**
 
-- [ ] Todo "Agendar" abre a agenda (`agenda.academiascuzziato.com.br` precisa estar no ar).
+- [ ] Todo "Agendar" abre a janela de agendamento; o "Agendar" da grade já abre no dia da turma escolhida.
 - [ ] O botão flutuante do WhatsApp abre a conversa com o número da academia (depois que o número for preenchido em `config.ts`).
 - [ ] "Fale com a gente" das turmas provisórias abre o WhatsApp com "Olá! Quero saber os horários de …".
 - [ ] "Quero me matricular" abre o WhatsApp com a mensagem do plano (ou o gateway, quando houver link).
 - [ ] "Como chegar" abre a rota no Google Maps, e o mapa aparece na seção de contato.
+
+**Agendamento da aula experimental**
+
+- [ ] Abra `https://www.academiascuzziato.com.br/api/agendamento.php` no navegador. Deve aparecer `{"ok":true,"aulas":[...]}` com as próximas aulas. Se aparecer erro, veja "Se algo der errado".
+- [ ] `https://www.academiascuzziato.com.br/#agendar` abre o site já no agendamento (é o link para a bio do Instagram).
+- [ ] Faça um agendamento de teste com dados reais:
+  - aparece "Aula marcada" com dia, horário e endereço;
+  - "Salvar na agenda" baixa o evento e o celular oferece salvar;
+  - o e-mail de aviso chega no destino (olhe também o spam);
+  - tente agendar de novo com o mesmo WhatsApp e nome: o site avisa que já tem aula marcada.
+- [ ] Entre em `https://www.academiascuzziato.com.br/painel/` com a senha: o agendamento de teste aparece na aula certa. Marque **Cancelado** e confira que a vaga volta no site.
+- [ ] Apague o agendamento de teste no phpMyAdmin (tabela `agendamentos`).
 
 **Formulário "Turmas em formação"**
 
@@ -139,6 +164,8 @@ Faça no celular (a maior parte do público vem dele) e no computador.
 
 - [ ] `https://www.academiascuzziato.com.br/config.local.php` dá erro 404 (o arquivo não está na pasta pública).
 - [ ] `https://www.academiascuzziato.com.br/.htaccess` e `https://www.academiascuzziato.com.br/api/error_log` dão erro 403 ou 404.
+- [ ] `https://www.academiascuzziato.com.br/api/turmas.json` e `https://www.academiascuzziato.com.br/api/inc/comum.php` dão erro 403 ou 404.
+- [ ] O painel pede senha e, depois de 5 senhas erradas seguidas, bloqueia por 15 minutos.
 
 **Conteúdo**
 
@@ -170,6 +197,9 @@ Os arquivos antigos de `assets/` podem ser apagados com segurança depois de env
 | Sintoma | O que verificar |
 |---|---|
 | Formulário mostra "Não conseguimos registrar agora" | `config.local.php` no lugar certo (passo 5) e dados do banco corretos. O motivo fica no log de erros do PHP: normalmente `public_html/api/error_log` (bloqueado para o navegador; abra pelo Gerenciador de arquivos) ou em hPanel → Avançado → logs. |
+| Agendamento mostra "Não conseguimos agendar agora" ou não carrega os horários | Mesmo caminho do formulário: `config.local.php` e banco. Confira também se as tabelas de `server/agendamentos.sql` foram criadas e se `api/turmas.json` foi publicado (vem do build). |
+| Painel diz "Defina a senha do painel" | Falta `painel.senha` (12 caracteres ou mais) no `config.local.php`. |
+| Turma não aparece no agendamento | Só aparecem turmas com `aulaExperimental: true` e `provisorio: false` em `src/data/turmas.ts`. Depois de mudar, publique de novo (o `turmas.json` é gerado no build). |
 | Formulário mostra "Origem não permitida" | O site está sendo aberto por um endereço diferente de `www.academiascuzziato.com.br` ou `academiascuzziato.com.br`. Acrescente-o em `origens_permitidas`. |
 | Interesse grava, mas o e-mail não chega | `email.destino` preenchido? Remetente do próprio domínio e caixa criada? Olhe o spam. |
 | "Recebemos vários envios seguidos daqui" | É o limite de 5 envios por IP por hora (configurável em `limite` no `config.local.php`). |

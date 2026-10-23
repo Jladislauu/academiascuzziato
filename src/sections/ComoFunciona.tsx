@@ -10,11 +10,11 @@ import { TextoGigante } from '../components/ui/efeitos';
 const passos = [
   {
     titulo: 'Agende',
-    texto: `Escolha a turma na grade e reserve sua vaga na aula experimental. São até ${config.vagasPorAula} vagas por aula.`,
+    texto: `Escolha a turma e o dia da sua primeira aula. São até ${config.vagasPorAula} vagas por aula experimental.`,
   },
   {
     titulo: 'Treine a semana',
-    texto: 'Venha treinar com a gente durante a primeira semana, sem pagar nada.',
+    texto: 'Depois da primeira aula, venha nas outras da semana sem agendar de novo e sem pagar nada.',
   },
   {
     titulo: 'Decida',
@@ -49,7 +49,6 @@ export function ComoFunciona() {
       <Reveal className="mt-14 flex flex-col gap-3 sm:flex-row sm:items-center">
         <ButtonLink
           href={agendaLink()}
-          {...linkExterno}
           tamanho="lg"
           icone={<IconCalendario className="size-6" />}
           onClick={() => trackAgendamentoIniciado('como-funciona')}

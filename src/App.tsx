@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { LazyMotion, MotionConfig, domAnimation } from 'motion/react';
+import { Agendamento } from './components/agendamento/Agendamento';
 import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { WhatsAppFloat } from './components/layout/WhatsAppFloat';
@@ -18,6 +19,7 @@ import { Professores } from './sections/Professores';
 export default function App() {
   // Links com âncora vindos de fora (ex.: ...#em-formacao): a seção só existe
   // depois que o React monta, então o navegador não rola sozinho.
+  // (#agendar não é seção: abre a janela de agendamento, ver components/agendamento.)
   useEffect(() => {
     if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }, []);
@@ -47,6 +49,7 @@ export default function App() {
         </main>
         <Footer />
         <WhatsAppFloat />
+        <Agendamento />
       </MotionConfig>
     </LazyMotion>
   );

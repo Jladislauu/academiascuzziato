@@ -10,8 +10,9 @@
   RewriteRule ^ https://www.academiascuzziato.com.br%{REQUEST_URI} [R=301,L]
 </IfModule>
 
-# Arquivos ocultos (.git, .env etc.) e logs de erro do PHP nunca ficam acessíveis
-<FilesMatch "^\.|^error_log$|\.log$">
+# Arquivos ocultos (.git, .env etc.), logs de erro do PHP e a cópia das turmas
+# usada pelo agendamento (api/turmas.json, lida só pelo PHP) nunca ficam acessíveis
+<FilesMatch "^\.|^error_log$|\.log$|^turmas\.json$">
   Require all denied
 </FilesMatch>
 

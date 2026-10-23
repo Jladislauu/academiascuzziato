@@ -1,5 +1,5 @@
 import { trackAgendamentoIniciado } from '../lib/analytics';
-import { agendaLink, linkExterno } from '../lib/links';
+import { agendaLink } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
 import { Section } from '../components/ui/Section';
@@ -30,7 +30,6 @@ export function ChamadaFinal() {
         </div>
         <ButtonLink
           href={agendaLink()}
-          {...linkExterno}
           tamanho="lg"
           className="shrink-0"
           icone={<IconCalendario className="size-6" />}
