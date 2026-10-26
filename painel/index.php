@@ -260,8 +260,10 @@ foreach ($consulta as $linha) {
 }
 
 try {
-    $vagasPorAula = (int) carregarAgenda()['vagasPorAula'];
+    $agendaPainel = carregarAgenda();
+    $vagasPorAula = (int) $agendaPainel['vagasPorAula'];
 } catch (Throwable) {
+    $agendaPainel = null;
     $vagasPorAula = 5;
 }
 
@@ -315,10 +317,12 @@ ob_start();
         $primeira = $pessoas[0];
         $ocupadas = count(array_filter($pessoas, fn ($p) => $p['status'] !== 'cancelado'));
         $quando = dataPorExtenso($data) . ' às ' . horaCurta($primeira['inicio']);
+        $turmaInfo = $agendaPainel ? turmaPorId($agendaPainel, $primeira['turma_id']) : null;
+        $professor = $turmaInfo ? professorDaAula($turmaInfo, $data) : null;
         ?>
       <section class="aula" aria-label="<?= e($primeira['turma_nome'] . ', ' . $quando) ?>">
         <div class="aula-topo">
-          <strong><?= e(horaCurta($primeira['inicio']) . '–' . horaCurta($primeira['fim'])) ?> · <?= e($primeira['turma_nome']) ?></strong>
+          <strong><?= e(horaCurta($primeira['inicio']) . '–' . horaCurta($primeira['fim'])) ?> · <?= e($primeira['turma_nome']) ?><?= $professor ? ' · Prof. ' . e($professor) : '' ?></strong>
           <span class="vagas<?= $ocupadas >= $vagasPorAula ? ' lotada' : '' ?>"><?= $ocupadas ?> de <?= $vagasPorAula ?> vagas</span>
         </div>
         <ul class="pessoas">
