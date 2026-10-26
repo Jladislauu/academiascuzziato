@@ -18,11 +18,15 @@ import type { Professor } from './types';
  * pessoa recortada do fundo (modelo local de segmentação), emblema e nome de
  * equipe bordados no kimono retocados com o tom do próprio tecido, e alto contraste.
  * O card põe a faixa vermelha atrás da pessoa e o gradiente na base.
+ * Sem foto (foto: null), o card mostra o ícone da marca no lugar.
+ *
+ * Professores novos (26/10/2026): só nome e modalidade por enquanto.
+ * TODO: foto, faixa, bio e destaques do Leynha, do João Menegonni e do Evandro Nascimento.
  */
 
 /** Frase de abertura da seção Professores. */
 export const introProfessores =
-  'Pai e filho, dois faixas pretas: um forma atletas para competir, o outro é a prova de que nunca é tarde para começar.';
+  'Rhaue e Camilo, pai e filho e faixas pretas, comandam o jiu-jitsu. Com eles, um time de professores no jiu-jitsu feminino, no judô e no muay thai.';
 
 export const professores: Professor[] = [
   {
@@ -62,5 +66,32 @@ export const professores: Professor[] = [
       largura: 720,
       altura: 900,
     },
+  },
+  {
+    id: 'leynha',
+    nome: 'Leynha',
+    faixa: null,
+    chamada: 'Jiu-jitsu feminino',
+    bio: null,
+    destaques: [],
+    foto: null,
+  },
+  {
+    id: 'joao-menegonni',
+    nome: 'João Menegonni',
+    faixa: null,
+    chamada: 'Judô',
+    bio: null,
+    destaques: [],
+    foto: null,
+  },
+  {
+    id: 'evandro-nascimento',
+    nome: 'Evandro Nascimento',
+    faixa: null,
+    chamada: 'Muay Thai',
+    bio: null,
+    destaques: [],
+    foto: null,
   },
 ];

@@ -1,6 +1,9 @@
+import iconeMarca from '../assets/marca/academia-scuzziato-icone.svg';
 import { introProfessores, professores } from '../data/professores';
 import { turmas } from '../data/turmas';
 import type { Professor } from '../data/types';
+import { professoresDaTurma } from '../lib/aulas';
+import { diaCurto } from '../lib/format';
 import { MOSTRAR_RASCUNHOS, SELO_RASCUNHO } from '../lib/rascunho';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
@@ -19,7 +22,7 @@ export function Professores() {
         descricao={introProfessores}
       />
 
-      <ul className="grid gap-5 md:grid-cols-2 lg:max-w-5xl">
+      <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {professores.map((professor, i) => (
           <Reveal as="li" key={professor.id} atraso={i * 0.08} className="flex">
             <ProfessorCard professor={professor} />
@@ -31,13 +34,14 @@ export function Professores() {
 }
 
 function ProfessorCard({ professor }: { professor: Professor }) {
-  const suasTurmas = turmas.filter((t) => t.professor === professor.nome);
+  // Turmas em que dá aula em pelo menos um dia (com os dias, se não forem todos os da turma).
+  const suasTurmas = turmas.flatMap((t) => {
+    const grupo = professoresDaTurma(t).find((g) => g.nome === professor.nome);
+    if (!grupo || t.provisorio) return [];
+    const parcial = grupo.dias.length < t.dias.length;
+    return [{ turma: t, detalhe: parcial ? grupo.dias.map(diaCurto).join(', ').toLowerCase() : t.nivel }];
+  });
   const destaques = professor.destaques.filter((d) => d.confirmado || MOSTRAR_RASCUNHOS);
-  const iniciais = professor.nome
-    .split(/\s+/)
-    .map((parte) => parte[0])
-    .slice(0, 2)
-    .join('');
 
   if (import.meta.env.DEV && professor.destaques.length > MAX_DESTAQUES) {
     console.warn(`[professores] ${professor.nome} tem mais de ${MAX_DESTAQUES} destaques.`);
@@ -63,13 +67,10 @@ function ProfessorCard({ professor }: { professor: Professor }) {
             className="relative size-full object-cover"
           />
         ) : (
-          // Placeholder até chegar a foto.
-          <span
-            aria-hidden="true"
-            className="texto-vazado relative flex size-full items-center justify-center font-display text-9xl font-black"
-          >
-            {iniciais}
-          </span>
+          // Imagem padrão até chegar a foto: o ícone da marca.
+          <div aria-hidden="true" className="relative flex size-full items-start justify-center pt-[16%]">
+            <img src={iconeMarca} alt="" width={160} height={167} className="w-2/5 opacity-30" />
+          </div>
         )}
 
         <div
@@ -92,10 +93,10 @@ function ProfessorCard({ professor }: { professor: Professor }) {
               {professor.faixa}
             </li>
           )}
-          {suasTurmas.map((t) => (
-            <li key={t.id} className="rounded-md bg-tom-chip px-2.5 py-1 text-sm font-medium text-tom-chip-texto">
-              {t.nome}
-              {t.nivel && ` · ${t.nivel}`}
+          {suasTurmas.map(({ turma, detalhe }) => (
+            <li key={turma.id} className="rounded-md bg-tom-chip px-2.5 py-1 text-sm font-medium text-tom-chip-texto">
+              {turma.nome}
+              {detalhe && ` · ${detalhe}`}
             </li>
           ))}
         </ul>
