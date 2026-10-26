@@ -11,12 +11,18 @@
       "nome": "Jiu-jitsu com kimono (GI)",
       "modalidade": "Jiu-Jitsu",
       "infantil": false,
-      "professor": "Camilo Scuzziato",
       "dias": [
+        "seg",
         "ter",
         "qua",
         "qui"
       ],
+      "professores": {
+        "seg": "Rhaue Scuzziato",
+        "ter": "Rhaue Scuzziato",
+        "qua": "Camilo Scuzziato",
+        "qui": "Camilo Scuzziato"
+      },
       "inicio": "21:00",
       "fim": "22:00"
     },
@@ -25,14 +31,106 @@
       "nome": "Jiu-jitsu sem kimono (No-Gi)",
       "modalidade": "Jiu-Jitsu",
       "infantil": false,
-      "professor": "Rhaue Scuzziato",
       "dias": [
         "seg",
+        "ter",
+        "qua",
+        "qui",
+        "sex"
+      ],
+      "professores": {
+        "seg": "Rhaue Scuzziato",
+        "ter": "Rhaue Scuzziato",
+        "qua": "Rhaue Scuzziato",
+        "qui": "Rhaue Scuzziato",
+        "sex": "Rhaue Scuzziato"
+      },
+      "inicio": "11:00",
+      "fim": "12:00"
+    },
+    {
+      "id": "jiu-jitsu-feminino",
+      "nome": "Jiu-jitsu feminino (GI)",
+      "modalidade": "Jiu-Jitsu",
+      "infantil": false,
+      "dias": [
+        "ter",
+        "qui"
+      ],
+      "professores": {
+        "ter": "Leynha",
+        "qui": "Leynha"
+      },
+      "inicio": "20:10",
+      "fim": "21:10"
+    },
+    {
+      "id": "jiu-jitsu-infantil-3-5",
+      "nome": "Jiu-jitsu infantil (3 a 5 anos)",
+      "modalidade": "Jiu-Jitsu",
+      "infantil": true,
+      "dias": [
+        "ter",
+        "qui"
+      ],
+      "professores": {
+        "ter": "Camilo Scuzziato",
+        "qui": "Camilo Scuzziato"
+      },
+      "inicio": "10:00",
+      "fim": "11:00"
+    },
+    {
+      "id": "jiu-jitsu-infantil-6-11",
+      "nome": "Jiu-jitsu infantil (6 a 11 anos)",
+      "modalidade": "Jiu-Jitsu",
+      "infantil": true,
+      "dias": [
+        "ter",
+        "qui"
+      ],
+      "professores": {
+        "ter": "Camilo Scuzziato",
+        "qui": "Camilo Scuzziato"
+      },
+      "inicio": "18:00",
+      "fim": "19:00"
+    },
+    {
+      "id": "judo-infantil",
+      "nome": "Judô infantil (3 a 5 anos)",
+      "modalidade": "Judô",
+      "infantil": true,
+      "dias": [
+        "seg",
+        "ter",
         "qua",
         "qui"
       ],
-      "inicio": "11:00",
-      "fim": "12:00"
+      "professores": {
+        "seg": null,
+        "ter": "João Menegonni",
+        "qua": "João Menegonni",
+        "qui": "João Menegonni"
+      },
+      "inicio": "19:00",
+      "fim": "20:00"
+    },
+    {
+      "id": "muay-thai-adulto",
+      "nome": "Muay Thai adulto",
+      "modalidade": "Muay Thai",
+      "infantil": false,
+      "dias": [
+        "ter",
+        "qui"
+      ],
+      "professores": {
+        "ter": "Evandro Nascimento",
+        "qui": "Evandro Nascimento"
+      },
+      "inicio": "19:00",
+      "fim": "20:00"
     }
   ]
 }
