@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { m } from 'motion/react';
 import { config, mensagens } from '../data/config';
 import { modalidades, nomeModalidade } from '../data/modalidades';
-import { turmas } from '../data/turmas';
+import { openMat, turmas } from '../data/turmas';
 import type { Dia, Modalidade, Publico, Turma } from '../data/types';
 import { trackAgendamentoIniciado } from '../lib/analytics';
+import { professoresDaTurma, turmasAgendaveis } from '../lib/aulas';
 import { diaCurto, diasPorExtenso, faixaHorario } from '../lib/format';
 import { agendaLink, linkExterno, whatsappLink } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
@@ -101,7 +102,17 @@ export function Grade() {
         </p>
       )}
 
-      <Reveal className="mt-8 rounded-xl border border-tom-borda p-5 text-tom-apoio md:flex md:items-center md:gap-4">
+      <Reveal className="mt-8 flex flex-col gap-1 rounded-xl border border-tom-borda bg-tom-card p-5 sm:flex-row sm:items-baseline sm:gap-4">
+        <p className="font-display text-2xl font-extrabold uppercase">
+          {openMat.dia}: open mat
+        </p>
+        <p className="text-tom-apoio">
+          <strong className="font-semibold text-tom-texto">{faixaHorario(openMat.inicio, openMat.fim)}.</strong> Treino livre no
+          tatame.
+        </p>
+      </Reveal>
+
+      <Reveal className="mt-4 rounded-xl border border-tom-borda p-5 text-tom-apoio md:flex md:items-center md:gap-4">
         <p>
           <strong className="font-semibold text-tom-texto">
             Até {config.vagasPorAula} vagas por aula experimental.
@@ -221,15 +232,9 @@ function TurmaCard({ turma }: { turma: Turma }) {
         )}
       </div>
 
-      <p className="mt-4 text-sm text-tom-suave">
-        {turma.professor ? (
-          <>
-            Professor <span className="font-semibold text-tom-apoio">{turma.professor}</span>
-          </>
-        ) : (
-          'Professor a definir'
-        )}
-      </p>
+      <ProfessoresTurma turma={turma} />
+
+      {turma.observacao && <p className="mt-2 text-sm font-semibold text-tom-apoio">{turma.observacao}</p>}
 
       <div className="mt-auto pt-5">
         <AcaoTurma turma={turma} />
@@ -238,8 +243,29 @@ function TurmaCard({ turma }: { turma: Turma }) {
   );
 }
 
+/** "Prof. Rhaue Scuzziato (seg, ter) · Camilo Scuzziato (qua, qui)" */
+function ProfessoresTurma({ turma }: { turma: Turma }) {
+  // Professores confirmados primeiro; "a confirmar" por último.
+  const grupos = professoresDaTurma(turma).sort((a, b) => Number(a.nome === null) - Number(b.nome === null));
+  const varios = grupos.length > 1 && !turma.provisorio;
+  return (
+    <p className="mt-4 text-sm text-tom-suave">
+      Prof.{' '}
+      {grupos.map((g, i) => (
+        <span key={g.nome ?? 'a-confirmar'}>
+          {i > 0 && ' · '}
+          <span className={g.nome ? 'font-semibold text-tom-apoio' : ''}>{g.nome ?? 'a confirmar'}</span>
+          {varios && ` (${g.dias.map(diaCurto).join(', ').toLowerCase()})`}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+const ID_AGENDAVEIS = new Set(turmasAgendaveis(turmas).map((t) => t.id));
+
 function AcaoTurma({ turma }: { turma: Turma }) {
-  if (turma.provisorio || !turma.aulaExperimental) {
+  if (!ID_AGENDAVEIS.has(turma.id)) {
     return (
       <ButtonLink
         href={whatsappLink(mensagens.horariosTurma(turma.nome))}
