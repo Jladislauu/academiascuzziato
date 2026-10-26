@@ -58,7 +58,8 @@ const passoDoCampo = (campo: string) => PASSOS.findIndex((p) => p.campos.include
 const VAZIO: DadosInteresse = {
   nome: '',
   whatsapp: '',
-  modalidade: '',
+  // Com uma modalidade só em formação, ela já vem marcada.
+  modalidade: modalidadesEmFormacao.length === 1 ? modalidadesEmFormacao[0].id : '',
   publico: '',
   idadeCrianca: '',
   dias: [],
@@ -279,9 +280,11 @@ function FormularioInteresse() {
           >
             Avise um amigo
           </ButtonLink>
-          <Botao variante="secundario" tamanho="lg" onClick={novoEnvio}>
-            Marcar outra modalidade
-          </Botao>
+          {modalidadesEmFormacao.length > 1 && (
+            <Botao variante="secundario" tamanho="lg" onClick={novoEnvio}>
+              Marcar outra modalidade
+            </Botao>
+          )}
         </div>
       </div>
     );

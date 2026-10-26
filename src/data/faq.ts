@@ -20,7 +20,7 @@ export const faq: FaqItem[] = [
   {
     pergunta: 'Nunca treinei. Posso ir?',
     resposta:
-      'Pode, e vai ser um prazer receber você. A turma de jiu-jitsu com kimono (GI), com o professor Camilo, é a ideal para começar. O jiu-jitsu sem kimono (No-Gi) é avançado, para quem já treina.',
+      'Pode, e vai ser um prazer receber você. A turma de jiu-jitsu com kimono (GI) é a ideal para começar. O jiu-jitsu sem kimono (No-Gi) é avançado, para quem já treina.',
     confirmado: true,
   },
   {
@@ -40,12 +40,10 @@ export const faq: FaqItem[] = [
     confirmado: false,
   },
   {
-    // TODO: confirmar com o Rhaue (idade mínima das turmas infantis)
     pergunta: 'Qual a idade mínima para as turmas infantis?',
-    resposta: import.meta.env.DEV
-      ? 'As turmas infantis recebem crianças a partir de 4 anos. O agendamento da aula experimental de criança é feito pelo responsável.'
-      : '',
-    confirmado: false,
+    resposta:
+      'As turmas infantis começam aos 3 anos. No jiu-jitsu, tem turma de 3 a 5 anos e de 6 a 11 anos. O agendamento da aula experimental de criança é feito pelo responsável.',
+    confirmado: true,
   },
   {
     pergunta: 'Posso trazer amigos?',

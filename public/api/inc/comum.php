@@ -101,6 +101,13 @@ function minutosDoDia(string $hhmm): int
     return $h * 60 + $m;
 }
 
+/** Professor da turma no dia de uma data ('AAAA-MM-DD'); null = a confirmar. */
+function professorDaAula(array $turma, string $data): ?string
+{
+    $dia = new DateTimeImmutable($data . ' 12:00', new DateTimeZone(FUSO_ACADEMIA));
+    return $turma['professores'][DIAS_SEMANA[(int) $dia->format('N')]] ?? null;
+}
+
 /**
  * Próximas aulas de uma turma que ainda podem ser agendadas.
  * Mesma regra de src/lib/aulas.ts (proximasAulas). Mudou lá, mude aqui.
@@ -116,8 +123,12 @@ function proximasAulas(array $turma, array $agenda, DateTimeImmutable $agora): a
     for ($i = 0; $i < (int) $agenda['diasAFrente']; $i++) {
         $dia = $hoje->modify("+{$i} days");
         $data = $dia->format('Y-m-d');
-        if (!in_array(DIAS_SEMANA[(int) $dia->format('N')], $turma['dias'], true)) {
+        $diaSemana = DIAS_SEMANA[(int) $dia->format('N')];
+        if (!in_array($diaSemana, $turma['dias'], true)) {
             continue;
+        }
+        if (($turma['professores'][$diaSemana] ?? null) === null) {
+            continue; // professor a confirmar nesse dia: não abre para agendamento
         }
         if (in_array($data, $agenda['diasSemAula'], true)) {
             continue;

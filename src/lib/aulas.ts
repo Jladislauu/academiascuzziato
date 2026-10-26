@@ -11,8 +11,28 @@ import type { Dia, Turma } from '../data/types';
 
 export const FUSO_ACADEMIA = 'America/Sao_Paulo';
 
-/** Turmas que aparecem no agendamento: aceitam aula experimental e têm horário confirmado. */
-export const turmasAgendaveis = (turmas: Turma[]) => turmas.filter((t) => t.aulaExperimental && !t.provisorio);
+/** Professor da turma num dia (null = a confirmar). */
+export const professorDoDia = (turma: Turma, dia: Dia): string | null =>
+  turma.professorPorDia && dia in turma.professorPorDia ? (turma.professorPorDia[dia] ?? null) : turma.professor;
+
+/** Professores da turma agrupados pelos dias em que dão aula, na ordem da semana. */
+export function professoresDaTurma(turma: Turma): { nome: string | null; dias: Dia[] }[] {
+  const grupos: { nome: string | null; dias: Dia[] }[] = [];
+  for (const dia of turma.dias) {
+    const nome = professorDoDia(turma, dia);
+    const grupo = grupos.find((g) => g.nome === nome);
+    if (grupo) grupo.dias.push(dia);
+    else grupos.push({ nome, dias: [dia] });
+  }
+  return grupos;
+}
+
+/**
+ * Turmas que aparecem no agendamento: aceitam aula experimental, têm horário
+ * confirmado e pelo menos um dia com professor confirmado.
+ */
+export const turmasAgendaveis = (turmas: Turma[]) =>
+  turmas.filter((t) => t.aulaExperimental && !t.provisorio && t.dias.some((d) => professorDoDia(t, d) !== null));
 
 export interface RegrasAgenda {
   diasAFrente: number;
@@ -26,6 +46,7 @@ export interface Aula {
   data: string;
   inicio: string;
   fim: string;
+  professor: string | null;
 }
 
 const DIA_DA_SEMANA: (Dia | null)[] = [null, 'seg', 'ter', 'qua', 'qui', 'sex', null];
@@ -75,8 +96,8 @@ export const diaMes = (data: string) => `${data.slice(8, 10)}/${data.slice(5, 7)
 
 /**
  * Próximas aulas de uma turma que ainda podem ser agendadas: de hoje até
- * `diasAFrente` dias depois, fora dos dias sem aula, e fechando
- * `antecedenciaMinutos` antes de cada aula começar.
+ * `diasAFrente` dias depois, fora dos dias sem aula e dos dias com professor a
+ * confirmar, e fechando `antecedenciaMinutos` antes de cada aula começar.
  */
 export function proximasAulas(turma: Turma, regras: RegrasAgenda, agora: Date = new Date()): Aula[] {
   const hoje = agoraNaAcademia(agora);
@@ -86,8 +107,10 @@ export function proximasAulas(turma: Turma, regras: RegrasAgenda, agora: Date = 
     const data = somarDias(hoje.data, i);
     const dia = diaDaData(data);
     if (!dia || !turma.dias.includes(dia) || regras.diasSemAula.includes(data)) continue;
+    const professor = professorDoDia(turma, dia);
+    if (professor === null) continue;
     if (i === 0 && minutos(turma.inicio) - regras.antecedenciaMinutos <= hoje.minutos) continue;
-    aulas.push({ turmaId: turma.id, data, inicio: turma.inicio, fim: turma.fim });
+    aulas.push({ turmaId: turma.id, data, inicio: turma.inicio, fim: turma.fim, professor });
   }
 
   return aulas;

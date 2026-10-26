@@ -8,9 +8,8 @@ export const config: Config = {
   // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
   agendamentoEndpoint: '/api/agendamento.php',
 
-  // TODO: número do WhatsApp da academia, só dígitos (ex.: '5541999999999').
-  // Enquanto estiver vazio, os botões abrem o WhatsApp sem destinatário.
-  whatsapp: '',
+  // WhatsApp da academia, só dígitos: 55 + DDD + número ((41) 93300-2563).
+  whatsapp: '5541933002563',
 
   instagram: 'https://www.instagram.com/academiascuzziato',
 
@@ -40,10 +39,10 @@ export const config: Config = {
   // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
   interesseEndpoint: '/api/interesse.php',
 
+  // Links de pagamento do Asaas (enviados pelo Rhaue em 25/10/2026).
   matriculaLinks: {
-    // TODO: links do gateway de pagamento (ainda não existem).
-    'uma-modalidade': null,
-    livre: null,
+    'uma-modalidade': 'https://www.asaas.com/000/c/2kfjbff4ec5zywty',
+    livre: 'https://www.asaas.com/000/c/emf71zbp52nbr6j5',
   },
 };
 

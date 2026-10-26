@@ -264,6 +264,7 @@ enviarEmail(
         'Nova aula experimental agendada pelo site.',
         '',
         "Turma: {$turma['nome']}",
+        'Professor: ' . (professorDaAula($turma, $data) ?? 'a confirmar'),
         'Quando: ' . ucfirst($quando),
         '',
         $paraMenor ? "Aluno: {$aluno}, {$idade} anos" : "Aluno: {$aluno}",

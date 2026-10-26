@@ -13,6 +13,12 @@ export function whatsappLink(mensagem: string = mensagens.geral): string {
   return `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(mensagem)}`;
 }
 
+/** '5541933002563' → '(41) 93300-2563' (número da academia para mostrar no site). */
+export function whatsappTexto(): string {
+  const d = config.whatsapp.replace(/^55/, '');
+  return d.length >= 10 ? `(${d.slice(0, 2)}) ${d.slice(2, -4)}-${d.slice(-4)}` : 'Chamar no WhatsApp';
+}
+
 /** Convite para um amigo: abre o WhatsApp sem destinatário, com o link de agendamento. */
 export function conviteAmigoLink(): string {
   return `https://wa.me/?text=${encodeURIComponent(mensagens.conviteAmigo(agendaUrlCompleta()))}`;
