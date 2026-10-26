@@ -51,7 +51,7 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 - Instagram: @academiascuzziato (https://www.instagram.com/academiascuzziato)
 - E-mail: academiascuzziato@gmail.com
 - WhatsApp: (41) 93300-2563 (`whatsapp` em `src/data/config.ts`)
-- Professores: Rhaue Scuzziato e Camilo Scuzziato
+- Professores: Rhaue Scuzziato e Camilo Scuzziato (jiu-jitsu), Leynha (jiu-jitsu feminino), João Menegonni (judô), Evandro Nascimento (muay thai)
 
 ## Regra mais importante: conteúdo fica em arquivos de dados
 
@@ -60,7 +60,7 @@ Todo conteúdo que muda (turmas, horários, planos, links, contatos) vive em `sr
 - `src/data/config.ts` — URLs e contatos:
   - `agendamentoEndpoint` (`/api/agendamento.php`)
   - `whatsapp`, `instagram`, `email`
-  - `matriculaLinks` por plano (links do gateway de pagamento, ainda não existem)
+  - `matriculaLinks` por plano (links de pagamento do Asaas)
 - `src/data/turmas.ts` — grade (também define o que aparece no agendamento)
 - `src/data/agenda.ts` — regras do agendamento: dias para a frente, antecedência, duração da semana grátis, dias sem aula
 - `src/data/planos.ts` — planos e preços
@@ -68,28 +68,35 @@ Todo conteúdo que muda (turmas, horários, planos, links, contatos) vive em `sr
 
 Nunca invente informação (horário, preço, nome, telefone). Se faltar, use placeholder com `// TODO` e me avise.
 
-### Turmas (estado em 12/10/2026)
+### Turmas (enviadas pelo Rhaue em 26/10/2026)
 
-Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto), `nivel`, `professor`, `dias`, `inicio`, `fim`, `aulaExperimental` (boolean), `provisorio` (boolean). Só turmas com `aulaExperimental: true` e `provisorio: false` aparecem no agendamento.
+Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto), `publicoLabel` (texto do card, ex.: "Feminino", "Adulto"), `nivel`, `professor`, `professorPorDia` (quando o professor muda conforme o dia; `null` = a confirmar), `observacao` (ex.: "No tatame da frente"), `dias`, `inicio`, `fim`, `aulaExperimental` (boolean), `provisorio` (boolean).
 
-| Turma | Público | Nível | Professor | Dias | Horário | Provisório |
-|---|---|---|---|---|---|---|
-| Jiu-jitsu com kimono (GI) | Juvenil/Adulto | Iniciante/Intermediário | Camilo Scuzziato | ter, qua, qui | 21h–22h | não |
-| Jiu-jitsu sem kimono (No-Gi) | Juvenil/Adulto | Avançado | Rhaue Scuzziato | seg, qua, qui | 11h–12h | não |
-| Judô adulto | Adulto | — | a definir | seg, qua | 20h–21h | **sim** |
-| Jiu-jitsu infantil | Infantil | — | a definir | ter, qui | 18h–19h | **sim** |
-| Judô infantil | Infantil | — | a definir | seg, qua | 19h–20h | **sim** |
+| Turma | Público | Professor | Dias | Horário |
+|---|---|---|---|---|
+| Jiu-jitsu com kimono (GI) | Juvenil/Adulto | Rhaue (seg, ter) · Camilo (qua, qui) | seg–qui | 21h–22h |
+| Jiu-jitsu sem kimono (No-Gi) | Juvenil/Adulto, avançado | Rhaue | seg–sex | 11h–12h |
+| Jiu-jitsu feminino (GI) | Feminino | Leynha | ter, qui | 20h10–21h10 |
+| Jiu-jitsu infantil (3 a 5 anos) | Infantil | Camilo | ter, qui | 10h–11h |
+| Jiu-jitsu infantil (6 a 11 anos) | Infantil | Camilo | ter, qui | 18h–19h |
+| Judô infantil (3 a 5 anos) | Infantil | João Menegonni (ter, qua, qui) · a confirmar (seg) | seg–qui | 19h–20h |
+| Judô adulto | Adulto | a confirmar | seg | 20h–21h |
+| Muay Thai adulto | Adulto | Evandro Nascimento (tatame da frente) | ter, qui | 19h–20h |
 
+- **Sábado:** open mat (treino livre), 10h–12h (`openMat` em `turmas.ts`, faixa abaixo dos cards da grade).
+- **Pendentes:** quarta 20h–21h (horário e modalidade a confirmar, fora da grade); professor do judô adulto e da segunda do judô infantil; se a faixa de 3 a 5 anos do judô infantil vale para todos os dias.
+- **Dia com professor a confirmar não abre para agendamento** (a aula aparece na grade). Turma sem nenhum dia com professor (judô adulto) mostra "Fale com a gente".
 - Turma com `provisorio: true` aparece no site **sem horário**, com o texto "Horário a confirmar — fale com a gente". Nunca publicar horário provisório como se fosse real.
-- A GI do Camilo é a turma **recomendada para iniciantes** (selo "Ideal para começar").
+- A GI é a turma **recomendada para iniciantes** (selo "Ideal para começar").
 - O No-Gi é aberto à aula experimental, mas sempre identificado como "Avançado — para quem já treina".
 
-**Em formação** (sem turma ainda): muay thai e boxe, adulto e infantil.
+**Em formação** (sem turma ainda): boxe, adulto e infantil.
 
 ### Planos
 
 - **Uma modalidade** — R$ 120/mês
 - **Livre** — R$ 160/mês, todas as modalidades. Destacar como o plano recomendado ("Por R$ 40 a mais, treine tudo").
+- "Quero me matricular" leva ao link de pagamento do Asaas de cada plano (`matriculaLinks` em `config.ts`).
 
 ### Aula experimental
 
@@ -101,11 +108,11 @@ Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto
 
 1. **Topo** — logo, chamada "Primeira semana grátis", botão "Agendar aula experimental", botão secundário "Ver horários". Todo botão "Agendar" do site abre a janela de agendamento (ver abaixo).
 2. **Como funciona a semana grátis** — 3 passos: agenda → treina a semana → decide se matricula.
-3. **Modalidades** — card por modalidade (jiu-jitsu, judô e, como "em formação", muay thai e boxe), com público e níveis.
+3. **Modalidades** — card por modalidade (jiu-jitsu, judô, muay thai e, como "em formação", boxe), com público e níveis.
 4. **Grade de horários** — filtro por modalidade e por público (infantil / juvenil-adulto). Cada turma com `aulaExperimental` tem botão "Agendar" que abre o agendamento já na turma.
 5. **Turmas em formação** — formulário de interesse (ver abaixo).
-6. **Professores** — Rhaue e Camilo, com foto, bio e destaques (`src/data/professores.ts`).
-7. **Planos** — os dois planos, botão "Quero me matricular" (por enquanto leva ao WhatsApp com mensagem pronta; depois vai para o link do gateway em `matriculaLinks`).
+6. **Professores** — todos os professores, com foto, bio e destaques (`src/data/professores.ts`). Sem foto, o card mostra o ícone da marca (`src/assets/marca/academia-scuzziato-icone.svg`).
+7. **Planos** — os dois planos, botão "Quero me matricular" leva ao link de pagamento do Asaas (`matriculaLinks`).
 8. **Estrutura** — galeria de fotos (placeholders até recebermos as fotos).
 9. **Perguntas frequentes** — precisa de kimono na aula experimental? qual a idade mínima? nunca treinei, posso ir? posso trazer amigos? o que levar? como funciona a semana grátis?
 10. **Localização e contato** — mapa (embed do Google Maps pelo endereço), endereço, horário de funcionamento, WhatsApp, Instagram.
@@ -128,9 +135,9 @@ Feito no próprio site (substituiu o Easy!Appointments). Código em `src/compone
 
 ## Formulário "Turmas em formação"
 
-Objetivo: descobrir quando e em que horário abrir muay thai e boxe.
+Objetivo: descobrir quando e em que horário abrir as turmas em formação (hoje, boxe; com uma modalidade só, ela já vem marcada).
 
-- Campos: nome, WhatsApp, modalidade (muay thai / boxe), público (adulto / infantil + idade da criança), dias preferidos (seg–sex), período preferido (manhã / tarde / noite), consentimento LGPD (checkbox obrigatório).
+- Campos: nome, WhatsApp, modalidade (as marcadas `emFormacao` em `modalidades.ts`), público (adulto / infantil + idade da criança), dias preferidos (seg–sex), período preferido (manhã / tarde / noite), consentimento LGPD (checkbox obrigatório).
 - Envio: endpoint PHP na própria Hostinger, `public/api/interesse.php`, que valida, grava numa tabela MySQL `interesses` e envia e-mail de aviso para a academia. Credenciais em arquivo fora do repositório (`config.local.php`, no `.gitignore`).
 - Proteção contra spam: campo honeypot + limite de envios por IP.
 - Depois do envio: mensagem de sucesso e botão "Avise um amigo" (WhatsApp).

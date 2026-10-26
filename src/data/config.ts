@@ -39,10 +39,10 @@ export const config: Config = {
   // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
   interesseEndpoint: '/api/interesse.php',
 
+  // Links de pagamento do Asaas (enviados pelo Rhaue em 25/10/2026).
   matriculaLinks: {
-    // TODO: links do gateway de pagamento (ainda não existem).
-    'uma-modalidade': null,
-    livre: null,
+    'uma-modalidade': 'https://www.asaas.com/000/c/2kfjbff4ec5zywty',
+    livre: 'https://www.asaas.com/000/c/emf71zbp52nbr6j5',
   },
 };
 

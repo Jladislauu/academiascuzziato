@@ -43,7 +43,7 @@ export function Hero() {
           className="entrada mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-cinza-700 bg-preto/70 px-4 py-1.5 text-sm font-semibold tracking-[0.14em] text-cinza-200 uppercase"
         >
           <span className="size-2 rounded-full bg-vermelho" aria-hidden="true" />
-          Jiu-jitsu e judô em Pinhais-PR
+          Jiu-jitsu, judô e muay thai em Pinhais-PR
         </p>
 
         <h1
