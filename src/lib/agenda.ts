@@ -4,7 +4,7 @@ import { turmas } from '../data/turmas';
 import type { Turma } from '../data/types';
 import { diaLongo, hora } from './format';
 import { soDigitos } from './interesse';
-import { diaDaData, diaMes, proximasAulas, somarDias, turmasAgendaveis, type Aula } from './aulas';
+import { diaDaData, diaMes, professorDoDia, proximasAulas, somarDias, turmasAgendaveis, type Aula } from './aulas';
 
 /*
  * Agendamento da aula experimental (janela aberta por qualquer botão "Agendar").
@@ -97,7 +97,9 @@ export async function carregarAulas(): Promise<AulaComVagas[]> {
 
   return corpo.aulas.flatMap((a) => {
     const turma = turmaPorId(a.turma);
-    return turma ? [{ turmaId: turma.id, data: a.data, inicio: turma.inicio, fim: turma.fim, vagas: a.vagas }] : [];
+    const dia = diaDaData(a.data);
+    if (!turma || !dia) return [];
+    return [{ turmaId: turma.id, data: a.data, inicio: turma.inicio, fim: turma.fim, professor: professorDoDia(turma, dia), vagas: a.vagas }];
   });
 }
 

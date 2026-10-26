@@ -3,7 +3,7 @@ import { agenda } from '../src/data/agenda';
 import { config } from '../src/data/config';
 import { nomeModalidade } from '../src/data/modalidades';
 import { turmas } from '../src/data/turmas';
-import { turmasAgendaveis } from '../src/lib/aulas';
+import { professorDoDia, turmasAgendaveis } from '../src/lib/aulas';
 
 /*
  * Gera dist/api/turmas.json a partir de src/data (turmas.ts, agenda.ts e config.ts).
@@ -38,8 +38,9 @@ export function agendaPlugin(): Plugin {
           nome: t.nome,
           modalidade: nomeModalidade(t.modalidade),
           infantil: t.publico === 'infantil',
-          professor: t.professor,
           dias: t.dias,
+          // Professor de cada dia; null = a confirmar (o dia não abre para agendamento).
+          professores: Object.fromEntries(t.dias.map((d) => [d, professorDoDia(t, d)])),
           inicio: t.inicio,
           fim: t.fim,
         })),

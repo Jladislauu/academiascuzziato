@@ -331,7 +331,10 @@ function Titulo({ tituloRef, children }: RefTitulo & { children: ReactNode }) {
 }
 
 function PassoTurma({ tituloRef, escolhida, onEscolher }: RefTitulo & { escolhida: string; onEscolher: (id: string) => void }) {
-  const aConfirmar = turmas.filter((t) => t.aulaExperimental && t.provisorio).map((t) => t.nome);
+  // Turmas que aceitam aula experimental, mas ainda não abriram (horário ou professor a confirmar).
+  const aConfirmar = turmas
+    .filter((t) => t.aulaExperimental && !turmasDoAgendamento.includes(t))
+    .map((t) => t.nome);
 
   return (
     <>
@@ -378,7 +381,7 @@ function PassoTurma({ tituloRef, escolhida, onEscolher }: RefTitulo & { escolhid
       {aConfirmar.length > 0 && (
         <p className="mt-6 text-sm text-tom-suave">
           {aConfirmar.length === 1 ? `${aConfirmar[0]} está` : `${aConfirmar.slice(0, -1).join(', ')} e ${aConfirmar.at(-1)} estão`}{' '}
-          com horário a confirmar.{' '}
+          com horário ou professor a confirmar.{' '}
           <a href={whatsappLink()} {...linkExterno} className="font-semibold text-tom-texto underline underline-offset-4">
             Fale com a gente
           </a>
@@ -448,7 +451,7 @@ function PassoDia({ tituloRef, turma, aulas, escolhida, carregando, erroAulas, e
                     type="button"
                     disabled={lotada}
                     onClick={() => onEscolher(a.data)}
-                    aria-label={`${maiuscula(dataPorExtenso(a.data))}, ${faixaHorario(a.inicio, a.fim)}. ${vagas}`}
+                    aria-label={`${maiuscula(dataPorExtenso(a.data))}, ${faixaHorario(a.inicio, a.fim)}${a.professor ? `, professor ${a.professor}` : ''}. ${vagas}`}
                     aria-current={a.data === escolhida ? 'true' : undefined}
                     className={`flex w-full items-center justify-between gap-3 rounded-xl border-2 px-4 py-3 text-left transition-colors enabled:hover:border-tom-texto disabled:cursor-not-allowed disabled:border-dashed disabled:opacity-60 ${
                       a.data === escolhida ? 'border-tom-texto' : 'border-tom-borda'
@@ -458,7 +461,10 @@ function PassoDia({ tituloRef, turma, aulas, escolhida, carregando, erroAulas, e
                       <span className="block font-display text-2xl leading-none font-extrabold uppercase">
                         {dia ? diaCurto(dia) : ''} {diaMes(a.data)}
                       </span>
-                      <span className="text-sm text-tom-suave">{faixaHorario(a.inicio, a.fim)}</span>
+                      <span className="text-sm text-tom-suave">
+                        {faixaHorario(a.inicio, a.fim)}
+                        {a.professor && ` · Prof. ${a.professor.split(' ')[0]}`}
+                      </span>
                     </span>
                     <span
                       className={`shrink-0 rounded-full px-2.5 py-1 text-sm font-semibold ${
@@ -657,8 +663,11 @@ function Pronto({ tituloRef, turma, aula, dados, onFechar }: ProntoProps) {
         <p className="text-sm font-semibold tracking-[0.12em] text-tom-destaque uppercase">{turma.nome}</p>
         <p className="mt-1 font-display text-3xl leading-none font-black uppercase">{maiuscula(dataPorExtenso(aula.data))}</p>
         <p className="mt-1 text-lg font-semibold">{faixaHorario(aula.inicio, aula.fim)}</p>
-        {turma.professor && <p className="mt-3 text-tom-apoio">Professor {turma.professor}</p>}
-        <p className="mt-1 text-tom-apoio">{endereco}</p>
+        {aula.professor && <p className="mt-3 text-tom-apoio">Prof. {aula.professor}</p>}
+        <p className="mt-1 text-tom-apoio">
+          {endereco}
+          {turma.observacao && ` · ${turma.observacao}`}
+        </p>
       </div>
 
       <p className="mt-6 text-tom-apoio">

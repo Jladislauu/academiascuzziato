@@ -17,8 +17,16 @@ export interface Turma {
   nivelAviso?: string;
   /** Selo de destaque (ex.: "Ideal para começar"). */
   selo?: string;
-  /** null = "Professor a definir". */
+  /** Professor da turma. null = "a definir". */
   professor: string | null;
+  /**
+   * Professor diferente em algum dia (ex.: { qua: 'Camilo Scuzziato' }).
+   * null num dia = professor a confirmar nesse dia: a aula aparece na grade,
+   * mas esse dia não abre para agendamento.
+   */
+  professorPorDia?: Partial<Record<Dia, string | null>>;
+  /** Aviso curto no card e na confirmação do agendamento (ex.: "No tatame da frente"). */
+  observacao?: string;
   dias: Dia[];
   /** "HH:MM" */
   inicio: string;
