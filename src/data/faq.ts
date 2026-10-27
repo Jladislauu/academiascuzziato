@@ -24,12 +24,9 @@ export const faq: FaqItem[] = [
     confirmado: true,
   },
   {
-    // TODO: confirmar com o Rhaue (precisa de kimono? a academia empresta?)
     pergunta: 'Preciso de kimono na aula experimental?',
-    resposta: import.meta.env.DEV
-      ? 'Não precisa. Venha com roupa confortável de treino, como camiseta e bermuda ou legging, sem zíper nem botões. A academia tem kimono para emprestar durante a primeira semana.'
-      : '',
-    confirmado: false,
+    resposta: 'Não precisa. Na aula experimental você pode treinar com roupa confortável de treino.',
+    confirmado: true,
   },
   {
     // TODO: confirmar com o Rhaue (o que levar)
@@ -52,12 +49,10 @@ export const faq: FaqItem[] = [
     confirmado: true,
   },
   {
-    // TODO: confirmar com o Rhaue (semana grátis vale para mais de uma modalidade?)
     pergunta: 'Posso fazer a semana grátis em mais de uma modalidade?',
-    resposta: import.meta.env.DEV
-      ? 'Pode. Durante a primeira semana você pode experimentar jiu-jitsu e judô para descobrir de qual gosta mais. Agende a primeira aula e combine as outras com a gente.'
-      : '',
-    confirmado: false,
+    resposta:
+      'Pode. Na primeira semana grátis você pode treinar todas as modalidades. Agende a primeira aula e, durante a semana, venha também nas aulas das outras modalidades, sem precisar agendar de novo.',
+    confirmado: true,
   },
 ];
 

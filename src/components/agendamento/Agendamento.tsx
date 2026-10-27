@@ -672,8 +672,8 @@ function Pronto({ tituloRef, turma, aula, dados, onFechar }: ProntoProps) {
 
       <p className="mt-6 text-tom-apoio">
         <strong className="font-semibold text-tom-texto">Depois dessa aula, a semana grátis continua</strong> até{' '}
-        {dataPorExtenso(fimSemanaGratis(aula.data))}: {menor ? `${aluno} pode vir` : 'venha'} nas próximas aulas da turma sem
-        precisar agendar de novo.
+        {dataPorExtenso(fimSemanaGratis(aula.data))}: {menor ? `${aluno} pode vir` : 'venha'} nas próximas aulas, de qualquer
+        modalidade, sem precisar agendar de novo.
       </p>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
