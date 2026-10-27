@@ -37,6 +37,8 @@ const DIAS_LONGOS = [
 
 date_default_timezone_set(FUSO_ACADEMIA);
 
+require_once __DIR__ . '/email.php'; // enviarEmail() e responderEContinuar()
+
 /**
  * config.local.php fica FORA da pasta pública, um nível acima de public_html
  * (ver server/config.local.example.php). Daqui: public_html/api/inc → 3 níveis acima.
@@ -193,20 +195,4 @@ function dataPorExtenso(string $data): string
 {
     $dia = new DateTimeImmutable($data . ' 12:00', new DateTimeZone(FUSO_ACADEMIA));
     return DIAS_LONGOS[DIAS_SEMANA[(int) $dia->format('N')]] . ', ' . $dia->format('d/m');
-}
-
-function enviarEmail(array $config, string $assunto, string $corpo): void
-{
-    $destino = trim((string) ($config['email']['destino'] ?? ''));
-    if ($destino === '') {
-        return;
-    }
-    $cabecalhos = implode("\r\n", [
-        'From: Site Academia Scuzziato <' . $config['email']['remetente'] . '>',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-    ]);
-    if (!mail($destino, mb_encode_mimeheader($assunto, 'UTF-8'), $corpo, $cabecalhos)) {
-        error_log('agendamento: falha ao enviar e-mail de aviso.');
-    }
 }

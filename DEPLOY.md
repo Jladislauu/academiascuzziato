@@ -73,6 +73,15 @@ O `agendamento.php` e o `interesse.php` avisam a academia por e-mail a cada aula
 
 Se o destino ficar vazio, nenhum e-mail sai: os interesses só ficam gravados no banco.
 
+## 4.1 Avisos pelo Gmail (SMTP)
+
+Os avisos saem pelo Gmail da academia (`academiascuzziato@gmail.com`), entregues na mesma caixa.
+
+1. Entre na conta Google da academia → **Segurança** → ligue a **Verificação em duas etapas** (se ainda não estiver).
+2. Abra [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords), crie uma senha de app com o nome "Site Academia" e copie as 16 letras.
+3. No `config.local.php` (passo 5), preencha o bloco `smtp` com essa senha (pode colar com os espaços).
+4. Depois de publicar, entre no painel (`/painel/`) e clique em **Testar e-mail**. A mensagem diz se saiu pelo Gmail ou o motivo da falha. Se aparecer erro de conexão na porta 465, troque para `'porta' => 587` e `'seguranca' => 'tls'`.
+
 ## 5. `config.local.php` (fora da pasta pública)
 
 As credenciais ficam num arquivo **fora de `public_html`**, para nunca poderem ser abertas pelo navegador. O `interesse.php` procura o arquivo um nível acima de `public_html`:

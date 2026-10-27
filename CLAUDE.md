@@ -128,6 +128,7 @@ Feito no próprio site (substituiu o Easy!Appointments). Código em `src/compone
 - **Passos:** turma → dia (próximas aulas com vagas) → dados (quem vai treinar, nome, WhatsApp, experiência, consentimento LGPD) → confirmação com "Salvar na agenda" (.ics), "Como chegar" e "Convidar um amigo".
 - **Menores de 18:** agenda o responsável (nome do responsável + nome e idade de quem vai treinar). Turma infantil é sempre assim; na juvenil/adulto a pessoa escolhe "Eu" ou "Meu filho ou filha".
 - **Servidor:** `public/api/agendamento.php` (GET = próximas aulas e vagas; POST = reserva). Confere tudo de novo: dia válido, vagas (com trava contra duas reservas simultâneas na última vaga), e se a pessoa já tem aula marcada (mesmo WhatsApp + mesmo nome de aluno). Honeypot, limite por IP e e-mail de aviso, como no formulário de interesse. Tabelas em `server/agendamentos.sql`.
+- **E-mails de aviso** (agendamento e interesse): `public/api/inc/email.php`, pelo **SMTP do Gmail** da academia (`academiascuzziato@gmail.com`, senha de app em `smtp` no `config.local.php`) com PHPMailer 6.12.0 em `public/api/inc/PHPMailer/`. Se o Gmail falhar, tenta o `mail()` do servidor. O site responde antes de mandar o e-mail (a pessoa não espera o SMTP) e falha no e-mail nunca perde o registro. O painel tem o botão **Testar e-mail**, que mostra o motivo se falhar.
 - **Turmas no servidor:** o build gera `dist/api/turmas.json` a partir de `src/data` (`plugins/agenda.ts`). O PHP lê esse arquivo; nunca editar no servidor.
 - **Mesma regra em dois lugares:** as datas das próximas aulas são calculadas em `src/lib/aulas.ts` e em `public/api/inc/comum.php`; a validação em `src/lib/agenda.ts` e em `public/api/agendamento.php`. Mudou um, mude o outro.
 - **Painel da academia:** `www.academiascuzziato.com.br/painel/` (senha em `config.local.php`). Lista os agendamentos da semana por aula, com link de WhatsApp com mensagem de confirmação pronta, e botões Agendado / Compareceu / Faltou / Cancelado. Cancelar libera a vaga no site.
@@ -138,7 +139,7 @@ Feito no próprio site (substituiu o Easy!Appointments). Código em `src/compone
 Objetivo: descobrir quando e em que horário abrir as turmas em formação (hoje, boxe; com uma modalidade só, ela já vem marcada).
 
 - Campos: nome, WhatsApp, modalidade (as marcadas `emFormacao` em `modalidades.ts`), público (adulto / infantil + idade da criança), dias preferidos (seg–sex), período preferido (manhã / tarde / noite), consentimento LGPD (checkbox obrigatório).
-- Envio: endpoint PHP na própria Hostinger, `public/api/interesse.php`, que valida, grava numa tabela MySQL `interesses` e envia e-mail de aviso para a academia. Credenciais em arquivo fora do repositório (`config.local.php`, no `.gitignore`).
+- Envio: endpoint PHP na própria Hostinger, `public/api/interesse.php`, que valida, grava numa tabela MySQL `interesses` e envia e-mail de aviso para a academia (pelo Gmail, ver "E-mails de aviso"). Credenciais em arquivo fora do repositório (`config.local.php`, no `.gitignore`).
 - Proteção contra spam: campo honeypot + limite de envios por IP.
 - Depois do envio: mensagem de sucesso e botão "Avise um amigo" (WhatsApp).
 

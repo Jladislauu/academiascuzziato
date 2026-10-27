@@ -27,10 +27,22 @@ return [
     ],
 
     'email' => [
-        // Quem recebe o aviso de novo interesse. Vazio = não envia e-mail (só grava no banco).
+        // Quem recebe os avisos (agendamento e interesse). Vazio = não envia e-mail (só grava no banco).
         'destino' => 'academiascuzziato@gmail.com',
-        // Remetente: use um e-mail do próprio domínio, senão o aviso cai no spam.
+        // Remetente do envio reserva (mail() do servidor), usado só se o Gmail falhar.
         'remetente' => 'site@academiascuzziato.com.br',
+    ],
+
+    // Envio dos avisos pelo Gmail da academia (SMTP). Precisa da verificação em duas
+    // etapas ligada na conta e de uma "senha de app" (myaccount.google.com/apppasswords):
+    // 16 letras, pode colar com os espaços. A senha normal da conta NÃO funciona.
+    // Para testar: painel → "Testar e-mail".
+    'smtp' => [
+        'host' => 'smtp.gmail.com',
+        'porta' => 465,
+        'seguranca' => 'ssl', // 465 = 'ssl'; se a porta 465 for bloqueada, use 587 com 'tls'
+        'usuario' => 'academiascuzziato@gmail.com',
+        'senha' => 'SENHA-DE-APP-DO-GMAIL',
     ],
 
     // https://www.academiascuzziato.com.br e https://academiascuzziato.com.br já são aceitos

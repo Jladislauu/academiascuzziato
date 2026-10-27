@@ -254,7 +254,14 @@ if ($recusa !== null) {
     responder(...$recusa);
 }
 
-// ---------- E-mail de aviso (falha aqui não perde o agendamento) ----------
+// ---------- Resposta e e-mail de aviso ----------
+// Responde já (o SMTP pode levar alguns segundos) e manda o aviso depois.
+// Falha no e-mail não perde o agendamento, que já está gravado.
+
+responderEContinuar(201, [
+    'ok' => true,
+    'aula' => ['turma' => $turma['id'], 'data' => $data, 'inicio' => $turma['inicio'], 'fim' => $turma['fim']],
+]);
 
 $vagasRestantes = $vagasPorAula - $ocupadas - 1;
 enviarEmail(
@@ -278,8 +285,4 @@ enviarEmail(
         'Agendado pelo site em ' . $agora->format('d/m/Y') . ' às ' . $agora->format('H:i') . '.',
     ], fn ($linha) => $linha !== null))
 );
-
-responder(201, [
-    'ok' => true,
-    'aula' => ['turma' => $turma['id'], 'data' => $data, 'inicio' => $turma['inicio'], 'fim' => $turma['fim']],
-]);
+exit;

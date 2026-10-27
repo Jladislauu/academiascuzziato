@@ -85,6 +85,8 @@ function pagina(string $titulo, string $conteudo): void
   .zap { color:var(--verde); font-weight:700; }
   .vazio { background:#fff; border:1px dashed var(--cinza-200); border-radius:14px; padding:28px 16px; text-align:center; color:var(--cinza-500); }
   .aviso { background:#fde7e6; color:var(--vermelho-escuro); border-radius:10px; padding:10px 14px; font-weight:600; }
+  .aviso.ok { background:#e6f4ea; color:var(--verde); }
+  .aviso.alerta { background:#fef7e0; color:#7a5a00; }
   .login { max-width:380px; margin:12vh auto 0; padding:0 16px; }
   .login form { background:#fff; border:1px solid var(--cinza-200); border-radius:14px; padding:22px; display:grid; gap:12px; }
   .login label { font-weight:600; }
@@ -217,6 +219,23 @@ if ($acao === 'sair') {
     irPara('/painel/');
 }
 
+if ($acao === 'testar-email') {
+    $resultado = enviarEmail(
+        $config,
+        'Teste de e-mail do painel',
+        "Este é um teste do painel de agendamentos da Academia Scuzziato.\n\n"
+            . 'Se você recebeu, os avisos de novos agendamentos vão chegar aqui.\n\n'
+            . 'Enviado em ' . agora()->format('d/m/Y \à\s H:i') . '.'
+    );
+    $destino = (string) ($config['email']['destino'] ?? '');
+    $_SESSION['aviso'] = match (true) {
+        $resultado['ok'] && $resultado['via'] === 'gmail' => ['ok', "E-mail de teste enviado pelo Gmail para {$destino}."],
+        $resultado['ok'] => ['alerta', "O Gmail não enviou ({$resultado['erro']}). O teste saiu pelo servidor para {$destino}, mas pode cair no spam."],
+        default => ['erro', "Não foi possível enviar: {$resultado['erro']}"],
+    };
+    irPara('/painel/');
+}
+
 if ($acao === 'status') {
     $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
     $status = (string) ($_POST['status'] ?? '');
@@ -268,6 +287,8 @@ try {
 }
 
 $csrf = e($_SESSION['csrf']);
+$aviso = $_SESSION['aviso'] ?? null;
+unset($_SESSION['aviso']);
 
 // ---------- HTML ----------
 
@@ -276,6 +297,11 @@ ob_start();
 <header class="topo">
   <div class="dentro">
     <span class="marca">Academia <b>Scuzziato</b></span>
+    <form method="post" action="./" style="margin-left:auto">
+      <input type="hidden" name="acao" value="testar-email">
+      <input type="hidden" name="csrf" value="<?= $csrf ?>">
+      <button class="botao claro" type="submit">Testar e-mail</button>
+    </form>
     <form method="post" action="./">
       <input type="hidden" name="acao" value="sair">
       <input type="hidden" name="csrf" value="<?= $csrf ?>">
@@ -284,6 +310,9 @@ ob_start();
   </div>
 </header>
 <main class="dentro">
+  <?php if ($aviso): ?>
+    <p class="aviso <?= e($aviso[0]) ?>" role="status" style="margin-top:14px"><?= e($aviso[1]) ?></p>
+  <?php endif; ?>
   <h1>Aulas experimentais</h1>
   <p class="sub"><?= e(ucfirst(dataPorExtenso($de))) ?> a <?= e(dataPorExtenso($ate)) ?></p>
 
