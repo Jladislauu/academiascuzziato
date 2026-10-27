@@ -102,6 +102,8 @@ Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto
 
 - Primeira semana grátis, antes de se matricular.
 - **A pessoa agenda só a primeira aula.** Depois dela, vem nas outras aulas da semana sem agendar de novo (a semana conta 7 dias a partir da aula agendada).
+- A semana grátis vale para **todas as modalidades**.
+- **Não precisa de kimono** na aula experimental.
 - Até 5 vagas por aula experimental (só quem vem pela primeira vez conta). A pessoa pode trazer amigos; cada amigo agenda a própria vaga.
 
 ## Seções da página
