@@ -14,6 +14,8 @@ declare(strict_types=1);
  * As regras de validação são as mesmas de src/lib/interesse.ts. Mudou lá, mude aqui.
  */
 
+require __DIR__ . '/inc/email.php'; // enviarEmail() (Gmail/SMTP) e responderEContinuar()
+
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
@@ -188,13 +190,15 @@ try {
     responder(500, ['ok' => false, 'erro' => ERRO_SERVIDOR]);
 }
 
-// ---------- E-mail de aviso (falha aqui não perde o cadastro) ----------
+// ---------- Resposta e e-mail de aviso (falha no e-mail não perde o cadastro) ----------
 
-$destino = trim((string) ($config['email']['destino'] ?? ''));
-if ($destino !== '') {
-    $turma = MODALIDADES[$modalidade] . ' ' . mb_strtolower(PUBLICOS[$publico]);
-    $assunto = "Novo interesse: {$turma}";
-    $corpo = implode("\n", array_filter([
+responderEContinuar(201, ['ok' => true]);
+
+$turma = MODALIDADES[$modalidade] . ' ' . mb_strtolower(PUBLICOS[$publico]);
+enviarEmail(
+    $config,
+    "Novo interesse: {$turma}",
+    implode("\n", array_filter([
         "Nova pessoa interessada na turma de {$turma}.",
         '',
         "Nome: {$nome}" . ($publico === 'infantil' ? ' (responsável)' : ''),
@@ -205,17 +209,6 @@ if ($destino !== '') {
         'Período: ' . PERIODOS[$periodo],
         '',
         'Enviado pelo site em ' . date('d/m/Y') . ' às ' . date('H:i') . '.',
-    ], fn ($linha) => $linha !== null));
-
-    $cabecalhos = implode("\r\n", [
-        'From: Site Academia Scuzziato <' . $config['email']['remetente'] . '>',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-    ]);
-
-    if (!mail($destino, mb_encode_mimeheader($assunto, 'UTF-8'), $corpo, $cabecalhos)) {
-        error_log('interesse.php: falha ao enviar e-mail de aviso.');
-    }
-}
-
-responder(201, ['ok' => true]);
+    ], fn ($linha) => $linha !== null))
+);
+exit;
