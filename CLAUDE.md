@@ -131,7 +131,11 @@ Feito no próprio site (substituiu o Easy!Appointments). Código em `src/compone
 - **E-mails de aviso** (agendamento e interesse): `public/api/inc/email.php`, pelo **SMTP do Gmail** da academia (`academiascuzziato@gmail.com`, senha de app em `smtp` no `config.local.php`) com PHPMailer 6.12.0 em `public/api/inc/PHPMailer/`. Se o Gmail falhar, tenta o `mail()` do servidor. O site responde antes de mandar o e-mail (a pessoa não espera o SMTP) e falha no e-mail nunca perde o registro. O painel tem o botão **Testar e-mail**, que mostra o motivo se falhar.
 - **Turmas no servidor:** o build gera `dist/api/turmas.json` a partir de `src/data` (`plugins/agenda.ts`). O PHP lê esse arquivo; nunca editar no servidor.
 - **Mesma regra em dois lugares:** as datas das próximas aulas são calculadas em `src/lib/aulas.ts` e em `public/api/inc/comum.php`; a validação em `src/lib/agenda.ts` e em `public/api/agendamento.php`. Mudou um, mude o outro.
-- **Painel da academia:** `www.academiascuzziato.com.br/painel/` (senha em `config.local.php`). Lista os agendamentos da semana por aula, com link de WhatsApp com mensagem de confirmação pronta, e botões Agendado / Compareceu / Faltou / Cancelado. Cancelar libera a vaga no site.
+- **Painel da academia:** `www.academiascuzziato.com.br/painel/` (senha em `config.local.php`). Três visões (`?ver=dia|semana|mes&data=AAAA-MM-DD`), filtro por turma e busca por nome ou WhatsApp:
+  - **Dia** (padrão, hoje): todas as aulas do dia, com quem agendou, WhatsApp com mensagem de confirmação pronta e botões Agendado / Compareceu / Faltou / Cancelado. Dia vazio mostra o próximo dia com agendamento.
+  - **Semana** (segunda a domingo): colunas por dia, aulas com vagas ocupadas e os nomes coloridos por status.
+  - **Mês**: calendário com a quantidade de agendamentos por dia, totais e tabela por turma.
+  - Totais do período e % de comparecimento. Cancelar libera a vaga no site. Depois de mudar um status, volta para a mesma tela.
 - **`npm run dev`:** não roda PHP; o agendamento é simulado (vagas fictícias, envio sempre dá certo).
 
 ## Formulário "Turmas em formação"
