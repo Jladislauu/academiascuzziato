@@ -2,7 +2,8 @@
 
 /*
  * Modelo do config.local.php usado por public/api/interesse.php (turmas em formação),
- * public/api/agendamento.php (aula experimental) e public/painel/ (agendamentos da academia).
+ * public/api/agendamento.php (aula experimental), public/api/matricula.php e
+ * public/api/asaas-webhook.php (matrícula online) e public/painel/ (agendamentos da academia).
  *
  * No servidor (Hostinger):
  *   1. Copie este arquivo como config.local.php e preencha os valores.
@@ -12,7 +13,8 @@
  *        .../domains/academiascuzziato.com.br/public_html/api/interesse.php
  *
  *      O interesse.php lê de __DIR__ . '/../../config.local.php'.
- *   3. Crie as tabelas rodando server/interesses.sql e server/agendamentos.sql no phpMyAdmin.
+ *   3. Crie as tabelas rodando server/interesses.sql, server/agendamentos.sql e
+ *      server/matriculas.sql no phpMyAdmin.
  *
  * Nunca coloque o config.local.php no Git (já está no .gitignore).
  */
@@ -65,5 +67,18 @@ return [
         // Senha de quem acessa o painel, com pelo menos 12 caracteres. Com menos, o painel não abre.
         // Para gerar uma: node -e "console.log(require('crypto').randomBytes(12).toString('base64url'))"
         'senha' => 'TROQUE-POR-UMA-SENHA-LONGA',
+    ],
+
+    // Matrícula online (cria o cliente e a assinatura mensal no Asaas). Conta do Asaas →
+    // Integrações → Chave de API (gere uma chave de Sandbox para testar e outra de Produção
+    // antes de publicar — são diferentes, e a chave errada dá 401 Unauthorized).
+    'asaas' => [
+        // 'sandbox' para testar (não cobra de verdade); 'producao' quando for publicar de vez.
+        'ambiente' => 'sandbox',
+        'chave_api' => 'TROQUE-PELA-CHAVE-DE-API-DO-ASAAS',
+        // Token do webhook: configurado em Integrações → Webhooks ao cadastrar a URL
+        // de public/api/asaas-webhook.php (ver DEPLOY.md). O Asaas manda esse mesmo token
+        // de volta no cabeçalho asaas-access-token de cada chamada ao webhook.
+        'token_webhook' => 'TROQUE-POR-UMA-SEQUENCIA-ALEATORIA-LONGA',
     ],
 ];
