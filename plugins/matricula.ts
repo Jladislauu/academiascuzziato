@@ -26,11 +26,15 @@ export function matriculaPlugin(): Plugin {
     generateBundle() {
       if (viteConfig.build.ssr) return; // build de pré-renderização
 
+      // Modalidade matriculável: tem pelo menos uma turma com horário confirmado (não provisória).
+      // Mais confiável do que o campo emFormacao de modalidades.ts, que pode ficar desatualizado.
+      const comTurma = new Set(turmas.filter((t) => !t.provisorio).map((t) => t.modalidade));
+
       const dados = {
         aviso: 'Gerado no build a partir de src/data. Não edite aqui.',
         taxaAdesao: matricula.taxaAdesao,
         termoVersao: matricula.termoAdesao.versao,
-        modalidades: modalidades.map((m) => m.id),
+        modalidades: modalidades.filter((m) => comTurma.has(m.id)).map((m) => m.id),
         planos: planos.map((p) => ({ id: p.id, nome: p.nome, precoMensal: p.precoMensal })),
         turmas: turmas.map((t) => ({ id: t.id, nome: t.nome, modalidade: t.modalidade })),
       };

@@ -4,6 +4,7 @@ import { Agendamento } from './components/agendamento/Agendamento';
 import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { WhatsAppFloat } from './components/layout/WhatsAppFloat';
+import { Matricula } from './components/matricula/Matricula';
 import { ComoFunciona } from './sections/ComoFunciona';
 import { EmFormacao } from './sections/EmFormacao';
 import { Estrutura } from './sections/Estrutura';
@@ -50,6 +51,7 @@ export default function App() {
         <Footer />
         <WhatsAppFloat />
         <Agendamento />
+        <Matricula />
       </MotionConfig>
     </LazyMotion>
   );

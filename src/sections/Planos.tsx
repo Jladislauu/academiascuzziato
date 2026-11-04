@@ -2,7 +2,7 @@ import { planos } from '../data/planos';
 import type { Plano } from '../data/types';
 import { trackAgendamentoIniciado } from '../lib/analytics';
 import { preco } from '../lib/format';
-import { agendaLink, linkExterno, matriculaLink } from '../lib/links';
+import { agendaLink, matriculaLink } from '../lib/links';
 import { ButtonLink } from '../components/ui/Button';
 import { Reveal } from '../components/ui/Reveal';
 import { Section, SectionHeading } from '../components/ui/Section';
@@ -81,7 +81,6 @@ function PlanoCard({ plano }: { plano: Plano }) {
       <div className="mt-auto pt-8">
         <ButtonLink
           href={matriculaLink(plano)}
-          {...linkExterno}
           variante={destaque ? 'primario' : 'secundario'}
           tamanho="lg"
           className="w-full"
