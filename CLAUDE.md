@@ -14,7 +14,7 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 
 - Vite + React + TypeScript + Tailwind CSS + Framer Motion
 - Site estático (`npm run build` gera `dist/`), hospedado na Hostinger em `www.academiascuzziato.com.br`
-- PHP + MySQL na própria Hostinger só para o que precisa de servidor: agendamento da aula experimental (`public/api/agendamento.php` + painel em `public/painel/`) e formulário de turmas em formação (`public/api/interesse.php`)
+- PHP + MySQL na própria Hostinger só para o que precisa de servidor: agendamento da aula experimental (`public/api/agendamento.php` + painel em `public/painel/`), formulário de turmas em formação (`public/api/interesse.php`) e matrícula online com pagamento pelo Asaas (`public/api/matricula.php` + `public/api/asaas-webhook.php`)
 - Repositório privado no GitHub, com publicação automática na Hostinger (ver "Fluxo de trabalho")
 - Página única com seções e navegação por âncoras. Sem roteador por enquanto.
 - Mobile-first: a maior parte do público vem do Instagram e do WhatsApp, no celular.
@@ -58,12 +58,12 @@ Gerar **agendamentos de aula experimental** e tirar do WhatsApp o trabalho manua
 Todo conteúdo que muda (turmas, horários, planos, links, contatos) vive em `src/data/`, nunca escrito dentro dos componentes. O João atualiza a grade e os links editando só esses arquivos.
 
 - `src/data/config.ts` — URLs e contatos:
-  - `agendamentoEndpoint` (`/api/agendamento.php`)
+  - `agendamentoEndpoint` (`/api/agendamento.php`), `matriculaEndpoint` (`/api/matricula.php`)
   - `whatsapp`, `instagram`, `email`
-  - `matriculaLinks` por plano (links de pagamento do Asaas)
-- `src/data/turmas.ts` — grade (também define o que aparece no agendamento)
+- `src/data/turmas.ts` — grade (também define o que aparece no agendamento e na matrícula)
 - `src/data/agenda.ts` — regras do agendamento: dias para a frente, antecedência, duração da semana grátis, dias sem aula
 - `src/data/planos.ts` — planos e preços
+- `src/data/matricula.ts` — regras da matrícula (taxa de adesão, fidelidade, termo de adesão com versão)
 - `src/data/faq.ts` — perguntas frequentes
 
 Nunca invente informação (horário, preço, nome, telefone). Se faltar, use placeholder com `// TODO` e me avise.
@@ -96,7 +96,8 @@ Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto
 
 - **Uma modalidade** — R$ 120/mês
 - **Livre** — R$ 160/mês, todas as modalidades. Destacar como o plano recomendado ("Por R$ 40 a mais, treine tudo").
-- "Quero me matricular" leva ao link de pagamento do Asaas de cada plano (`matriculaLinks` em `config.ts`).
+- "Quero me matricular" abre a ficha de matrícula (ver "Matrícula online"), já no plano escolhido.
+- Sem taxa de matrícula, sem fidelidade, sem multa nem juros por atraso (confirmado pelo Rhaue em 04/11/2026). Vencimento da mensalidade no dia da matrícula.
 
 ### Aula experimental
 
@@ -114,7 +115,7 @@ Cada turma tem: `id`, `modalidade`, `nome`, `publico` (Infantil / Juvenil/Adulto
 4. **Grade de horários** — filtro por modalidade e por público (infantil / juvenil-adulto). Cada turma com `aulaExperimental` tem botão "Agendar" que abre o agendamento já na turma.
 5. **Turmas em formação** — formulário de interesse (ver abaixo).
 6. **Professores** — todos os professores, com foto, bio e destaques (`src/data/professores.ts`). Sem foto, o card mostra o ícone da marca (`src/assets/marca/academia-scuzziato-icone.svg`).
-7. **Planos** — os dois planos, botão "Quero me matricular" leva ao link de pagamento do Asaas (`matriculaLinks`).
+7. **Planos** — os dois planos, botão "Quero me matricular" abre a ficha de matrícula (ver "Matrícula online").
 8. **Estrutura** — galeria de fotos (placeholders até recebermos as fotos).
 9. **Perguntas frequentes** — precisa de kimono na aula experimental? qual a idade mínima? nunca treinei, posso ir? posso trazer amigos? o que levar? como funciona a semana grátis?
 10. **Localização e contato** — mapa (embed do Google Maps pelo endereço), endereço, horário de funcionamento, WhatsApp, Instagram.
@@ -139,6 +140,24 @@ Feito no próprio site (substituiu o Easy!Appointments). Código em `src/compone
   - **Mês**: calendário com a quantidade de agendamentos por dia, totais e tabela por turma.
   - Totais do período e % de comparecimento. Cancelar libera a vaga no site. Depois de mudar um status, volta para a mesma tela.
 - **`npm run dev`:** não roda PHP; o agendamento é simulado (vagas fictícias, envio sempre dá certo).
+
+## Matrícula online
+
+Ficha no próprio site que cria a assinatura mensal no Asaas (substituiu os links fixos de pagamento). **Solução provisória:** depois migra para a Thryve Agenda — por isso o modelo é simples (aluno, responsável, matrícula, cobrança). Código em `src/components/matricula/Matricula.tsx` e `src/lib/matricula.ts`.
+
+- **A matrícula só fica ativa quando a primeira mensalidade é paga.** Até lá, fica `aguardando_pagamento`. Quem decide isso é o **webhook do Asaas** (`public/api/asaas-webhook.php`), nunca o envio da ficha.
+- **Abrir:** qualquer link para `#matricula` ou `#matricula/<id-do-plano>` abre a janela (`matriculaHref()` em `src/lib/matricula.ts`), nos mesmos moldes do agendamento.
+- **Passos:** plano (e modalidade, no plano "Uma modalidade") → quem vai treinar (eu / meu filho ou filha) → dados do aluno e de quem paga (CPF, e-mail, WhatsApp) → turmas que pretende frequentar (opcional) → resumo com o termo de adesão (texto completo + aceite obrigatório), autorização de uso de imagem (opcional, separada) e consentimento LGPD → "Ir para o pagamento" (abre a fatura do Asaas: Pix, boleto ou cartão).
+- **Menores de 18:** o responsável é quem paga (CPF, e-mail e WhatsApp do responsável); o campo "quem vai treinar" guarda o nome do aluno.
+- **Sem CPF no nosso banco:** o CPF vai só para o Asaas (busca o cliente por CPF e reaproveita, ou cria). O que identifica a pessoa para não duplicar matrícula é o WhatsApp + nome de quem vai treinar, igual ao agendamento.
+- **Regras confirmadas pelo Rhaue em 04/11/2026:** sem taxa de matrícula, sem fidelidade, vencimento no dia da matrícula, sem multa nem juros por atraso (`src/data/matricula.ts`).
+- **Termo de adesão:** texto placeholder versionado em `src/data/matricula.ts` (`termoAdesao.versao`) até o João trocar pelo texto aprovado. A versão aceita fica em `alunos.termo_versao`; mudou o texto, suba a versão.
+- **Servidor:** `public/api/matricula.php` (POST) valida tudo de novo, cria ou reaproveita o cliente no Asaas, cria a assinatura (`billingType: 'UNDEFINED'`, ciclo mensal, sem multa/juros) e grava `alunos` + `matriculas` (`aguardando_pagamento`) + a primeira `cobranças`. A mesma pessoa tentando de novo com matrícula `aguardando_pagamento` recebe a fatura já existente (sem criar outra assinatura); com matrícula `ativa` ou `inadimplente`, é avisada para falar no WhatsApp. Honeypot, limite por IP e e-mail de aviso, como no agendamento. Tabelas em `server/matriculas.sql`.
+- **`public/api/inc/asaas.php`:** chamadas à API do Asaas (autenticação por `access_token`, timeout curto). Ambiente `sandbox` ou `producao` em `config.local.php` (`asaas.ambiente`).
+- **`public/api/asaas-webhook.php`:** só aceita POST com o token configurado (`asaas.token_webhook`, cabeçalho `asaas-access-token`); idempotente pela tabela `asaas_eventos` (nunca processa o mesmo evento duas vezes). Cobrança confirmada ou recebida → `cobranças` paga e matrícula `aguardando_pagamento`/`inadimplente` vira `ativa` (e-mail "matrícula confirmada" só na primeira ativação); cobrança vencida → matrícula `ativa` vira `inadimplente`; cobrança nova da assinatura → grava em `cobranças`; assinatura cancelada ou removida → matrícula vira `cancelada`. Evento desconhecido: registra e ignora.
+- **Planos, turmas e termo no servidor:** o build gera `dist/api/matricula.json` a partir de `src/data` (`plugins/matricula.ts`), com a mesma proteção do `turmas.json` no `.htaccess`.
+- **Painel de alunos e mensalidades:** ainda não existe (fica para depois; o painel atual só cobre o agendamento da aula experimental).
+- **`npm run dev`:** não roda PHP; a matrícula é simulada (fatura fictícia, envio sempre dá certo).
 
 ## Formulário "Turmas em formação"
 
@@ -192,5 +211,5 @@ Repositório privado no GitHub, com publicação automática (`.github/workflows
 ## Fora do escopo agora
 
 - Loja (fase 2)
-- Matrícula com pagamento integrado por API (fase 2; por enquanto links do gateway)
-- Agenda com recorrência, lembretes e integração com WhatsApp (a Thryve Agenda pode assumir o lugar do `agendamento.php` depois; o site só depende de `agendamentoEndpoint`)
+- Painel de alunos e mensalidades da matrícula online (fica para depois; ver "Matrícula online")
+- Agenda com recorrência, lembretes e integração com WhatsApp (a Thryve Agenda pode assumir o lugar do `agendamento.php` e do `matricula.php` depois; o site só depende de `agendamentoEndpoint` e `matriculaEndpoint`)
