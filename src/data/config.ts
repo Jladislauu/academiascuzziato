@@ -39,11 +39,9 @@ export const config: Config = {
   // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
   interesseEndpoint: '/api/interesse.php',
 
-  // Links de pagamento do Asaas (enviados pelo Rhaue em 25/10/2026).
-  matriculaLinks: {
-    'uma-modalidade': 'https://www.asaas.com/000/c/2kfjbff4ec5zywty',
-    livre: 'https://www.asaas.com/000/c/emf71zbp52nbr6j5',
-  },
+  // Matrícula online: cria o cliente e a assinatura mensal no Asaas (ver src/data/matricula.ts
+  // e src/components/matricula/). Arquivo em public/api/; credenciais no config.local.php do servidor.
+  matriculaEndpoint: '/api/matricula.php',
 };
 
 /** Mensagens prontas do WhatsApp. */

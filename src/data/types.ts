@@ -77,8 +77,8 @@ export interface Config {
   avisoPrivacidade: string;
   /** Endpoint PHP do formulário "Turmas em formação". */
   interesseEndpoint: string;
-  /** Link do gateway por plano. null = botão abre o WhatsApp com mensagem pronta. */
-  matriculaLinks: Record<PlanoId, string | null>;
+  /** Endpoint PHP da matrícula (cria o cliente e a assinatura no Asaas). */
+  matriculaEndpoint: string;
 }
 
 export interface Foto {
