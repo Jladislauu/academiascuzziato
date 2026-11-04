@@ -48,7 +48,6 @@ export const config: Config = {
 export const mensagens = {
   geral: 'Olá! Vim pelo site da Academia Scuzziato e quero tirar uma dúvida.',
   horariosTurma: (turma: string) => `Olá! Quero saber os horários de ${turma}`,
-  matricula: (plano: string) => `Olá! Quero me matricular no plano ${plano} da Academia Scuzziato.`,
   aviseAmigoTurma: (modalidade: string, link: string) =>
     `Entrei na lista da turma de ${modalidade} da Academia Scuzziato, em Pinhais. Bora treinar junto? Deixa seu interesse aqui: ${link}`,
   duvidaFaq: (pergunta: string) => `Olá! Tenho uma dúvida: ${pergunta}`,
