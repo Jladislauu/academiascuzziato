@@ -119,6 +119,17 @@ function asaasCriarAssinatura(array $config, string $customerId, float $valor, s
 }
 
 /**
+ * Todas as cobranças já geradas por uma assinatura.
+ *
+ * @return array<int, array> cobranças do Asaas (cada uma com 'id', 'invoiceUrl', 'dueDate', 'value', 'status', 'subscription')
+ */
+function asaasCobrancasDaAssinatura(array $config, string $subscriptionId): array
+{
+    $lista = asaasRequisicao($config, 'GET', '/payments?subscription=' . urlencode($subscriptionId));
+    return $lista['data'] ?? [];
+}
+
+/**
  * Primeira cobrança gerada pela assinatura (a de vencimento mais próximo).
  * O Asaas pode levar um instante para gerar a cobrança depois da assinatura
  * criada: tenta até 3 vezes, com ~1s de intervalo, antes de desistir.
@@ -128,8 +139,7 @@ function asaasCriarAssinatura(array $config, string $customerId, float $valor, s
 function asaasPrimeiraCobranca(array $config, string $subscriptionId): array
 {
     for ($tentativa = 1; $tentativa <= 3; $tentativa++) {
-        $lista = asaasRequisicao($config, 'GET', '/payments?subscription=' . urlencode($subscriptionId));
-        $cobrancas = $lista['data'] ?? [];
+        $cobrancas = asaasCobrancasDaAssinatura($config, $subscriptionId);
         if ($cobrancas) {
             usort($cobrancas, fn ($a, $b) => strcmp((string) $a['dueDate'], (string) $b['dueDate']));
             return $cobrancas[0];
