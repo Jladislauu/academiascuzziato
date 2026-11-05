@@ -34,6 +34,7 @@ export function matriculaPlugin(): Plugin {
         aviso: 'Gerado no build a partir de src/data. Não edite aqui.',
         taxaAdesao: matricula.taxaAdesao,
         termoVersao: matricula.termoAdesao.versao,
+        diasAbandono: matricula.diasAbandono,
         modalidades: modalidades.filter((m) => comTurma.has(m.id)).map((m) => m.id),
         planos: planos.map((p) => ({ id: p.id, nome: p.nome, precoMensal: p.precoMensal })),
         turmas: turmas.map((t) => ({ id: t.id, nome: t.nome, modalidade: t.modalidade })),

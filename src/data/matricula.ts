@@ -17,6 +17,13 @@ export const matricula = {
   fidelidadeMeses: 0,
 
   /**
+   * Matrícula `aguardando_pagamento` há mais desse tanto de dias é considerada
+   * abandonada: o cron diário (public/api/cron/cancelar-matriculas-abandonadas.php)
+   * cancela a assinatura no Asaas e marca a matrícula como `cancelada`.
+   */
+  diasAbandono: 7,
+
+  /**
    * Termo de adesão mostrado na ficha (abre o texto completo antes do
    * pagamento). Texto placeholder — o João troca pelo texto aprovado pela
    * academia antes de publicar. Subir a `versao` sempre que o texto mudar: é
