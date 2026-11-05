@@ -213,6 +213,7 @@ Faça no celular (a maior parte do público vem dele) e no computador.
 - [ ] No Asaas, marque uma cobrança de teste como vencida (ou aguarde o vencimento de um boleto de teste): a matrícula correspondente vira `inadimplente` no phpMyAdmin.
 - [ ] Pague no sandbox uma fatura **depois do vencimento** (a primeira vence no dia da matrícula; um boleto pago no dia seguinte costuma compensar depois de vencido): confirme que a matrícula vira `ativa` mesmo assim (cobrança criada com atraso ou confirmada fora de ordem).
 - [ ] Abandone uma matrícula de teste (não pague a fatura) e rode à mão `php api/cron/cancelar-matriculas-abandonadas.php` (ou espere o cron, se `diasAbandono` já tiver passado): confira que a matrícula virou `cancelada` no phpMyAdmin e que a assinatura foi removida no painel do Asaas.
+- [ ] Simule o webhook perdido: pague uma fatura de teste no sandbox, mas **antes** disso desative a fila do webhook no Asaas (ou troque o `token_webhook` por um errado) para a confirmação não chegar. Espere `diasAbandono` dias (ou reduza temporariamente o valor para testar) e rode à mão o cron: confira que a matrícula virou `ativa` (não `cancelada`), que a cobrança foi gravada e que o e-mail "Matrícula confirmada" chegou. Desfaça a mudança no webhook depois do teste.
 - [ ] Apague os dados de teste no phpMyAdmin (`cobrancas`, `matriculas`, `alunos`, nessa ordem) e cancele a assinatura de teste no painel do Asaas.
 
 **Formulário "Turmas em formação"**
