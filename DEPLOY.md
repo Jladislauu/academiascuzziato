@@ -17,7 +17,8 @@ O site é estático (a pasta `dist/` gerada pelo build). O que roda no servidor,
 4. Enviar o **conteúdo** de `dist/` para `public_html`.
 5. SSL + forçar HTTPS.
 6. Configurar o webhook no painel do Asaas.
-7. Rodar o checklist.
+7. Agendar o cron de matrículas abandonadas.
+8. Rodar o checklist.
 
 ---
 
@@ -45,7 +46,8 @@ dist/
 │  ├─ matricula.php
 │  ├─ asaas-webhook.php
 │  ├─ turmas.json       ← gerado no build a partir de src/data (o PHP lê; bloqueado para o navegador)
-│  ├─ matricula.json    ← idem, para a matrícula (planos, turmas e versão do termo de adesão)
+│  ├─ matricula.json    ← idem, para a matrícula (planos, turmas e dias para considerar abandonada)
+│  ├─ cron/             ← rotina de linha de comando (bloqueada para o navegador; roda só pelo cron da Hostinger)
 │  └─ inc/              ← código comum do PHP (bloqueado para o navegador)
 ├─ painel/index.php   ← painel de agendamentos
 ├─ assets/            ← JS, CSS e fontes (nomes com hash)
@@ -149,6 +151,20 @@ Com o site publicado (precisa da URL pública):
 4. **Eventos:** marque pelo menos "Cobrança criada", "Cobrança confirmada", "Cobrança recebida", "Cobrança vencida" e "Assinatura removida" (ou todos — eventos que não usamos são registrados e ignorados).
 5. Deixe a fila **ativa** (enabled). Depois do primeiro pagamento de teste (checklist abaixo), confira em **Integrações → Webhooks → Histórico de envios** se a entrega deu 200.
 
+## 9. Cron: cancelar matrículas abandonadas
+
+Quem começa a matrícula e nunca paga a primeira fatura fica como `aguardando_pagamento` para sempre, com uma assinatura ativa no Asaas sem ninguém pagando. Uma rotina diária cancela essas matrículas (e a assinatura no Asaas) depois de `matricula.diasAbandono` dias (padrão 7, em `src/data/matricula.ts`).
+
+1. hPanel → **Avançado → Cron Jobs**.
+2. **Comando:** o caminho completo do PHP da Hostinger até o script, por exemplo:
+   ```
+   /usr/bin/php8.2 /home/u123456789/domains/academiascuzziato.com.br/public_html/api/cron/cancelar-matriculas-abandonadas.php
+   ```
+   (confirme o caminho do PHP em **Avançado → Configuração do PHP**, ou use `php` se a Hostinger já resolver a versão certa).
+3. **Frequência:** uma vez por dia (ex.: todos os dias às 4h da manhã).
+4. O script só roda por linha de comando — pela web, `api/cron/cancelar-matriculas-abandonadas.php` responde 404, igual aos outros arquivos de servidor.
+5. A saída do cron (quantas matrículas foram canceladas) normalmente chega por e-mail do próprio hPanel, se configurado; senão fica só no log de execução do cron.
+
 ---
 
 ## Checklist depois de publicar
@@ -195,6 +211,8 @@ Faça no celular (a maior parte do público vem dele) e no computador.
 - [ ] Reenvie manualmente o mesmo evento pelo histórico de webhooks do Asaas: a matrícula continua `ativa` (sem duplicar e-mail nem erro) — confirma que `asaas_eventos` está bloqueando o reprocessamento.
 - [ ] Tente se matricular de novo com o mesmo nome e WhatsApp de uma matrícula `aguardando_pagamento`: recebe a mesma fatura, sem criar outra assinatura no Asaas. Com a matrícula já `ativa`, recebe o aviso para falar no WhatsApp.
 - [ ] No Asaas, marque uma cobrança de teste como vencida (ou aguarde o vencimento de um boleto de teste): a matrícula correspondente vira `inadimplente` no phpMyAdmin.
+- [ ] Pague no sandbox uma fatura **depois do vencimento** (a primeira vence no dia da matrícula; um boleto pago no dia seguinte costuma compensar depois de vencido): confirme que a matrícula vira `ativa` mesmo assim (cobrança criada com atraso ou confirmada fora de ordem).
+- [ ] Abandone uma matrícula de teste (não pague a fatura) e rode à mão `php api/cron/cancelar-matriculas-abandonadas.php` (ou espere o cron, se `diasAbandono` já tiver passado): confira que a matrícula virou `cancelada` no phpMyAdmin e que a assinatura foi removida no painel do Asaas.
 - [ ] Apague os dados de teste no phpMyAdmin (`cobrancas`, `matriculas`, `alunos`, nessa ordem) e cancele a assinatura de teste no painel do Asaas.
 
 **Formulário "Turmas em formação"**
@@ -258,3 +276,5 @@ Os arquivos antigos de `assets/` podem ser apagados com segurança depois de env
 | Matrícula mostra "Não conseguimos matricular agora" | Além de `config.local.php` e banco, confira o bloco `asaas` (ambiente e chave de API certos para esse ambiente) e se a extensão **curl** do PHP está ativa. O motivo exato fica no `error_log` (mesmo lugar da primeira linha desta tabela). |
 | Matrícula não recebe o link da fatura | A chave de API é de um ambiente (sandbox/produção) e `asaas.ambiente` está configurado para o outro. |
 | Pagamento aprovado mas a matrícula não vira `ativa` | Confira no Asaas (Integrações → Webhooks → Histórico de envios) se a entrega deu 200. Se der 401, o `token_webhook` do `config.local.php` está diferente do cadastrado no webhook; se der 404/500, confira se `api/asaas-webhook.php` foi publicado e se o banco está acessível. |
+| Vários envios do webhook deram erro e nenhum chega mais | Depois de 15 falhas seguidas numa configuração de webhook, o Asaas **interrompe a fila** (as outras configurações continuam normais). Corrija a causa (ver linha acima) e reative em Integrações → Webhooks → a fila interrompida tem um botão para reativar. Eventos parados na fila por mais de 14 dias são apagados pelo Asaas — não demore para resolver. |
+| Matrícula não é cancelada depois de abandonada | Confira se o cron job foi criado (passo 9) e se o caminho do PHP no comando está certo. Rode o comando à mão por SSH ou pelo terminal do hPanel para ver o erro na tela. |
