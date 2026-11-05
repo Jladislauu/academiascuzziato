@@ -8,9 +8,12 @@ declare(strict_types=1);
  * para esta URL (ver DEPLOY.md para os eventos a marcar).
  *
  * Segurança: só aceita POST com o cabeçalho asaas-access-token igual ao
- * token_webhook do config.local.php. Idempotente pela tabela asaas_eventos:
- * o mesmo evento (pelo id mandado pelo Asaas) nunca é processado duas vezes.
- * Responde 200 rápido; o e-mail de aviso sai depois, sem atrasar a resposta.
+ * token_webhook do config.local.php.
+ *
+ * Idempotente e atômico: grava o evento em asaas_eventos e aplica o efeito na
+ * MESMA transação. Evento já processado (mesmo id) responde 200 sem repetir o
+ * efeito; se o efeito falhar, a transação desfaz tudo (nem o evento fica
+ * gravado) e responde 500, para o Asaas reenviar depois.
  */
 
 require __DIR__ . '/inc/comum.php';
@@ -25,6 +28,48 @@ function responder(int $status, array $corpo): void
     http_response_code($status);
     echo json_encode($corpo, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+/**
+ * Garante a linha da cobrança a partir do objeto `payment` do webhook, achando
+ * a matrícula pela assinatura (payment.subscription). Cobrança que já existe
+ * (mesmo asaas_payment_id) é atualizada; o resto dos eventos (cobrança
+ * confirmada, recebida, vencida) só aplica o efeito depois de garantir que a
+ * cobrança está gravada, mesmo que o evento "cobrança criada" nunca tenha chegado.
+ *
+ * @return int|false id da matrícula, ou false se a assinatura não é nossa (ex.: link antigo) — regista e ignora.
+ */
+function garantirCobranca(PDO $pdo, array $payment, string $agoraTexto): int|false
+{
+    $subscriptionId = (string) ($payment['subscription'] ?? '');
+    $paymentId = (string) ($payment['id'] ?? '');
+    if ($subscriptionId === '' || $paymentId === '') {
+        return false;
+    }
+
+    $matricula = $pdo->prepare('SELECT id FROM matriculas WHERE asaas_subscription_id = ?');
+    $matricula->execute([$subscriptionId]);
+    $matriculaId = $matricula->fetchColumn();
+    if ($matriculaId === false) {
+        return false;
+    }
+
+    $pdo->prepare(
+        'INSERT INTO cobrancas (matricula_id, asaas_payment_id, vencimento, valor, status, link_fatura, criado_em)
+         VALUES (?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE vencimento = VALUES(vencimento), valor = VALUES(valor),
+             status = VALUES(status), link_fatura = VALUES(link_fatura)'
+    )->execute([
+        $matriculaId,
+        $paymentId,
+        (string) ($payment['dueDate'] ?? date('Y-m-d')),
+        (string) ($payment['value'] ?? '0'),
+        (string) ($payment['status'] ?? 'PENDING'),
+        (string) ($payment['invoiceUrl'] ?? ''),
+        $agoraTexto,
+    ]);
+
+    return (int) $matriculaId;
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -56,105 +101,72 @@ if (!is_array($corpo) || !isset($corpo['event'])) {
 $eventoId = (string) ($corpo['id'] ?? '');
 $tipo = (string) $corpo['event'];
 $agora = agora();
-
-if ($eventoId === '') {
-    // Sem id para checar duplicidade: processa, mas não há como ser idempotente.
-    error_log('asaas-webhook.php: evento sem id (' . $tipo . ')');
-} else {
-    try {
-        $pdo->prepare('INSERT INTO asaas_eventos (id, tipo, recebido_em) VALUES (?, ?, ?)')
-            ->execute([$eventoId, $tipo, $agora->format('Y-m-d H:i:s')]);
-    } catch (PDOException $e) {
-        if ((string) $e->getCode() === '23000') {
-            // Evento já processado antes: responde ok sem repetir o efeito.
-            responder(200, ['ok' => true]);
-        }
-        error_log('asaas-webhook.php: erro ao gravar evento: ' . $e->getMessage());
-        responder(500, ['ok' => false]);
-    }
-}
-
 $agoraTexto = $agora->format('Y-m-d H:i:s');
 $emailMatricula = null; // definido só quando uma matrícula é ativada por este evento
 
 try {
+    $pdo->beginTransaction();
+
+    if ($eventoId === '') {
+        // Sem id para checar duplicidade: aplica o efeito, mas não há como ser idempotente.
+        error_log('asaas-webhook.php: evento sem id (' . $tipo . ')');
+    } else {
+        try {
+            $pdo->prepare('INSERT INTO asaas_eventos (id, tipo, recebido_em) VALUES (?, ?, ?)')
+                ->execute([$eventoId, $tipo, $agoraTexto]);
+        } catch (PDOException $e) {
+            if ((string) $e->getCode() === '23000') {
+                // Evento já processado antes: desfaz (nada tinha sido gravado) e responde ok sem repetir o efeito.
+                $pdo->rollBack();
+                responder(200, ['ok' => true]);
+            }
+            throw $e;
+        }
+    }
+
     switch ($tipo) {
         case 'PAYMENT_CONFIRMED':
         case 'PAYMENT_RECEIVED':
-            $paymentId = (string) ($corpo['payment']['id'] ?? '');
-            $status = (string) ($corpo['payment']['status'] ?? $tipo);
-            if ($paymentId !== '') {
-                $pdo->prepare('UPDATE cobrancas SET status = ?, pago_em = COALESCE(pago_em, ?) WHERE asaas_payment_id = ?')
-                    ->execute([$status, $agoraTexto, $paymentId]);
+            $payment = (array) ($corpo['payment'] ?? []);
+            $paymentId = (string) ($payment['id'] ?? '');
+            $matriculaId = garantirCobranca($pdo, $payment, $agoraTexto);
 
-                $cobranca = $pdo->prepare('SELECT matricula_id FROM cobrancas WHERE asaas_payment_id = ?');
-                $cobranca->execute([$paymentId]);
-                $matriculaId = $cobranca->fetchColumn();
+            if ($matriculaId !== false && $paymentId !== '') {
+                $pdo->prepare('UPDATE cobrancas SET pago_em = COALESCE(pago_em, ?) WHERE asaas_payment_id = ?')
+                    ->execute([$agoraTexto, $paymentId]);
 
-                if ($matriculaId !== false) {
-                    $matriculaAtual = $pdo->prepare('SELECT status, ativada_em FROM matriculas WHERE id = ?');
-                    $matriculaAtual->execute([$matriculaId]);
-                    $linha = $matriculaAtual->fetch();
+                $matriculaAtual = $pdo->prepare('SELECT status, ativada_em FROM matriculas WHERE id = ?');
+                $matriculaAtual->execute([$matriculaId]);
+                $linha = $matriculaAtual->fetch();
 
-                    if ($linha && in_array($linha['status'], ['aguardando_pagamento', 'inadimplente'], true)) {
-                        $pdo->prepare('UPDATE matriculas SET status = ?, ativada_em = COALESCE(ativada_em, ?) WHERE id = ?')
-                            ->execute(['ativa', $agoraTexto, $matriculaId]);
+                if ($linha && in_array($linha['status'], ['aguardando_pagamento', 'inadimplente'], true)) {
+                    $pdo->prepare('UPDATE matriculas SET status = ?, ativada_em = COALESCE(ativada_em, ?) WHERE id = ?')
+                        ->execute(['ativa', $agoraTexto, $matriculaId]);
 
-                        if ($linha['ativada_em'] === null) {
-                            $aluno = $pdo->prepare(
-                                'SELECT a.nome, a.whatsapp, a.responsavel_nome, m.plano_id, m.valor
-                                 FROM alunos a JOIN matriculas m ON m.aluno_id = a.id WHERE m.id = ?'
-                            );
-                            $aluno->execute([$matriculaId]);
-                            $emailMatricula = $aluno->fetch() ?: null;
-                        }
+                    if ($linha['ativada_em'] === null) {
+                        $aluno = $pdo->prepare(
+                            'SELECT a.nome, a.whatsapp, a.responsavel_nome, m.plano_id, m.valor
+                             FROM alunos a JOIN matriculas m ON m.aluno_id = a.id WHERE m.id = ?'
+                        );
+                        $aluno->execute([$matriculaId]);
+                        $emailMatricula = $aluno->fetch() ?: null;
                     }
                 }
             }
             break;
 
         case 'PAYMENT_OVERDUE':
-            $paymentId = (string) ($corpo['payment']['id'] ?? '');
-            if ($paymentId !== '') {
-                $pdo->prepare('UPDATE cobrancas SET status = ? WHERE asaas_payment_id = ?')->execute(['OVERDUE', $paymentId]);
-
-                $cobranca = $pdo->prepare('SELECT matricula_id FROM cobrancas WHERE asaas_payment_id = ?');
-                $cobranca->execute([$paymentId]);
-                $matriculaId = $cobranca->fetchColumn();
-                if ($matriculaId !== false) {
-                    $pdo->prepare("UPDATE matriculas SET status = 'inadimplente' WHERE id = ? AND status = 'ativa'")
-                        ->execute([$matriculaId]);
-                }
+            $payment = (array) ($corpo['payment'] ?? []);
+            $matriculaId = garantirCobranca($pdo, $payment, $agoraTexto);
+            if ($matriculaId !== false) {
+                $pdo->prepare("UPDATE matriculas SET status = 'inadimplente' WHERE id = ? AND status = 'ativa'")
+                    ->execute([$matriculaId]);
             }
             break;
 
         case 'PAYMENT_CREATED':
-            $paymentId = (string) ($corpo['payment']['id'] ?? '');
-            $subscriptionId = (string) ($corpo['payment']['subscription'] ?? '');
-            if ($paymentId !== '' && $subscriptionId !== '') {
-                $matriculaExistente = $pdo->prepare('SELECT id FROM matriculas WHERE asaas_subscription_id = ?');
-                $matriculaExistente->execute([$subscriptionId]);
-                $matriculaId = $matriculaExistente->fetchColumn();
-
-                if ($matriculaId !== false) {
-                    $jaExiste = $pdo->prepare('SELECT COUNT(*) FROM cobrancas WHERE asaas_payment_id = ?');
-                    $jaExiste->execute([$paymentId]);
-                    if ((int) $jaExiste->fetchColumn() === 0) {
-                        $pdo->prepare(
-                            'INSERT INTO cobrancas (matricula_id, asaas_payment_id, vencimento, valor, status, link_fatura, criado_em)
-                             VALUES (?, ?, ?, ?, ?, ?, ?)'
-                        )->execute([
-                            $matriculaId,
-                            $paymentId,
-                            (string) ($corpo['payment']['dueDate'] ?? $agora->format('Y-m-d')),
-                            (string) ($corpo['payment']['value'] ?? '0'),
-                            (string) ($corpo['payment']['status'] ?? 'PENDING'),
-                            (string) ($corpo['payment']['invoiceUrl'] ?? ''),
-                            $agoraTexto,
-                        ]);
-                    }
-                }
-            }
+            // Só garante que a cobrança está gravada; o efeito É a própria gravação.
+            garantirCobranca($pdo, (array) ($corpo['payment'] ?? []), $agoraTexto);
             break;
 
         case 'SUBSCRIPTION_DELETED':
@@ -169,10 +181,15 @@ try {
             // Evento reconhecido pelo Asaas mas sem efeito aqui: fica registrado em asaas_eventos e é ignorado.
             break;
     }
+
+    $pdo->commit();
 } catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     error_log("asaas-webhook.php: falha ao processar {$tipo}: " . $e->getMessage());
-    // O evento já ficou gravado em asaas_eventos; responde 200 para o Asaas não reenviar
-    // (reenvio reprocessaria o mesmo estado e cairia no mesmo erro).
+    // Nada ficou gravado (nem o evento em asaas_eventos): responde 500 para o Asaas reenviar.
+    responder(500, ['ok' => false]);
 }
 
 responderEContinuar(200, ['ok' => true]);
