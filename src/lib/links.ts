@@ -1,6 +1,7 @@
 import { config, mensagens } from '../data/config';
 import type { Plano, Turma } from '../data/types';
 import { agendaHref, agendaUrlCompleta } from './agenda';
+import { matriculaHref } from './matricula';
 
 /**
  * Link dos botões "Agendar": abre a janela de agendamento (src/components/agendamento),
@@ -24,10 +25,8 @@ export function conviteAmigoLink(): string {
   return `https://wa.me/?text=${encodeURIComponent(mensagens.conviteAmigo(agendaUrlCompleta()))}`;
 }
 
-/** Link de matrícula: gateway, se houver; senão, WhatsApp com mensagem pronta. */
-export function matriculaLink(plano: Plano): string {
-  return config.matriculaLinks[plano.id] ?? whatsappLink(mensagens.matricula(plano.nome));
-}
+/** Link do botão "Quero me matricular": abre a ficha de matrícula (src/components/matricula), já no plano. */
+export const matriculaLink = (plano: Plano): string => matriculaHref(plano.id);
 
 /** "R. Vicente D'Andréa, 617 - Estância Pinhais, Pinhais - PR, 83323-190" */
 export function enderecoCompleto(): string {

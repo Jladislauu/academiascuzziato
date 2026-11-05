@@ -39,18 +39,15 @@ export const config: Config = {
   // Arquivo em public/api/; credenciais no config.local.php do servidor (ver server/).
   interesseEndpoint: '/api/interesse.php',
 
-  // Links de pagamento do Asaas (enviados pelo Rhaue em 25/10/2026).
-  matriculaLinks: {
-    'uma-modalidade': 'https://www.asaas.com/000/c/2kfjbff4ec5zywty',
-    livre: 'https://www.asaas.com/000/c/emf71zbp52nbr6j5',
-  },
+  // Matrícula online: cria o cliente e a assinatura mensal no Asaas (ver src/data/matricula.ts
+  // e src/components/matricula/). Arquivo em public/api/; credenciais no config.local.php do servidor.
+  matriculaEndpoint: '/api/matricula.php',
 };
 
 /** Mensagens prontas do WhatsApp. */
 export const mensagens = {
   geral: 'Olá! Vim pelo site da Academia Scuzziato e quero tirar uma dúvida.',
   horariosTurma: (turma: string) => `Olá! Quero saber os horários de ${turma}`,
-  matricula: (plano: string) => `Olá! Quero me matricular no plano ${plano} da Academia Scuzziato.`,
   aviseAmigoTurma: (modalidade: string, link: string) =>
     `Entrei na lista da turma de ${modalidade} da Academia Scuzziato, em Pinhais. Bora treinar junto? Deixa seu interesse aqui: ${link}`,
   duvidaFaq: (pergunta: string) => `Olá! Tenho uma dúvida: ${pergunta}`,
