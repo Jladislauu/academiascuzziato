@@ -1,0 +1,3 @@
+# Rotinas de linha de comando (cron da Hostinger). Nunca acessíveis pelo navegador
+# (o próprio script também recusa rodar fora da linha de comando, ver PHP_SAPI).
+Require all denied

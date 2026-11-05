@@ -1,0 +1,65 @@
+{
+  "aviso": "Gerado no build a partir de src/data. Não edite aqui.",
+  "taxaAdesao": 0,
+  "termoVersao": "1",
+  "diasAbandono": 7,
+  "modalidades": [
+    "jiu-jitsu",
+    "judo",
+    "muay-thai"
+  ],
+  "planos": [
+    {
+      "id": "uma-modalidade",
+      "nome": "Uma modalidade",
+      "precoMensal": 120
+    },
+    {
+      "id": "livre",
+      "nome": "Livre",
+      "precoMensal": 160
+    }
+  ],
+  "turmas": [
+    {
+      "id": "jiu-jitsu-gi",
+      "nome": "Jiu-jitsu com kimono (GI)",
+      "modalidade": "jiu-jitsu"
+    },
+    {
+      "id": "jiu-jitsu-nogi",
+      "nome": "Jiu-jitsu sem kimono (No-Gi)",
+      "modalidade": "jiu-jitsu"
+    },
+    {
+      "id": "jiu-jitsu-feminino",
+      "nome": "Jiu-jitsu feminino (GI)",
+      "modalidade": "jiu-jitsu"
+    },
+    {
+      "id": "jiu-jitsu-infantil-3-5",
+      "nome": "Jiu-jitsu infantil (3 a 5 anos)",
+      "modalidade": "jiu-jitsu"
+    },
+    {
+      "id": "jiu-jitsu-infantil-6-11",
+      "nome": "Jiu-jitsu infantil (6 a 11 anos)",
+      "modalidade": "jiu-jitsu"
+    },
+    {
+      "id": "judo-infantil",
+      "nome": "Judô infantil (3 a 5 anos)",
+      "modalidade": "judo"
+    },
+    {
+      "id": "judo-adulto",
+      "nome": "Judô adulto",
+      "modalidade": "judo"
+    },
+    {
+      "id": "muay-thai-adulto",
+      "nome": "Muay Thai adulto",
+      "modalidade": "muay-thai"
+    }
+  ]
+}
