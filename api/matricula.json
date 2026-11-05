@@ -2,6 +2,7 @@
   "aviso": "Gerado no build a partir de src/data. Não edite aqui.",
   "taxaAdesao": 0,
   "termoVersao": "1",
+  "diasAbandono": 7,
   "modalidades": [
     "jiu-jitsu",
     "judo",
