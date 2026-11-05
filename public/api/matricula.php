@@ -33,6 +33,21 @@ function responder(int $status, array $corpo): void
     exit;
 }
 
+/**
+ * Cancela no Asaas uma assinatura que acabou de ser criada mas não pôde ser
+ * gravada aqui (cobrança não veio, ou a gravação no banco falhou), para não
+ * deixar uma assinatura cobrando sem nenhum registro nosso. Se o próprio
+ * cancelamento falhar, fica registrado no log para conferir à mão.
+ */
+function cancelarAssinaturaOrfa(array $config, string $subscriptionId): void
+{
+    try {
+        asaasCancelarAssinatura($config, $subscriptionId);
+    } catch (Throwable $e) {
+        error_log("matricula.php: falha ao cancelar assinatura órfã {$subscriptionId} no Asaas: " . $e->getMessage());
+    }
+}
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
     responder(405, ['ok' => false, 'erro' => 'Método não permitido.']);
@@ -220,6 +235,7 @@ try {
             ]];
         } else {
             // Sem matrícula, ou a última foi cancelada: cria uma nova (reaproveitando o aluno, se já existir).
+            $assinatura = null;
             try {
                 $customerId = asaasBuscarOuCriarCliente($config, [
                     'nome' => $paraMenor ? $nomeResponsavel : $nomeAluno,
@@ -232,6 +248,10 @@ try {
                 $primeiraCobranca = asaasPrimeiraCobranca($config, (string) $assinatura['id']);
             } catch (Throwable $e) {
                 error_log('matricula.php: Asaas: ' . $e->getMessage());
+                // A assinatura pode ter sido criada mesmo com a cobrança falhando: cancela para não deixar órfã.
+                if ($assinatura !== null) {
+                    cancelarAssinaturaOrfa($config, (string) $assinatura['id']);
+                }
                 $recusa = [500, ['ok' => false, 'erro' => ERRO_SERVIDOR]];
             }
 
@@ -285,8 +305,9 @@ try {
                     $resultado = ['ok' => true, 'faturaUrl' => (string) $primeiraCobranca['invoiceUrl']];
                 } catch (Throwable $e) {
                     $pdo->rollBack();
-                    // A assinatura já existe no Asaas mas não foi gravada aqui: fica registrado para conferir à mão.
                     error_log("matricula.php: gravação falhou após criar a assinatura {$assinatura['id']} no Asaas: " . $e->getMessage());
+                    // Nada foi gravado aqui: cancela a assinatura no Asaas para não deixar órfã.
+                    cancelarAssinaturaOrfa($config, (string) $assinatura['id']);
                     $recusa = [500, ['ok' => false, 'erro' => ERRO_SERVIDOR]];
                 }
             }

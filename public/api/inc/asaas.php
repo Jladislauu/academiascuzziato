@@ -120,18 +120,25 @@ function asaasCriarAssinatura(array $config, string $customerId, float $valor, s
 
 /**
  * Primeira cobrança gerada pela assinatura (a de vencimento mais próximo).
+ * O Asaas pode levar um instante para gerar a cobrança depois da assinatura
+ * criada: tenta até 3 vezes, com ~1s de intervalo, antes de desistir.
  *
  * @return array cobrança do Asaas (tem 'id', 'invoiceUrl', 'dueDate', 'value', 'status')
  */
 function asaasPrimeiraCobranca(array $config, string $subscriptionId): array
 {
-    $lista = asaasRequisicao($config, 'GET', '/payments?subscription=' . urlencode($subscriptionId));
-    $cobrancas = $lista['data'] ?? [];
-    if (!$cobrancas) {
-        throw new RuntimeException('Asaas: assinatura criada sem nenhuma cobrança.');
+    for ($tentativa = 1; $tentativa <= 3; $tentativa++) {
+        $lista = asaasRequisicao($config, 'GET', '/payments?subscription=' . urlencode($subscriptionId));
+        $cobrancas = $lista['data'] ?? [];
+        if ($cobrancas) {
+            usort($cobrancas, fn ($a, $b) => strcmp((string) $a['dueDate'], (string) $b['dueDate']));
+            return $cobrancas[0];
+        }
+        if ($tentativa < 3) {
+            sleep(1);
+        }
     }
-    usort($cobrancas, fn ($a, $b) => strcmp((string) $a['dueDate'], (string) $b['dueDate']));
-    return $cobrancas[0];
+    throw new RuntimeException('Asaas: assinatura criada sem nenhuma cobrança.');
 }
 
 function asaasCancelarAssinatura(array $config, string $subscriptionId): void
