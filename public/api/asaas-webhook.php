@@ -30,48 +30,6 @@ function responder(int $status, array $corpo): void
     exit;
 }
 
-/**
- * Garante a linha da cobrança a partir do objeto `payment` do webhook, achando
- * a matrícula pela assinatura (payment.subscription). Cobrança que já existe
- * (mesmo asaas_payment_id) é atualizada; o resto dos eventos (cobrança
- * confirmada, recebida, vencida) só aplica o efeito depois de garantir que a
- * cobrança está gravada, mesmo que o evento "cobrança criada" nunca tenha chegado.
- *
- * @return int|false id da matrícula, ou false se a assinatura não é nossa (ex.: link antigo) — regista e ignora.
- */
-function garantirCobranca(PDO $pdo, array $payment, string $agoraTexto): int|false
-{
-    $subscriptionId = (string) ($payment['subscription'] ?? '');
-    $paymentId = (string) ($payment['id'] ?? '');
-    if ($subscriptionId === '' || $paymentId === '') {
-        return false;
-    }
-
-    $matricula = $pdo->prepare('SELECT id FROM matriculas WHERE asaas_subscription_id = ?');
-    $matricula->execute([$subscriptionId]);
-    $matriculaId = $matricula->fetchColumn();
-    if ($matriculaId === false) {
-        return false;
-    }
-
-    $pdo->prepare(
-        'INSERT INTO cobrancas (matricula_id, asaas_payment_id, vencimento, valor, status, link_fatura, criado_em)
-         VALUES (?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE vencimento = VALUES(vencimento), valor = VALUES(valor),
-             status = VALUES(status), link_fatura = VALUES(link_fatura)'
-    )->execute([
-        $matriculaId,
-        $paymentId,
-        (string) ($payment['dueDate'] ?? date('Y-m-d')),
-        (string) ($payment['value'] ?? '0'),
-        (string) ($payment['status'] ?? 'PENDING'),
-        (string) ($payment['invoiceUrl'] ?? ''),
-        $agoraTexto,
-    ]);
-
-    return (int) $matriculaId;
-}
-
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
     responder(405, ['ok' => false, 'erro' => 'Método não permitido.']);
@@ -128,30 +86,9 @@ try {
         case 'PAYMENT_CONFIRMED':
         case 'PAYMENT_RECEIVED':
             $payment = (array) ($corpo['payment'] ?? []);
-            $paymentId = (string) ($payment['id'] ?? '');
             $matriculaId = garantirCobranca($pdo, $payment, $agoraTexto);
-
-            if ($matriculaId !== false && $paymentId !== '') {
-                $pdo->prepare('UPDATE cobrancas SET pago_em = COALESCE(pago_em, ?) WHERE asaas_payment_id = ?')
-                    ->execute([$agoraTexto, $paymentId]);
-
-                $matriculaAtual = $pdo->prepare('SELECT status, ativada_em FROM matriculas WHERE id = ?');
-                $matriculaAtual->execute([$matriculaId]);
-                $linha = $matriculaAtual->fetch();
-
-                if ($linha && in_array($linha['status'], ['aguardando_pagamento', 'inadimplente'], true)) {
-                    $pdo->prepare('UPDATE matriculas SET status = ?, ativada_em = COALESCE(ativada_em, ?) WHERE id = ?')
-                        ->execute(['ativa', $agoraTexto, $matriculaId]);
-
-                    if ($linha['ativada_em'] === null) {
-                        $aluno = $pdo->prepare(
-                            'SELECT a.nome, a.whatsapp, a.responsavel_nome, m.plano_id, m.valor
-                             FROM alunos a JOIN matriculas m ON m.aluno_id = a.id WHERE m.id = ?'
-                        );
-                        $aluno->execute([$matriculaId]);
-                        $emailMatricula = $aluno->fetch() ?: null;
-                    }
-                }
+            if ($matriculaId !== false) {
+                $emailMatricula = ativarMatriculaPaga($pdo, $matriculaId, (string) ($payment['id'] ?? ''), $agoraTexto);
             }
             break;
 
@@ -195,19 +132,6 @@ try {
 responderEContinuar(200, ['ok' => true]);
 
 if ($emailMatricula) {
-    enviarEmail(
-        $config,
-        "Matrícula confirmada: {$emailMatricula['nome']}",
-        implode("\n", array_filter([
-            'O pagamento da primeira mensalidade foi aprovado — a matrícula está ativa.',
-            '',
-            "Aluno: {$emailMatricula['nome']}",
-            $emailMatricula['responsavel_nome'] ? "Responsável: {$emailMatricula['responsavel_nome']}" : null,
-            'Plano: ' . $emailMatricula['plano_id'],
-            'Valor: R$ ' . number_format((float) $emailMatricula['valor'], 2, ',', '.') . '/mês',
-            'WhatsApp: ' . formatarWhatsapp((string) $emailMatricula['whatsapp']),
-            "Conversar: https://wa.me/55{$emailMatricula['whatsapp']}",
-        ], fn ($linha) => $linha !== null))
-    );
+    avisarMatriculaConfirmada($config, $emailMatricula);
 }
 exit;
